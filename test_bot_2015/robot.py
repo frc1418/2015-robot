@@ -7,8 +7,8 @@ class MyRobot(wpilib.SampleRobot):
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
         
-        self.lmotor = wpilib.Talon(5)
-        self.rmotor = wpilib.Talon(10)
+        self.lmotor = wpilib.Talon(0)
+        self.rmotor = wpilib.Talon(1)
         
         self.robot_drive = wpilib.RobotDrive(self.lmotor,self.rmotor )
         self.robot_drive.setSafetyEnabled(False)  
