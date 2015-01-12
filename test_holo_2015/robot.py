@@ -12,13 +12,15 @@ class MyRobot(wpilib.SampleRobot):
         self.rr_motor = wpilib.Talon(2);
         self.rf_motor = wpilib.Talon(3);
         
+        
+        
         self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rr_motor, self.rf_motor)
-        self.robot_drive.setSafetyEnabled(False)  
+        self.robot_drive.setSafetyEnabled(False)
         
     def operatorControl(self):
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
-            self.robot_drive.holonomicDrive(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX())
+            self.robot_drive.holonomicDrive(self.joystick2.getY(), self.joystick1.getDirectionDegrees(), self.joystick2.getX())
             wpilib.Timer.delay(.01)
         
     def disabled(self):
