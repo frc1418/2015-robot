@@ -19,21 +19,15 @@ class MyRobot(wpilib.SampleRobot):
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
         
-        self.DriverStation = wpilib.DriverStation()
     def operatorControl(self):
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
             if self.joystick1.getPOV()is not 180 or 90:
-                strafe = 0
+                self.strafe = 0
             else:
-                strafe = math.sin(self.joystick1.getPOV())
-            self.robot_drive.mecanumDrive_Cartesian(self.joystick1.getY(), math.sin(self.joystick1.getPOV()), self.joystick1.getTwist()*-1, 0)
-            if self.joystick1.getRawButton(4):
-                self.robot_drive.mecanumDrive_Cartesian(0, -1, 0, 0)
-            if self.joystick1.getRawButton(5):
-                self.robot_drive.mecanumDrive_Cartesian(0, 1, 0, 0)
-            if self.logTimer.hasPeriodPassed(1.0):
-                self.logger.info(self.DriverStation.getStickPOV(0,0))
+                self.strafe = math.sin(self.joystick1.getPOV())
+            self.robot_drive.mecanumDrive_Cartesian(self.joystick1.getY(), self.strafe, self.joystick1.getTwist()*-1, 0)
+           
             wpilib.Timer.delay(.01)
                 
         
