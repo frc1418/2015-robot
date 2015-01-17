@@ -5,17 +5,17 @@ class MyRobot(wpilib.SampleRobot):
     
     def robotInit(self):
         
-        self.smalldistance = wpilib.AnalogInput(0)
+        self.smalldistance = wpilib.AnalogInput(2)
         self.largedistance = wpilib.AnalogInput(1)
         self.smalldistance2 = wpilib.AnalogInput(3)
                 
         
     def operatorControl(self):
-        self.myRobot.setSafetyEnabled(True)
+        #self.myRobot.setSafetyEnabled(True)
 
         while self.isOperatorControl() and self.isEnabled():
             wpilib.SmartDashboard.putNumber('smallSensor Voltage', self.smalldistance.getVoltage())
-            wpilib.SmartDashboard.putNumber('smallSensor Voltage', self.smalldistance2.getVoltage())
+            wpilib.SmartDashboard.putNumber('smallSensor2 Voltage', self.smalldistance2.getVoltage())
             wpilib.SmartDashboard.putNumber('largeSensor Voltage', self.largedistance.getVoltage())
 
             
