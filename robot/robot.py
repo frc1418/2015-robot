@@ -1,4 +1,5 @@
 import wpilib
+import math
 
 class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
@@ -18,8 +19,6 @@ class MyRobot(wpilib.SampleRobot):
         self.robot_drive.setSafetyEnabled(False)
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
-        
-        self.DriverStation = wpilib.DriverStation()
     def operatorControl(self):
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
@@ -33,7 +32,8 @@ class MyRobot(wpilib.SampleRobot):
             if self.joystick1.getRawButton(5):
                 self.robot_drive.mecanumDrive_Cartesian(0, 1, 0, 0)
             if self.logTimer.hasPeriodPassed(1.0):
-                self.logger.info(self.DriverStation.getStickPOV(0,0))
+                pass
+                #self.logger.info(self.DriverStation.getStickPOV(0,0))
             wpilib.Timer.delay(.01)
                 
         
