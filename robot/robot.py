@@ -12,6 +12,8 @@ class MyRobot(wpilib.SampleRobot):
         self.rr_motor = wpilib.Talon(2)
         self.rf_motor = wpilib.Talon(3)
         
+        self.lift_motor = wpilib.CANTalon(10)
+        
         self.logTimer = wpilib.Timer()
         self.logTimer.start()
         
@@ -29,6 +31,11 @@ class MyRobot(wpilib.SampleRobot):
             else:
                 self.strafe = math.sin(self.joystick1.getPOV())
             self.robot_drive.mecanumDrive_Cartesian(self.joystick1.getY(), self.strafe, self.joystick1.getTwist()*-1, 0)
+            
+            if self.joystick1.getRawButton(3):
+                self.lift_motor.set(1)
+            elif self.joystick1.getRawButton(4):
+                self.lift_motor.set(-1)
            
             wpilib.Timer.delay(.01)
                 
