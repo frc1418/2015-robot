@@ -1,4 +1,5 @@
 import wpilib
+import math
 
 class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
@@ -19,6 +20,7 @@ class MyRobot(wpilib.SampleRobot):
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
         
+
     def operatorControl(self):
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
