@@ -10,7 +10,7 @@ class MyRobot(wpilib.SampleRobot):
         self.joystick3 = wpilib.Joystick(2)
         
         
-        self.smalldistance = wpilib.AnalogInput(0)
+        self.smalldistance = wpilib.AnalogInput(2)
         self.largedistance = wpilib.AnalogInput(1)
         self.smalldistance2 = wpilib.AnalogInput(3)
                 
@@ -21,7 +21,7 @@ class MyRobot(wpilib.SampleRobot):
         while self.isOperatorControl() and self.isEnabled():
             '''
             wpilib.SmartDashboard.putNumber('smallSensor Voltage', self.smalldistance.getVoltage())
-            wpilib.SmartDashboard.putNumber('smallSensor Voltage', self.smalldistance2.getVoltage())
+            wpilib.SmartDashboard.putNumber('smallSensor2 Voltage', self.smalldistance2.getVoltage())
             wpilib.SmartDashboard.putNumber('largeSensor Voltage', self.largedistance.getVoltage())
             '''
             wpilib.SmartDashboard.putNumber('smallSensor Voltage', self.joystick1.getX())

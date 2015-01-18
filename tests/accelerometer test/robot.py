@@ -6,7 +6,7 @@ class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
         self.Accelerometer = wpilib.BuiltInAccelerometer(range=2)        
     def operatorControl(self):
-        self.myRobot.setSafetyEnabled(True)
+        #self.myRobot.setSafetyEnabled(True)
 
         while self.isOperatorControl() and self.isEnabled():            
             wpilib.SmartDashboard.putNumber('Accelerometer X', self.Accelerometer.getX())
