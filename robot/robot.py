@@ -6,6 +6,7 @@ class MyRobot(wpilib.SampleRobot):
         super().__init__()
         print("Team 1418 2015 Test Code")
         self.joystick1 = wpilib.Joystick(0)
+        self.joystick2 = wpilib.Joystick(1)
         
         self.lf_motor = wpilib.Talon(0)
         self.lr_motor = wpilib.Talon(1)
@@ -30,12 +31,18 @@ class MyRobot(wpilib.SampleRobot):
                 self.strafe = 0
             else:
                 self.strafe = math.sin(self.joystick1.getPOV())
-            self.robot_drive.mecanumDrive_Cartesian(self.joystick1.getY(), self.strafe, self.joystick1.getTwist()*-1, 0)
+            self.robot_drive.mecanumDrive_Cartesian((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()*-1)/2, 0)
             
-            if self.joystick1.getRawButton(3):
+            if self.joystick1.getRawButton(2):
+                self.lift_motor.set(.5)
+            elif self.joystick1.getRawButton(3):
+                self.lift_motor.set(-.5)
+            elif self.joystick2.getRawButton(2):
                 self.lift_motor.set(1)
-            elif self.joystick1.getRawButton(4):
+            elif self.joystick2.getRawButton(3):
                 self.lift_motor.set(-1)
+            else: 
+                self.lift_motor.set(0)
            
             wpilib.Timer.delay(.01)
                 
