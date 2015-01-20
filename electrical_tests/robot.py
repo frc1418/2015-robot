@@ -6,6 +6,7 @@ class MyRobot(wpilib.SampleRobot):
         self.largeDistance = wpilib.AnalogInput(0)
         self.smallDistance = wpilib.AnalogInput(1)
         self.accelerometer = wpilib.BuiltInAccelerometer(range=2)
+
         
     def disabled(self):
         self.operatorControl()
