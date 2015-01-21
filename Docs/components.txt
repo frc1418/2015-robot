@@ -1,0 +1,21 @@
+Driving (positioning)
+		need ability to straighten path using gyro
+		need ability to tell how far we've gone using accelerometer
+		ability to know if the robot is perpendicular to the tote
+	
+Forklift
+		Ability to go up 
+		Ability to go down
+		Ability to go up/down by intervals
+		Ability to zero the encoder
+	
+Image Processing
+		Ability to recognize yellow totes
+
+Sensor list
+	Gyro
+	Accelerometer
+	Long distance sensor x 4
+	Short distance sensor x 4
+	
+Autonomus

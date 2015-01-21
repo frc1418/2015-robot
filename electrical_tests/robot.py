@@ -29,11 +29,6 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
             wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
             
-            
-            
-            
-            
-            
         
             wpilib.Timer.delay(0.005)
     '''        
