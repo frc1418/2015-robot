@@ -30,6 +30,7 @@ class MyRobot(wpilib.SampleRobot):
         ##INITIALIZE SENSORS#
         self.gyro = wpilib.Gyro(0)
         self.forklift = forklift.Forklift(self.lift_motor)
+        
         self.drive = drive.Drive(self.robot_drive,self.gyro)
         
         self.components = {
@@ -64,10 +65,7 @@ class MyRobot(wpilib.SampleRobot):
             component.doit()
     def disabled(self):
         '''Called when the robot is in disabled mode'''
-        
-        
         wpilib.Timer.delay(.01)
-
 if __name__ == '__main__':
     
     wpilib.run(MyRobot)
