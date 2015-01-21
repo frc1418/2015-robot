@@ -29,7 +29,6 @@ class MyRobot(wpilib.SampleRobot):
         
         self.forklift = forklift.Forklift(self.lift_motor)
         
-        
         self.components = {
             'forklift': self.forklift,
         }
@@ -61,10 +60,7 @@ class MyRobot(wpilib.SampleRobot):
             component.doit()
     def disabled(self):
         '''Called when the robot is in disabled mode'''
-        
-        
         wpilib.Timer.delay(.01)
-
 if __name__ == '__main__':
     
     wpilib.run(MyRobot)
