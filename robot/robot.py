@@ -18,7 +18,7 @@ class MyRobot(wpilib.SampleRobot):
         self.lr_motor = wpilib.Talon(1)
         self.rr_motor = wpilib.Talon(2)
         self.rf_motor = wpilib.Talon(3)
-        self.lift_motor = wpilib.Talon(10)
+        self.lift_motor = wpilib.CANTalon(10)
         
        
         ##ROBOT DRIVE##
