@@ -1,7 +1,7 @@
 import wpilib
 import math
 
-from components import forklift
+from components import forklift, drive
 
 class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
@@ -18,7 +18,7 @@ class MyRobot(wpilib.SampleRobot):
         self.lr_motor = wpilib.Talon(1)
         self.rr_motor = wpilib.Talon(2)
         self.rf_motor = wpilib.Talon(3)
-        self.lift_motor = wpilib.CANTalon(10)
+        self.lift_motor = wpilib.Talon(10)
         
        
         ##ROBOT DRIVE##
@@ -27,11 +27,14 @@ class MyRobot(wpilib.SampleRobot):
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
         
+        ##INITIALIZE SENSORS#
+        self.gyro = wpilib.Gyro(0)
         self.forklift = forklift.Forklift(self.lift_motor)
-        
+        self.drive = drive.Drive(self.robot_drive,self.gyro)
         
         self.components = {
             'forklift': self.forklift,
+            'drive': self.drive
         }
     def operatorControl(self):
         print("Entering Teleop")
@@ -40,7 +43,7 @@ class MyRobot(wpilib.SampleRobot):
                 self.strafe = 0
             else:
                 self.strafe = math.sin(self.joystick1.getPOV())
-            self.robot_drive.mecanumDrive_Cartesian((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX() * -1) / 2, 0)
+            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX() * -1) / 2)
             
             if self.joystick1.getRawButton(2):
                 self.forklift.setLift(.5)
