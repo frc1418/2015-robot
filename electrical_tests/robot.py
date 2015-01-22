@@ -6,6 +6,9 @@ class MyRobot(wpilib.SampleRobot):
         self.largeDistance = wpilib.AnalogInput(0)
         self.smallDistance = wpilib.AnalogInput(1)
         self.accelerometer = wpilib.BuiltInAccelerometer(range=2)
+        self.timercounter = 0
+        self.XOfRobot=0
+        self.YOfRobot=0
 
         
     def disabled(self):
@@ -17,7 +20,7 @@ class MyRobot(wpilib.SampleRobot):
         while not self.isEnabled():    
             wpilib.SmartDashboard.putNumber('Accelerometer X', self.accelerometer.getX())
             wpilib.SmartDashboard.putNumber('Accelerometer Y', self.accelerometer.getY())
-            wpilib.SmartDashboard.putNumber('Accelerometer Z', self.accelerometer.getZ())
+            #wpilib.SmartDashboard.putNumber('Accelerometer Z', self.accelerometer.getZ())
             
             wpilib.SmartDashboard.putNumber('largeSensorVoltage', self.largeDistance.getVoltage())           
             wpilib.SmartDashboard.putNumber('smalllSensorVoltage', self.smallDistance.getVoltage())
@@ -29,7 +32,10 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
             wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
             
-        
+            self.XOfRobot=self.xofrobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
+            self.YOfRobot=self.yofrobot+(self.accelerometer.getY()*.5*(self.timercounter**2))
+            
+            self.timercounter=self.timercounter+0.005
             wpilib.Timer.delay(0.005)
     '''        
     def convertVoltageToDistance (self, voltage, SmallerSensor):
