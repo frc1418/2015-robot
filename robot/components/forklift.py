@@ -1,3 +1,5 @@
+import wpilib
+
 class Forklift (object):
     def __init__ (self, liftmotor):
         self.lift_motor = liftmotor

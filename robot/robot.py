@@ -19,8 +19,8 @@ class MyRobot(wpilib.SampleRobot):
         self.rf_motor = wpilib.Talon(3)
         self.lift_motor = wpilib.CANTalon(10)
         
+        #CAMERAw
         self.camera = wpilib.USBCamera()
-        #   self.camera.openCamera()
         self.camera.startCapture()
         self.camServ = wpilib.CameraServer()
         self.camServ.startAutomaticCapture(self.camera)
