@@ -17,9 +17,9 @@ class MyRobot(wpilib.SimpleRobot):
         self.smallDistance2=wpilib.AnalogChannel(4)
         
         #self.initSmartDashboard()
-    def OperatorControl(self):
+    def Disabled(self):
         
-        while self.IsEnabled() and self.IsOperatorControl():
+        while not self.IsEnabled() and not self.IsOperatorControl():
         
             self.fixedLargeValue = ((max(0.00001,self.largeDistance.GetVoltage()))/22.73)**(1/-0.7533)/2.54
             self.fixedSmallValue = ((max(0.00001,self.smallDistance.GetVoltage()))/7.330)**(1/-0.7685)/2.54

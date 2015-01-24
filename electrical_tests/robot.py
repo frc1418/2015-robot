@@ -20,12 +20,13 @@ class MyRobot(wpilib.SampleRobot):
 
         
     def disabled(self):
-        self.operatorControl()
-        
+        #self.operatorControl()
+        pass
+    
     def operatorControl(self):
         #self.myRobot.setSafetyEnabled(True)
         
-        while not self.isEnabled():    
+        while self.isEnabled():    
             wpilib.SmartDashboard.putNumber('Accelerometer X', self.accelerometer.getX())
             wpilib.SmartDashboard.putNumber('Accelerometer Y', self.accelerometer.getY())
             #wpilib.SmartDashboard.putNumber('Accelerometer Z', self.accelerometer.getZ())
@@ -46,6 +47,11 @@ class MyRobot(wpilib.SampleRobot):
             #wpilib.SmartDashboard.putNumber('Potentiometer', self.pot.getVoltage())
             
             wpilib.SmartDashboard.putNumber('Enc', self.encoder.getDistance())
+            wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
+            wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+            
+            #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
+            #self.YOfRobot=self.YOfRobot+(self.accelerometer.getY()*.5*(self.timercounter**2))
             
             self.timercounter=self.timercounter+0.005
             wpilib.Timer.delay(0.005)
