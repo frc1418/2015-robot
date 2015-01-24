@@ -5,7 +5,9 @@ class MyRobot(wpilib.SampleRobot):
     
     def robotInit(self):
         self.largeDistance = wpilib.AnalogInput(0)
-        self.smallDistance = wpilib.AnalogInput(1)
+        self.largeDistance2 = wpilib.AnalogInput(1)
+        self.smallDistance = wpilib.AnalogInput(2)
+        self.smallDistance2 = wpilib.AnalogInput(3)
         self.accelerometer = wpilib.BuiltInAccelerometer(range=2)
         self.pot = wpilib.AnalogInput(2)
         self.timercounter = 0
@@ -28,21 +30,22 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.SmartDashboard.putNumber('Accelerometer Y', self.accelerometer.getY())
             #wpilib.SmartDashboard.putNumber('Accelerometer Z', self.accelerometer.getZ())
             
-            wpilib.SmartDashboard.putNumber('largeSensorVoltage', self.largeDistance.getVoltage())           
-            wpilib.SmartDashboard.putNumber('smalllSensorVoltage', self.smallDistance.getVoltage())
             #large distance 22.73x^-0.7533
             #small distance 7.330x^-0.7685
-            self.fixedLargeValue = ((max(0.00001,self.largeDistance.getVoltage()))/22.73)**(1/-0.7533)/2.54
-            self.fixedSmallValue = ((max(0.00001,self.smallDistance.getVoltage()))/7.330)**(1/-0.7685)/2.54
+            fixedLargeValue = ((max(0.00001,self.largeDistance.getVoltage()))/22.73)**(1/-0.7533)/2.54
+            fixedLargeValue2 = ((max(0.00001,self.largeDistance2.getVoltage()))/22.73)**(1/-0.7533)/2.54
+            fixedSmallValue = ((max(0.00001,self.smallDistance.getVoltage()))/7.330)**(1/-0.7685)/2.54
+            fixedSmallValue2 = ((max(0.00001,self.smallDistance2.getVoltage()))/7.330)**(1/-0.7685)/2.54
 
-            wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
-            wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+            wpilib.SmartDashboard.putNumber('largeSensorValue', fixedLargeValue)
+            wpilib.SmartDashboard.putNumber('largeSensorValue2', fixedLargeValue2)
+            
+            wpilib.SmartDashboard.putNumber('smallSensorValue', fixedSmallValue)
+            wpilib.SmartDashboard.putNumber('smallSensorValue2', fixedSmallValue2)
             
             wpilib.SmartDashboard.putNumber('Potentiometer', self.pot.getVoltage())
             
             wpilib.SmartDashboard.putNumber('Enc', self.encoder.getDistance())
-            
-           
             
             self.timercounter=self.timercounter+0.005
             wpilib.Timer.delay(0.005)
