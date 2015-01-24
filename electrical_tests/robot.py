@@ -1,4 +1,5 @@
 import wpilib
+from wpilib import cantalon
 
 class MyRobot(wpilib.SampleRobot):
     
@@ -10,6 +11,10 @@ class MyRobot(wpilib.SampleRobot):
         self.timercounter = 0
         self.XOfRobot=0
         self.YOfRobot=0
+        
+        self.talon = wpilib.CANTalon(0)
+        
+        self.encoder= wpilib.Encoder(0,1)
 
         
     def disabled(self):
@@ -35,9 +40,9 @@ class MyRobot(wpilib.SampleRobot):
             
             wpilib.SmartDashboard.putNumber('Potentiometer', self.pot.getVoltage())
             
+            wpilib.SmartDashboard.putNumber('Enc', self.encoder.getDistance())
             
-            self.XOfRobot=self.xofrobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
-            self.YOfRobot=self.yofrobot+(self.accelerometer.getY()*.5*(self.timercounter**2))
+           
             
             self.timercounter=self.timercounter+0.005
             wpilib.Timer.delay(0.005)
