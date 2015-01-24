@@ -6,6 +6,7 @@ class MyRobot(wpilib.SampleRobot):
         self.largeDistance = wpilib.AnalogInput(0)
         self.smallDistance = wpilib.AnalogInput(1)
         self.accelerometer = wpilib.BuiltInAccelerometer(range=2)
+        self.pot = wpilib.AnalogInput(2)
         self.timercounter = 0
         self.XOfRobot=0
         self.YOfRobot=0
@@ -31,6 +32,9 @@ class MyRobot(wpilib.SampleRobot):
 
             wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
             wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+            
+            wpilib.SmartDashboard.putNumber('Potentiometer', self.pot.getVoltage())
+            
             
             self.XOfRobot=self.xofrobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
             self.YOfRobot=self.yofrobot+(self.accelerometer.getY()*.5*(self.timercounter**2))
