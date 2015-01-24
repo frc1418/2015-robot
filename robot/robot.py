@@ -1,6 +1,5 @@
 import wpilib
 import math
-
 from components import forklift, drive
 
 class MyRobot(wpilib.SampleRobot):
@@ -20,6 +19,12 @@ class MyRobot(wpilib.SampleRobot):
         self.rf_motor = wpilib.Talon(3)
         self.lift_motor = wpilib.CANTalon(10)
         
+        self.camera = wpilib.USBCamera()
+        #   self.camera.openCamera()
+        self.camera.startCapture()
+        self.camServ = wpilib.CameraServer()
+        self.camServ.startAutomaticCapture(self.camera)
+        
        
         ##ROBOT DRIVE##
         self.robot_drive = wpilib.RobotDrive(self.lr_motor, self.rr_motor, self.lf_motor, self.rf_motor)
@@ -27,7 +32,7 @@ class MyRobot(wpilib.SampleRobot):
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
         
-        ##INITIALIZE SENSORS#
+        ##INITIALIZE SENSORS#was
         self.gyro = wpilib.Gyro(0)
         self.forklift = forklift.Forklift(self.lift_motor)
         
@@ -38,24 +43,27 @@ class MyRobot(wpilib.SampleRobot):
             'drive': self.drive
         }
     def operatorControl(self):
+        
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
-            if self.joystick1.getPOV()is not 180 or 90:
-                self.strafe = 0
-            else:
-                self.strafe = math.sin(self.joystick1.getPOV())
-            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX() * -1) / 2)
-            
+            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
             if self.joystick1.getRawButton(2):
                 self.forklift.setLift(.5)
+                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick1.getRawButton(3):
                 self.forklift.setLift(-.5)
+                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick2.getRawButton(2):
                 self.forklift.setLift(1)
+                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick2.getRawButton(3):
                 self.forklift.setLift(-1)
+                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             else: 
                 self.forklift.setLift(0)
+                
+
+            
             self.update()
             wpilib.Timer.delay(.01)
                 

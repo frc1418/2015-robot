@@ -32,7 +32,7 @@ class Drive(object):
 	# conflicts.
 	#
 	
-	def move(self, x, y, rotation):
+	def move(self, y, x, rotation):
 		'''
 			Causes the robot to move
 		
