@@ -14,7 +14,7 @@ class MyRobot(wpilib.SampleRobot):
         self.XOfRobot=0
         self.YOfRobot=0
         
-        self.talon = wpilib.CANTalon(0)
+        self.talon = wpilib.CANTalon(5)
         
         self.encoder= wpilib.Encoder(0,1)
 
@@ -49,6 +49,7 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.SmartDashboard.putNumber('Enc', self.encoder.getDistance())
             wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
             wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+
             
             #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
             #self.YOfRobot=self.YOfRobot+(self.accelerometer.getY()*.5*(self.timercounter**2))

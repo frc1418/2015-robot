@@ -15,4 +15,4 @@ class SharpIRGP2Y0A41SK0F:
         self.smallDistance = wpilib.AnalogInput(2)
 
     def getDistance(self):
-        return min(((max(0.00001,self.smallDistance.getVoltage()))/7.330)**(1/-0.7685)/2.5,1000)
+        return min(((max(0.00001,self.smallDistance.getVoltage()))/7.330)**(1/-0.7685)/2.54,1000)

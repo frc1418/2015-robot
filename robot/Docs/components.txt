@@ -19,3 +19,9 @@ Sensor list
 	Short distance sensor x 4
 	
 Autonomous
+
+Positioning:
+	Get voltage
+	Use data from voltage to get angle of bin
+	reset gyro
+	tell gyro to turn to that angle
