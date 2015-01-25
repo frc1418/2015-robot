@@ -80,7 +80,11 @@ class MyRobot(wpilib.SampleRobot):
             #wpilib.SmartDashboard.putNumber('smallSensorValue', fixedSmallValue)
             #wpilib.SmartDashboard.putNumber('smallSensorValue2', fixedSmallValue2)
             if(self.joystick1.getTrigger()==1):
-                self.infrared_rotation(self.shortDistance.getDistance(1),self.shortDistance.getDistance(2))
+                #########################################################################################
+                # TODO: make it switch between short and long distance depending on distance from tote. #
+                #########################################################################################
+                #if(self.shortDistance.getDistance() or self.shortDistance.getDistance() is ):
+                self.infrared_rotation(self.shortDistance.getDistance(),self.shortDistance2.getDistance())
                             
             self.update()
             self.smartdashbord_update()
@@ -94,23 +98,32 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('largeSensorValue2', self.longDistance2.getDistance())
         
     def infrared_rotation(self, distance1, distance2):
-        #distance 1 should be on the left
-        #distance 2 on the right
-        self.rotation=0
+        '''
+        when facing the direction of the robot:
+            distance 1 should be on the left
+            distance 2 on the right
+        '''
+        rotation=0
+        strafe=0
         #distance between sensors is assumed to be 12 inches
         distanceBetween=12
         #now we find dat slope
-        slope=(distance2-distance1)/((-distanceBetween/2) - (distanceBetween/2))
-        if(distance1>distance2):
-            #then the robot is too far counterclockwise
-            self.rotation=1
-        elif(distance2>distance1):
-            #then the robot is too far clockwise
-            self.rotation=-1
+        slope=(distance2-distance1)/((distanceBetween/2)-(-distanceBetween/2))
+        if(abs(slope)>.2):
+            print("slope > 1/10")
+            #gives it a "deadzone"
+            if(distance1>distance2):    
+                #then the robot is too far counterclockwise
+                rotation=.1
+                strafe=.1
+            elif(distance2>distance1):
+                #then the robot is too far clockwise
+                strafe=.1
+                rotation=-.1
             
     
         
-        self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), self.rotation / 2)
+        self.drive.move(0, (strafe), rotation / 2)
     def update (self):
         for component in self.components.values():
             component.doit()

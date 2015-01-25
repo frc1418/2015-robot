@@ -5,7 +5,7 @@ class SharpIR2Y0A02:
         self.Distance = wpilib.AnalogInput(num)
         
     def getDistance(self):
-        return min(((max(0.00001,self.Distance.getVoltage()))/22.73)**(1/-0.7533),1000)
+        return max(  min(  ((  max(self.Distance.getVoltage(),0.00001)/22.73)**(1/-0.7533))  ,200)  ,30)
 
 
 class SharpIRGP2Y0A41SK0F:
@@ -14,4 +14,14 @@ class SharpIRGP2Y0A41SK0F:
         self.Distance = wpilib.AnalogInput(num)
 
     def getDistance(self):
-        return min(((max(0.00001,self.Distance.getVoltage()))/7.330)**(1/-0.7685),1000)
+        return max(  min(    ((  max(self.Distance.getVoltage(),0.00001)/7.330)**(1/-0.7685))  ,35)  ,4)
+
+class CombinedSensor:
+    def __init__(self, longnum, shortnum):
+        self.longDistance = SharpIR2Y0A02(longnum)
+        self.shortDistance = SharpIRGP2Y0A41SK0F(shortnum)
+    def getDistance(self):
+        if(self.shortDistance.getDistance()>25):
+            return max(  min(  ((  max(self.longDistance.getVoltage(),0.00001)/22.73)**(1/-0.7533))  ,200)  ,30)
+        else:
+            return max(  min(    ((  max(self.shortDistance.getVoltage(),0.00001)/7.330)**(1/-0.7685))  ,35)  ,4)
