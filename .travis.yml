@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.4"
+# command to install dependencies
+install:
+  - "pip install pyfrc"
+# command to run tests
+script:
+  - electrical_tests/robot.py test
+  - robot/robot.py test
