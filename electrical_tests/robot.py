@@ -16,16 +16,17 @@ class MyRobot(wpilib.SampleRobot):
         self.XOfRobot=0
         self.YOfRobot=0
         
-        '''
         self.talon = wpilib.CANTalon(15)
         self.talon.changeControlMode(CANTalon.ControlMode.Position)
-        self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder)
+        self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder    )
+        wpilib.SmartDashboard.putBoolean('Reverse Enc', True)
+        self.talon.reverseSensor(wpilib.SmartDashboard.getBoolean('Reverse Enc'))
         self.talon.setP(1)
         self.joystick = wpilib.Joystick(0)
-        wpilib.SmartDashboard.putNumber('P', 1)
-        self.talon.setSensorPosition(0)
+        wpilib.SmartDashboard.putNumber('P', .001)
+        self.talon.setPosition(0)
         wpilib.SmartDashboard.putNumber('Pos', 50)
-        '''
+        
 
         
     def disabled(self):
@@ -61,12 +62,10 @@ class MyRobot(wpilib.SampleRobot):
             
             wpilib.SmartDashboard.putNumber('largeSensorVoltage', self.largeDistance2.getVoltage())
             wpilib.SmartDashboard.putNumber('smallSensorVoltage', self.smallDistance.getVoltage())
-            '''
+            
             if wpilib.SmartDashboard.getNumber('P') is not self.talon.getP():
-                print("Changing P")
                 self.talon.setP(wpilib.SmartDashboard.getNumber('P'))
-            self.talon.set(wpilib.SmartDashboard.getNumber('Pos')*-1)
-            '''    
+            self.talon.set(wpilib.SmartDashboard.getNumber('Pos'))
             
 
             
