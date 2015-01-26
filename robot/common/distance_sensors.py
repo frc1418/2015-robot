@@ -22,6 +22,6 @@ class CombinedSensor:
         self.shortDistance = SharpIRGP2Y0A41SK0F(shortnum)
     def getDistance(self):
         if(self.shortDistance.getDistance()>25):
-            return shortDistance.getDistance()
+            return self.longDistance.getDistance()
         else:
-            return longDistance.getDistance()
+            return self.shortDistance.getDistance()

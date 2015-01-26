@@ -85,10 +85,6 @@ class Drive(object):
 		
 		return True
 		
-	
-	#
-	# Actually tells the motors to do something
-	#
 	def infrared_rotation(self, distance1, distance2):
 		'''when facing the direction of the robot:
 		distance 1 should be on the left
@@ -101,7 +97,7 @@ class Drive(object):
 		#now we find the slope
 		slope = (distance2 - distance1)/((distanceBetween /  2) - (-distanceBetween /2))
 		if abs(slope)>.2:
-			print("slope > 1/10")
+			#print("slope > 1/10")
 			#gives it a "deadzone"
 			if distance1>distance2:
 				# then the robot is too far counterclockwise
@@ -111,7 +107,15 @@ class Drive(object):
 				#too far clockwise
 				strafe = -.1
 				rotation = -.1
-		move(0, stafe, rotation / 2)
+		else:
+			rotation = 0
+			strafe = 0
+		self.move(0, strafe, rotation / 2)
+		
+	#
+	# Actually tells the motors to do something
+	#
+	
 	def doit(self):
 		''' actually does stuff'''
 		self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation * -1, 0)
