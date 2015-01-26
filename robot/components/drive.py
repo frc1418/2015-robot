@@ -7,7 +7,7 @@ class Drive(object):
 		through this class.
 	'''
 
-	def __init__(self, robotDrive ,gyro):
+	def __init__(self, robotDrive , gyro):
 		'''
 			Constructor. 
 			
@@ -18,7 +18,7 @@ class Drive(object):
 		self.x = 0
 		self.y = 0
 		self.rotation = 0
-		self.gyro=gyro
+		self.gyro = gyro
 		
 		self.angle_constant = .040
 		self.gyro_enabled = True
@@ -78,7 +78,7 @@ class Drive(object):
 		angleOffset = target_angle - self.return_gyro_angle()
 		
 		if angleOffset < -1 or angleOffset > 1:
-			self.rotation = angleOffset*self.angle_constant
+			self.rotation = angleOffset * self.angle_constant
 			self.rotation = max(min(0.5, self.rotation), -0.5)
 			
 			return False
@@ -90,33 +90,32 @@ class Drive(object):
 	# Actually tells the motors to do something
 	#
 	def infrared_rotation(self, distance1, distance2):
-    		'''when facing the direction of the robot: 
-    		distance 1 should be on the left
-            distance 2 on the right
-     		'''
-        rotation=0
-        strafe=0
-        #distance between sensors is assumed to be 12 inches
-        distanceBetween=12
-        #now we find dat slope
-        slope=(distance2-distance1)/((distanceBetween/2)-(-distanceBetween/2))
-        if(abs(slope)>.2):
-            print("slope > 1/10")
-            #gives it a "deadzone"
-            if(distance1>distance2):    
-                #then the robot is too far counterclockwise
-                rotation=.1
-                strafe=.1
-            elif(distance2>distance1):
-                #then the robot is too far clockwise
-                strafe=.1
-                rotation=-.1
-         
-		move(0, strafe, rotation/2)
+		'''when facing the direction of the robot:
+		distance 1 should be on the left
+		distance 2 should be on the right
+		'''
+		rotation = 0
+		strafe = 0
+		#distance between sensors is assumed to be 12 inches
+		distanceBetween = 12
+		#now we find the slope
+		slope = (distance2 - distance1)/((distanceBetween /  2) - (-distanceBetween /2))
+		if abs(slope)>.2:
+			print("slope > 1/10")
+			#gives it a "deadzone"
+			if distance1>distance2:
+				# then the robot is too far counterclockwise
+				rotation = .1
+				stafe = .1
+			elif distance2 > distance1:
+				#too far clockwise
+				strafe = -.1
+				rotation = -.1
+		move(0, stafe, rotation / 2)
 	def doit(self):
 		''' actually does stuff'''
-		self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation*-1,0)
-		#print('x=%s, y=%s, r=%s ' % (self.x, self.y, self.rotation))
+		self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation * -1, 0)
+		# print('x=%s, y=%s, r=%s ' % (self.x, self.y, self.rotation))
 		
 
 		# by default, the robot shouldn't move
