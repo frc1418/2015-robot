@@ -16,6 +16,7 @@ class MyRobot(wpilib.SampleRobot):
         self.XOfRobot=0
         self.YOfRobot=0
         
+        '''
         self.talon = wpilib.CANTalon(15)
         self.talon.changeControlMode(CANTalon.ControlMode.Position)
         self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder)
@@ -24,11 +25,13 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('P', 1)
         self.talon.setSensorPosition(0)
         wpilib.SmartDashboard.putNumber('Pos', 50)
+        '''
 
         
     def disabled(self):
         #self.operatorControl()
-        self.talon.setSensorPosition(0)
+        #self.talon.setSensorPosition(0)
+        wpilib.Timer.delay(.01)
     
     def operatorControl(self):
         #self.myRobot.setSafetyEnabled(True)
@@ -55,11 +58,15 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.SmartDashboard.putNumber('Enc', self.talon.getEncPosition())
             wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
             wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+            
+            wpilib.SmartDashboard.putNumber('largeSensorVoltage', self.largeDistance2.getVoltage())
+            wpilib.SmartDashboard.putNumber('smallSensorVoltage', self.smallDistance.getVoltage())
+            '''
             if wpilib.SmartDashboard.getNumber('P') is not self.talon.getP():
                 print("Changing P")
                 self.talon.setP(wpilib.SmartDashboard.getNumber('P'))
             self.talon.set(wpilib.SmartDashboard.getNumber('Pos')*-1)
-                
+            '''    
             
 
             
