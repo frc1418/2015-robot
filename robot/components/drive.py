@@ -46,13 +46,7 @@ class Drive(object):
 		self.rotation = rotation
 		
 		
-	def closePosition(self):
-		'''returns true if the robot is in shooting range, false if it's not'''	
-		volts = self.ultraSonic.getAverageVoltage()
-		if volts <= 1.75 and volts >= 1.5:
-			return True
-		else:
-			return False
+
 	
 	def set_gyro_enabled(self, value):
 		self.gyro_enabled = value
