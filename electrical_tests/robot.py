@@ -18,13 +18,13 @@ class MyRobot(wpilib.SampleRobot):
         
         self.talon = wpilib.CANTalon(15)
         self.talon.changeControlMode(CANTalon.ControlMode.Position)
-        self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder    )
+        self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder)
         self.talon.reverseSensor(True)
         self.talon.setSensorPosition(0)
         
         
         ##SMART DASHBOARD
-        wpilib.SmartDashboard.putNumber('Pos', 50)
+        wpilib.SmartDashboard.putNumber('Pos', 1440)
         wpilib.SmartDashboard.putNumber('P', .001)
         wpilib.SmartDashboard.putNumber('Dist', '3')
 
@@ -32,6 +32,7 @@ class MyRobot(wpilib.SampleRobot):
     def disabled(self):
         #self.operatorControl()
         #self.talon.setSensorPosition(0)
+        self.talon.setSensorPosition(0)
         wpilib.Timer.delay(.01)
     
     def operatorControl(self):
@@ -66,8 +67,8 @@ class MyRobot(wpilib.SampleRobot):
             if wpilib.SmartDashboard.getNumber('P') is not self.talon.getP():
                 self.talon.setP(wpilib.SmartDashboard.getNumber('P'))
             
-            position = (wpilib.SmartDashboard.getNumber('Dist')*1440)/3
-            self.talon.set(pos)
+            position = (wpilib.SmartDashboard.getNumber('Dist')*1440)/5.75
+            self.talon.set(wpilib.SmartDashboard.getNumber('Pos')*-1)
             
             
             
