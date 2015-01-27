@@ -19,14 +19,14 @@ class MyRobot(wpilib.SampleRobot):
         self.talon = wpilib.CANTalon(15)
         self.talon.changeControlMode(CANTalon.ControlMode.Position)
         self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder    )
-        wpilib.SmartDashboard.putBoolean('Reverse Enc', True)
-        self.talon.reverseSensor(wpilib.SmartDashboard.getBoolean('Reverse Enc'))
-        self.talon.setP(1)
-        self.joystick = wpilib.Joystick(0)
-        wpilib.SmartDashboard.putNumber('P', .001)
-        self.talon.setPosition(0)
-        wpilib.SmartDashboard.putNumber('Pos', 50)
+        self.talon.reverseSensor(True)
+        self.talon.setSensorPosition(0)
         
+        
+        ##SMART DASHBOARD
+        wpilib.SmartDashboard.putNumber('Pos', 50)
+        wpilib.SmartDashboard.putNumber('P', .001)
+        wpilib.SmartDashboard.putNumber('Dist', '3')
 
         
     def disabled(self):
@@ -38,36 +38,38 @@ class MyRobot(wpilib.SampleRobot):
         #self.myRobot.setSafetyEnabled(True)
         
         while self.isOperatorControl() and self.isEnabled():    
-            wpilib.SmartDashboard.putNumber('Accelerometer X', self.accelerometer.getX())
-            wpilib.SmartDashboard.putNumber('Accelerometer Y', self.accelerometer.getY())
+            #wpilib.SmartDashboard.putNumber('Accelerometer X', self.accelerometer.getX())
+            #wpilib.SmartDashboard.putNumber('Accelerwometer Y', self.accelerometer.getY())
             #wpilib.SmartDashboard.putNumber('Accelerometer Z', self.accelerometer.getZ())
             
             #large distance 22.73x^-0.7533
             #small distance 7.330x^-0.7685
-            self.fixedLargeValue = ((max(0.00001,self.largeDistance.getVoltage()))/22.73)**(1/-0.7533)/2.54
-            self.fixedLargeValue2 = ((max(0.00001,self.largeDistance2.getVoltage()))/22.73)**(1/-0.7533)/2.54
-            self.fixedSmallValue = ((max(0.00001,self.smallDistance.getVoltage()))/7.330)**(1/-0.7685)/2.54
-            self.fixedSmallValue2 = ((max(0.00001,self.smallDistance2.getVoltage()))/7.330)**(1/-0.7685)/2.54
+           # self.fixedLargeValue = ((max(0.00001,self.largeDistance.getVoltage()))/22.73)**(1/-0.7533)/2.54
+           # self.fixedLargeValue2 = ((max(0.00001,self.largeDistance2.getVoltage()))/22.73)**(1/-0.7533)/2.54
+           # self.fixedSmallValue = ((max(0.00001,self.smallDistance.getVoltage()))/7.330)**(1/-0.7685)/2.54
+           # self.fixedSmallValue2 = ((max(0.00001,self.smallDistance2.getVoltage()))/7.330)**(1/-0.7685)/2.54
 
-            wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
-            wpilib.SmartDashboard.putNumber('largeSensorValue2', self.fixedLargeValue2)
+           # wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
+           # wpilib.SmartDashboard.putNumber('largeSensorValue2', self.fixedLargeValue2)
             
-            wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
-            wpilib.SmartDashboard.putNumber('smallSensorValue2', self.fixedSmallValue2)
+           # wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+           # wpilib.SmartDashboard.putNumber('smallSensorValue2', self.fixedSmallValue2)
             
             #wpilib.SmartDashboard.putNumber('Potentiometer', self.pot.getVoltage())
             wpilib.SmartDashboard.putNumber('Enc', self.talon.getEncPosition())
-            wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
-            wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
+           # wpilib.SmartDashboard.putNumber('largeSensorValue', self.fixedLargeValue)
+           # wpilib.SmartDashboard.putNumber('smallSensorValue', self.fixedSmallValue)
             
-            wpilib.SmartDashboard.putNumber('largeSensorVoltage', self.largeDistance2.getVoltage())
-            wpilib.SmartDashboard.putNumber('smallSensorVoltage', self.smallDistance.getVoltage())
+           # wpilib.SmartDashboard.putNumber('largeSensorVoltage', self.largeDistance2.getVoltage())
+           # wpilib.SmartDashboard.putNumber('smallSensorVoltage', self.smallDistance.getVoltage())
             
             if wpilib.SmartDashboard.getNumber('P') is not self.talon.getP():
                 self.talon.setP(wpilib.SmartDashboard.getNumber('P'))
-            self.talon.set(wpilib.SmartDashboard.getNumber('Pos'))
             
-
+            position = (wpilib.SmartDashboard.getNumber('Dist')*1440)/3
+            self.talon.set(pos)
+            
+            
             
             #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
             #self.YOfRobot=self.YOfRobot+(self.accelerometer.getY()*.5*(self.timercounter**2))
