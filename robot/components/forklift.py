@@ -1,15 +1,17 @@
 import wpilib
 
 class Forklift (object):
-    def __init__ (self, liftmotor):
-        self.lift_motor = liftmotor
-        
-       
-        (distance/rotationDistance)
-    def setLift(self, pos):
+    def __init__ (self, toteMotor,canMotor ):
+        self.tote_motor = toteMotor
+        self.canMotor = canMotor
+   
+    def setCanLift(self, pos):
+        self.canPosition = pos
+   
+    def setToteLift(self, pos):
         self.position = pos
-        #self.position = distance*1440/RotationDistance
 
     def doit(self):
-        self.lift_motor.set(self.position)
+        self.canMotor.set(canPosition)
+        self.tote_motor.set(self.position)
         

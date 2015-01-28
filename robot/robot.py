@@ -65,19 +65,19 @@ class MyRobot(wpilib.SampleRobot):
         while self.isOperatorControl() and self.isEnabled():
             self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
             if self.joystick1.getRawButton(2):
-                self.forklift.setLift(.5)
+                self.forklift.setToteLift(.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick1.getRawButton(3):
-                self.forklift.setLift(-.5)
+                self.forklift.setToteLift(-.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick2.getRawButton(2):
-                self.forklift.setLift(1)
+                self.forklift.setToteLift(1)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick2.getRawButton(3):
-                self.forklift.setLift(-1)
+                self.forklift.setToteLift(-1)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             else: 
-                self.forklift.setLift(0)
+                self.forklift.setToteLift(0)
                 
             #INFARED DRIVE#
             if(self.joystick1.getTrigger()==1):
