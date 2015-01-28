@@ -43,7 +43,7 @@ class MyRobot(wpilib.SampleRobot):
         
         
         #self.gyro = wpilib.Gyro(4)
-        self.forklift = forklift.Forklift(self.tote_motor)
+        self.forklift = forklift.Forklift(self.tote_motor, self.bin_motor)
         
         self.drive = drive.Drive(self.robot_drive,0)
         
