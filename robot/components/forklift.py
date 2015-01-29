@@ -3,9 +3,9 @@ import wpilib
 class Forklift (object):
     def __init__ (self, toteMotor,canMotor ):
         self.tote_motor = toteMotor
-        self.canMotor = canMotor
-        self.canPosition = 0
-        self.totePosition = 0
+        self.can_Motor = canMotor
+        self.canPosition = self.can_Motor.getPosition()
+        self.totePosition = self.tote_motor.getPosition()
    
     def setCanLift(self, pos):
         self.canPosition = pos
@@ -16,4 +16,5 @@ class Forklift (object):
     def doit(self):
         self.canMotor.set(self.canPosition)
         self.tote_motor.set(self.totePosition)
+        
         

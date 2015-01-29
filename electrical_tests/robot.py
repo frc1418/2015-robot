@@ -16,16 +16,19 @@ class MyRobot(wpilib.SampleRobot):
         self.XOfRobot=0
         self.YOfRobot=0
         
-        self.talon = wpilib.CANTalon(15)
-        self.talon.changeControlMode(CANTalon.ControlMode.Position)
-        self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder)
-        self.talon.reverseSensor(True)
-        self.talon.setSensorPosition(0)
-        
         self.talon = wpilib.CANTalon(5)
         self.talon.changeControlMode(CANTalon.ControlMode.Position)
         self.talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder)
         self.talon.setSensorPosition(0)
+        self.talon.setP(.001)
+         
+        self.bin_talon = wpilib.CANTalon(15)
+        self.bin_talon.changeControlMode(CANTalon.ControlMode.Position)
+        self.bin_talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder)
+        self.bin_talon.reverseSensor(True)
+        self.bin_talon.setSensorPosition(0)
+        
+        
         
         
         ##SMART DASHBOARD
@@ -79,7 +82,7 @@ class MyRobot(wpilib.SampleRobot):
             
             
             #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
-            #self.YOfRobot=self.YOfRobot+(self.accelerometer.getY()*.5*(self.timercounter**2))
+            #self.YOfRobot=self.YOfRobot+(self.acwcelerometer.getY()*.5*(self.timercounter**2))
             
             self.timercounter=self.timercounter+0.005
             wpilib.Timer.delay(0.005)
