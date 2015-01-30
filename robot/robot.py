@@ -21,8 +21,8 @@ class MyRobot(wpilib.SampleRobot):
         self.lr_motor = wpilib.Talon(1)
         self.rr_motor = wpilib.Talon(2)
         self.rf_motor = wpilib.Talon(3)
-        self.tote_motor = wpilib.CANTalon(10)
-        self.bin_motor = wpilib.CANTalon(5)
+        self.tote_motor = wpilib.CANTalon(5)
+        self.bin_motor = wpilib.CANTalon(15)
         
         #CAMERA
         try:
@@ -34,8 +34,7 @@ class MyRobot(wpilib.SampleRobot):
             self.camera = None
        
         ##ROBOT DRIVE##
-        self.robot_drive = wpilib.RobotDrive(self.lr_motor, self.rr_motor, self.lf_motor, self.rf_motor)
-        self.robot_drive.setSafetyEnabled(False)
+        self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
 
@@ -63,25 +62,26 @@ class MyRobot(wpilib.SampleRobot):
         
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
-            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
+            self.drive.move((self.joystick1.getY()*-1), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
             if self.joystick1.getRawButton(2):
-                self.forklift.setToteLift(.5)
+                self.tote_motor.set(.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick1.getRawButton(3):
-                self.forklift.setToteLift(-.5)
-                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
-            elif self.joystick2.getRawButton(2):
-                self.forklift.setToteLift(1)
+                self.tote_motor.set(-.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             elif self.joystick2.getRawButton(3):
-                self.forklift.setToteLift(-1)
+                self.bin_motor.set(.5)
+                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
+            elif self.joystick2.getRawButton(2):
+                self.bin_motor.set(-.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
             else: 
-                self.forklift.setToteLift(0)
+                self.tote_motor.set(0)
+                self.bin_motor.set(0)
                 
             #INFARED DRIVE#
-            if(self.joystick1.getTrigger()==1):
-                    self.drive.infrared_rotation(self.combinedDistance.getDistance(),self.combinedDistance2.getDistance())
+            #if(self.joystick1.getTrigger()==1):
+            #        self.drive.infrared_rotation(self.combinedDistance.getDistance(),self.combinedDistance2.getDistance())
                     
             self.update()
             self.smartdashbord_update()
