@@ -53,7 +53,7 @@ class MyRobot(wpilib.SampleRobot):
         self.combinedDistance = CombinedSensor(0,1)
         self.combinedDistance2 = CombinedSensor(2,3)
                 
-        
+        self.s=True
         self.components = {
             'forklift': self.forklift,
             'drive': self.drive
@@ -63,21 +63,35 @@ class MyRobot(wpilib.SampleRobot):
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
             self.drive.move((self.joystick1.getY()*-1), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
+ 
             if self.joystick1.getRawButton(2):
                 self.tote_motor.set(.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
+                
             elif self.joystick1.getRawButton(3):
                 self.tote_motor.set(-.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
+                
             elif self.joystick2.getRawButton(3):
                 self.bin_motor.set(.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
+                
             elif self.joystick2.getRawButton(2):
                 self.bin_motor.set(-.5)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
+                
             else: 
                 self.tote_motor.set(0)
                 self.bin_motor.set(0)
+            
+            if self.joystick1.getRawButton(7) and self.s:
+                self.drive.switch_direction(self.joystick1.getRawButton(7))
+                self.s=False
+                #print("hellp")
+            elif not self.joystick1.getRawButton(7):
+                self.s=True
+            
+            
                 
             #INFARED DRIVE#
             #if(self.joystick1.getTrigger()==1):

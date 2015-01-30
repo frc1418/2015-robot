@@ -13,7 +13,7 @@ class Drive(object):
 			
 			:param robotDrive: a `wpilib.RobotDrive` object
 		'''
-		
+		self.isTheRobotBackwards = False
 		# set defaults here
 		self.x = 0
 		self.y = 0
@@ -115,10 +115,19 @@ class Drive(object):
 	#
 	# Actually tells the motors to do something
 	#
-	
+	def switch_direction(self, b):
+		
+		self.isTheRobotBackwards = not self.isTheRobotBackwards
+		
 	def doit(self):
 		''' actually does stuff'''
-		self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation * -1, 0)
+		if(self.isTheRobotBackwards):
+			self.robotDrive.mecanumDrive_Cartesian(-self.y, -self.x, self.rotation * 1, 0)
+			print("revrsed")
+		else:
+			self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation * -1, 0)
+			print("not revrsed")
+
 		# print('x=%s, y=%s, r=%s ' % (self.x, self.y, self.rotation))
 		
 
