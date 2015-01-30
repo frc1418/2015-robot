@@ -15,7 +15,7 @@ class MyRobot(wpilib.SampleRobot):
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
 
-        
+        #hello
         ##INITIALIZE MOTORS##
         self.lf_motor = wpilib.Talon(0)
         self.lr_motor = wpilib.Talon(1)
