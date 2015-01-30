@@ -34,7 +34,7 @@ class MyRobot(wpilib.SampleRobot):
             self.camera = None
        
         ##ROBOT DRIVE##
-        self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
+        self.robot_drive = wpilib.RobotDrive(self.lr_motor, self.rr_motor, self.lf_motor, self.rf_motor)
         self.robot_drive.setInvertedMotor(0, True)
         self.robot_drive.setInvertedMotor(2, True)
 
