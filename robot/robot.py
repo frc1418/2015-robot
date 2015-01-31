@@ -116,8 +116,7 @@ class MyRobot(wpilib.SampleRobot):
     def update (self):
         for component in self.components.values():
             component.doit()
-            
-            
+
     def disabled(self):
         '''Called when the robot is in disabled mode'''
         while not self.isEnabled():
