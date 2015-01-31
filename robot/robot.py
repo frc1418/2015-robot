@@ -2,7 +2,8 @@
 
 import wpilib
 import math
-from components import forklift, drive
+from components import drive
+from components.forklift import tote_Forklift, bin_Forklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from wpilib.smartdashboard import SmartDashboard
 
@@ -42,20 +43,22 @@ class MyRobot(wpilib.SampleRobot):
         
         
         #self.gyro = wpilib.Gyro(4)
-        self.forklift = forklift.Forklift(self.tote_motor, self.bin_motor)
+        self.tote_forklift = tote_Forklift(self.tote_motor)
+        self.bin_forklift = bin_Forklift(self.bin_motor)
         
         self.drive = drive.Drive(self.robot_drive,0)
         
-        #self.longDistance = SharpIR2Y0A02(0)
-        #self.longDistance2 = SharpIR2Y0A02(2)
-        #self.shortDistance = SharpIRGP2Y0A41SK0F(1)
-        #self.shortDistance2 = SharpIRGP2Y0A41SK0F(3)
-        self.combinedDistance = CombinedSensor(0,1)
-        self.combinedDistance2 = CombinedSensor(2,3)
+        self.longDistance = SharpIR2Y0A02(0)
+        self.longDistance2 = SharpIR2Y0A02(2)
+        self.shortDistance = SharpIRGP2Y0A41SK0F(1)
+        self.shortDistance2 = SharpIRGP2Y0A41SK0F(3)
+        #self.combinedDistance = CombinedSensor(0,1)
+        #self.combinedDistance2 = CombinedSensor(2,3)
                 
         self.s=True
         self.components = {
-            'forklift': self.forklift,
+            'bin_forklift': self.bin_forklift,
+            'tote_forklift': self.tote_forklift,
             'drive': self.drive
         }
     def operatorControl(self):
@@ -88,25 +91,27 @@ class MyRobot(wpilib.SampleRobot):
                 self.drive.switch_direction(self.joystick1.getRawButton(7))
                 self.s=False
                 #print("hellp")
+            
             elif not self.joystick1.getRawButton(7):
                 self.s=True
-            
-            
-                
+             
+            if self.tote_forklift.toteCheck():
+                pass
+
             #INFARED DRIVE#
             #if(self.joystick1.getTrigger()==1):
             #        self.drive.infrared_rotation(self.combinedDistance.getDistance(),self.combinedDistance2.getDistance())
-                    
+            
             self.update()
             self.smartdashbord_update()
             wpilib.Timer.delay(.01)
         
     def smartdashbord_update(self):
-        wpilib.SmartDashboard.putNumber('shortSensorValue', self.combinedDistance.getDistance())
-        wpilib.SmartDashboard.putNumber('shortSensorValue2',self.combinedDistance2.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValue', self.shortDistance.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValue2',self.shortDistance2.getDistance())
 
-        wpilib.SmartDashboard.putNumber('largeSensorValue', self.combinedDistance.getDistance())
-        wpilib.SmartDashboard.putNumber('largeSensorValue2', self.combinedDistance2.getDistance())
+        wpilib.SmartDashboard.putNumber('largeSensorValue', self.longDistance.getDistance())
+        wpilib.SmartDashboard.putNumber('largeSensorValue2', self.longDistance2.getDistance())
         
     def update (self):
         for component in self.components.values():

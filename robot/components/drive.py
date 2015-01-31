@@ -123,10 +123,8 @@ class Drive(object):
 		''' actually does stuff'''
 		if(self.isTheRobotBackwards):
 			self.robotDrive.mecanumDrive_Cartesian(-self.y, -self.x, self.rotation * 1, 0)
-			print("revrsed")
 		else:
 			self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation * -1, 0)
-			print("not revrsed")
 
 		# print('x=%s, y=%s, r=%s ' % (self.x, self.y, self.rotation))
 		
