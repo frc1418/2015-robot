@@ -20,8 +20,8 @@ class MyRobot(wpilib.SampleRobot):
         ##INITIALIZE MOTORS##
         self.lf_motor = wpilib.Talon(0)
         self.lr_motor = wpilib.Talon(1)
-        self.rr_motor = wpilib.Talon(2)
-        self.rf_motor = wpilib.Talon(3)
+        self.rf_motor = wpilib.Talon(2)
+        self.rr_motor = wpilib.Talon(3)
         self.tote_motor = wpilib.CANTalon(5)
         self.bin_motor = wpilib.CANTalon(15)
         
@@ -35,9 +35,9 @@ class MyRobot(wpilib.SampleRobot):
             self.camera = None
        
         ##ROBOT DRIVE##
-        self.robot_drive = wpilib.RobotDrive(self.lr_motor, self.rr_motor, self.lf_motor, self.rf_motor)
-        self.robot_drive.setInvertedMotor(0, True)
-        self.robot_drive.setInvertedMotor(2, True)
+        self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
 
         ##INITIALIZE SENSORS#
         
@@ -65,7 +65,7 @@ class MyRobot(wpilib.SampleRobot):
         
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
-            self.drive.move((self.joystick1.getY()*-1), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
+            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
  
             if self.joystick1.getRawButton(2):
                 self.tote_motor.set(.5)
@@ -76,11 +76,11 @@ class MyRobot(wpilib.SampleRobot):
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
                 
             elif self.joystick2.getRawButton(3):
-                self.bin_motor.set(.5)
+                self.bin_motor.set(1)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
                 
             elif self.joystick2.getRawButton(2):
-                self.bin_motor.set(-.5)
+                self.bin_motor.set(-.3)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
                 
             else: 

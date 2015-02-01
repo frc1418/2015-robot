@@ -122,9 +122,9 @@ class Drive(object):
 	def doit(self):
 		''' actually does stuff'''
 		if(self.isTheRobotBackwards):
-			self.robotDrive.mecanumDrive_Cartesian(-self.y, -self.x, self.rotation * 1, 0)
+			self.robotDrive.mecanumDrive_Cartesian(-self.x, -self.y, self.rotation * -1, 0)
 		else:
-			self.robotDrive.mecanumDrive_Cartesian(self.y, self.x, self.rotation * -1, 0)
+			self.robotDrive.mecanumDrive_Cartesian(self.x, self.y, self.rotation, 0)
 
 		# print('x=%s, y=%s, r=%s ' % (self.x, self.y, self.rotation))
 		
