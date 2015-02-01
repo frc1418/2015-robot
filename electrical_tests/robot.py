@@ -53,8 +53,6 @@ class MyRobot(wpilib.SampleRobot):
         
         while self.isOperatorControl() and self.isEnabled():    
             
-            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
-            
             '''
             wpilib.SmartDashboard.putNumber('Enc', self.talon.getEncPosition())
             
@@ -67,6 +65,12 @@ class MyRobot(wpilib.SampleRobot):
             #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
             #self.YOfRobot=self.YOfRobot+(self.acwcelerometer.getY()*.5*(self.timercounter**2))
             '''
+            
+            self.x=self.joystick1.getY()
+            self.y=self.joystick1.getX()
+            self.rotation=(self.joystick2.getX() / 2)
+            
+            self.robot_drive.mecanumDrive_Cartesian(-1*(self.x), -1*(self.y), -1*(self.rotation), 0)
 
             wpilib.Timer.delay(0.005)
             
