@@ -57,8 +57,7 @@ class MyRobot(wpilib.SampleRobot):
                 
         self.s=True
         self.components = {
-            #'bin_forklift': self.bin_forklift,
-            #'tote_forklift': self.tote_forklift,
+            #'Forklift': self.tote_forklift.Forklift,
             'drive': self.drive
         }
     def operatorControl(self):

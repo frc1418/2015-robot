@@ -1,7 +1,7 @@
 import wpilib
 class tote_Forklift (object):
-    def __init__ (self, Motor):
-        self.forklift=forklift
+    def __init__ (self, CANMotor):
+        self.forklift=Forklift(CANMotor)
         
 
         self.lim1 =  wpilib.DigitalInput(1)
@@ -28,15 +28,15 @@ class tote_Forklift (object):
 
 class bin_Forklift (object):
     def __init__ (self, Motor):
-        self.forklift=forklift(Motor)
+        self.forklift=Forklift(Motor)
         P1=0
         P2=1
         P3=2
 class Forklift (object):
     def __init__ (self, CANMotor):
-        self.can_Motor = canMotor
-        self.zero=self.canPosition
-        self.setpoint=self.canPosition
+        self.can_Motor = CANMotor
+        #self.zero=self.canPosition
+        #self.setpoint=self.canPosition
         
     def setLift(self, motor, position):
         motor = motor
