@@ -109,9 +109,10 @@ class MyRobot(wpilib.SampleRobot):
     def smartdashbord_update(self):
         wpilib.SmartDashboard.putNumber('shortSensorValue', self.shortDistance.getDistance())
         wpilib.SmartDashboard.putNumber('shortSensorValue2',self.shortDistance2.getDistance())
-
         wpilib.SmartDashboard.putNumber('largeSensorValue', self.longDistance.getDistance())
         wpilib.SmartDashboard.putNumber('largeSensorValue2', self.longDistance2.getDistance())
+        
+        
         
     def update (self):
         for component in self.components.values():
