@@ -32,7 +32,8 @@ class MyRobot(wpilib.SampleRobot):
         self.lr_motor = wpilib.Talon(1)
         self.rf_motor = wpilib.Talon(2)
         self.rr_motor = wpilib.Talon(3)
-
+        self.forkliftMotor = wpilib.Talon(4)
+        self.forkliftMotor2 = wpilib.Talon(5)
         
         ##SMART DASHBOARD
         wpilib.SmartDashboard.putNumber('Pos', 1440)
@@ -65,6 +66,19 @@ class MyRobot(wpilib.SampleRobot):
             #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
             #self.YOfRobot=self.YOfRobot+(self.acwcelerometer.getY()*.5*(self.timercounter**2))
             '''
+            if self.joystick1.getRawButton(4):
+                self.forkliftMotor.set(1)
+            if self.joystick1.getRawButton(3):
+                self.forkliftMotor.set(-1)
+            elif self.joystick1.getRawButton(4)==(False) and self.joystick1.getRawButton(3)==(False):
+                self.forkliftMotor.set(0)
+                
+            if self.joystick2.getRawButton(4):
+                self.forkliftMotor2.set(1)
+            if self.joystick2.getRawButton(3):
+                self.forkliftMotor2.set(-1)
+            elif self.joystick2.getRawButton(4)==(False) and self.joystick2.getRawButton(3)==(False):
+                self.forkliftMotor2.set(0)
             
             self.x=self.joystick1.getY()
             self.y=self.joystick1.getX()
