@@ -71,16 +71,16 @@ class MyRobot(wpilib.SampleRobot):
             '''
             Canset1=0
             if self.joystick1.getRawButton(2):
-                Canset1=(1)
+                Canset1=(.75)
             if self.joystick1.getRawButton(3):
-                Canset1=(-1)
+                Canset1=(-.75)
             
             self.forkliftMotor.set(Canset1)
             #print("setting 1 to %n",Canset1)
 
             Canset2=0
             if self.joystick2.getRawButton(3):
-                Canset2=(1)
+                Canset2=(.75)
             if self.joystick2.getRawButton(2):
                 Canset2=(-.5)
             
