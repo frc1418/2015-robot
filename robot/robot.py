@@ -15,7 +15,7 @@ class MyRobot(wpilib.SampleRobot):
         ##INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
-
+        
         #hello
         ##INITIALIZE MOTORS##
         self.lf_motor = wpilib.Talon(0)
@@ -57,7 +57,8 @@ class MyRobot(wpilib.SampleRobot):
                 
         self.s=True
         self.components = {
-            #'Forklift': self.tote_forklift.Forklift,
+            'tote_Forklift': self.tote_forklift,
+            'can_Forklift': self.can_forklift,
             'drive': self.drive
         }
     def operatorControl(self):
