@@ -26,7 +26,7 @@ class tote_Forklift (object):
         return False
 
 
-class bin_Forklift (object):
+class can_Forklift (object):
     def __init__ (self, Motor):
         self.forklift=Forklift(Motor)
         P1=0

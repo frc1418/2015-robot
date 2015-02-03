@@ -3,14 +3,14 @@
 import wpilib
 import math
 from components import drive
-from components.forklift import tote_Forklift, bin_Forklift
+from components.forklift import tote_Forklift, can_Forklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from wpilib.smartdashboard import SmartDashboard
 
 class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
         super().__init__()
-        print("Team 1418 2015 Test Code")
+        print("Team 1418's 2015 Code")
         
         ##INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
@@ -23,7 +23,7 @@ class MyRobot(wpilib.SampleRobot):
         self.rf_motor = wpilib.Talon(2)
         self.rr_motor = wpilib.Talon(3)
         self.tote_motor = wpilib.CANTalon(5)
-        self.bin_motor = wpilib.CANTalon(15)
+        self.can_motor = wpilib.CANTalon(15)
         
         #CAMERA
         try:
@@ -44,7 +44,7 @@ class MyRobot(wpilib.SampleRobot):
         
         #self.gyro = wpilib.Gyro(4)
         self.tote_forklift = tote_Forklift(self.tote_motor)
-        self.bin_forklift = bin_Forklift(self.bin_motor)
+        self.can_forklift = can_Forklift(self.can_motor)
         
         self.drive = drive.Drive(self.robot_drive,0)
         
@@ -75,16 +75,16 @@ class MyRobot(wpilib.SampleRobot):
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
                 
             elif self.joystick2.getRawButton(3):
-                self.bin_motor.set(1)
+                self.can_motor.set(1)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
                 
             elif self.joystick2.getRawButton(2):
-                self.bin_motor.set(-.3)
+                self.can_motor.set(-.3)
                 self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
                 
             else: 
                 self.tote_motor.set(0)
-                self.bin_motor.set(0)
+                self.can_motor.set(0)
             
             if self.joystick1.getRawButton(7) and self.s:
                 self.drive.switch_direction(self.joystick1.getRawButton(7))
