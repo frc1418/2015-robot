@@ -103,7 +103,7 @@ class MyRobot(wpilib.SampleRobot):
             #        self.drive.infrared_rotation(self.combinedDistance.getDistance(),self.combinedDistance2.getDistance())
             
             self.update()
-            self.smartdashbord_update()
+            #self.smartdashbord_update()
             wpilib.Timer.delay(.01)
         
     def smartdashbord_update(self):
