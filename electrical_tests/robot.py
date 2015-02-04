@@ -36,6 +36,7 @@ class MyRobot(wpilib.SampleRobot):
         self.forkliftMotor2 = wpilib.CANTalon(15)
         self.forkliftMotor.changeControlMode(CANTalon.ControlMode.PercentVbus)
         self.forkliftMotor2.changeControlMode(CANTalon.ControlMode.PercentVbus)
+        self.reverse = 1
         
         
         ##SMART DASHBOARD
@@ -71,24 +72,30 @@ class MyRobot(wpilib.SampleRobot):
             '''
             Canset1=0
             if self.joystick1.getRawButton(2):
-                Canset1=(.75)
+                Canset1=(.5)
             if self.joystick1.getRawButton(3):
-                Canset1=(-.75)
+                Canset1=(-.5)
             
             self.forkliftMotor.set(Canset1)
             #print("setting 1 to %n",Canset1)
 
             Canset2=0
             if self.joystick2.getRawButton(3):
-                Canset2=(.75)
+                Canset2=(.5)
             if self.joystick2.getRawButton(2):
                 Canset2=(-.5)
             
             self.forkliftMotor2.set(Canset2)
             #print("setting 2 to %n",Canset2)
             
-            self.x=self.joystick1.getX()
-            self.y=self.joystick1.getY()
+            if self.joystick1.getTrigger():
+                self.reverse = 1
+            if self.joystick2.getTrigger():
+                self.reverse = -1
+                
+                
+            self.x=self.joystick1.getX()*self.reverse
+            self.y=self.joystick1.getY()*self.reverse
             self.rotation=(self.joystick2.getX() / 2)
             
             self.robot_drive.mecanumDrive_Cartesian((self.x), (self.y), (self.rotation), 0)
