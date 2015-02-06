@@ -79,22 +79,18 @@ class MyRobot(wpilib.SampleRobot):
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
             self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
-
+            #tote forklift goes up
             if self.joystick1.getRawButton(2):
                 self.tote_motor.set(.5)
-                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
-
+            #tote forklift goes down
             elif self.joystick1.getRawButton(3):
                 self.tote_motor.set(-.5)
-                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
-
+            #can forklift goes down
             elif self.joystick2.getRawButton(3):
                 self.can_motor.set(1)
-                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
-
+            #can forklift goes up
             elif self.joystick2.getRawButton(2):
                 self.can_motor.set(-.3)
-                self.drive.move((self.joystick1.getY())/2, (self.joystick1.getX())/2, (self.joystick2.getX()) / 2)
 
             else:
                 self.tote_motor.set(0)
@@ -112,9 +108,9 @@ class MyRobot(wpilib.SampleRobot):
                 pass
 
             #INFARED DRIVE#
-            #if(self.joystick1.getTrigger()==1):
-            #        self.drive.infrared_rotation(self.combinedDistance.getDistance(),self.combinedDistance2.getDistance())
-
+            if(self.joystick1.getTrigger()==1):
+                self.drive.infrared_rotation(self.longDistance.getDistance(),self.longDistance.getDistance(),12)
+                
             self.update()
             #self.smartdashbord_update()
             wpilib.Timer.delay(self.control_loop_wait_time)
