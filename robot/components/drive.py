@@ -85,7 +85,7 @@ class Drive(object):
 		
 		return True
 		
-	def infrared_rotation(self, distance1, distance2):
+	def infrared_rotation(self, distance1, distance2, distanceBetween):
 		'''when facing the direction of the robot:
 		distance 1 should be on the left
 		distance 2 should be on the right
@@ -93,11 +93,9 @@ class Drive(object):
 		rotation = 0
 		strafe = 0
 		#distance between sensors is assumed to be 12 inches
-		distanceBetween = 12
 		#now we find the slope
 		slope = (distance2 - distance1)/((distanceBetween /  2) - (-distanceBetween /2))
 		if abs(slope)>.2:
-			#print("slope > 1/10")
 			#gives it a "deadzone"
 			if distance1>distance2:
 				# then the robot is too far counterclockwise
@@ -115,6 +113,8 @@ class Drive(object):
 	#
 	# Actually tells the motors to do something
 	#
+
+		
 	def switch_direction(self, b):
 		
 		self.isTheRobotBackwards = not self.isTheRobotBackwards
@@ -128,7 +128,7 @@ class Drive(object):
 
 		# print('x=%s, y=%s, r=%s ' % (self.x, self.y, self.rotation))
 		
-
+		
 		# by default, the robot shouldn't move
 		self.x = 0
 		self.y = 0

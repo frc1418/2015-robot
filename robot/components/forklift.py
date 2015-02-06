@@ -7,10 +7,12 @@ class Forklift (object):
         self.setpoint = setpoint
     
     def zeroEnc(self):
+        #takes encoder posistion, returns inches.
         self.zero=self.encoderToInch(CANMotor.getEncPosition())
     
     def doit(self):
-        self.CANMotor.set(self.inchToEncoder(self.position))
+        #takes inches, gives motor encoder values
+        self.CANMotor.set(self.inchToEncoder(self.setpoint))
 
 
 
@@ -19,7 +21,7 @@ class tote_Forklift (Forklift):
         self.CANMotor=CANMotor
         self.CANMotor = CANMotor
         self.setpoint=CANMotor.getEncPosition()
-        self.position = (self.setpoint*1440)/5.75
+        #self.position = (self.setpoint*1440)/5.75
         #List of positions in inches from 0
         Pn1=0
         P0=1
@@ -55,7 +57,7 @@ class can_Forklift (Forklift):
     def __init__ (self, CANMotor):
         self.CANMotor = CANMotor
         self.setpoint=CANMotor.getEncPosition()
-        self.position = (self.setpoint*1440)/9.625
+        #self.position = (self.setpoint*1440)/9.625
         #List of positions in inches from 0
         P1=0
         P2=1
