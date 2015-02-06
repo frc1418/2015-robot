@@ -7,7 +7,6 @@ from components.forklift import tote_Forklift, can_Forklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from wpilib.smartdashboard import SmartDashboard
 
-from robotpy_ext.autonomous import AutonomousModeSelector
 
 class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
@@ -24,9 +23,6 @@ class MyRobot(wpilib.SampleRobot):
         self.lr_motor = wpilib.Talon(1)
         self.rf_motor = wpilib.Talon(2)
         self.rr_motor = wpilib.Talon(3)
-        self.tote_motor = wpilib.CANTalon(5)
-        self.can_motor = wpilib.CANTalon(15)
-
         #CAMERA
         try:
             self.camera = wpilib.USBCamera()
@@ -45,8 +41,8 @@ class MyRobot(wpilib.SampleRobot):
 
 
         #self.gyro = wpilib.Gyro(4)
-        self.tote_forklift = tote_Forklift(self.tote_motor)
-        self.can_forklift = can_Forklift(self.can_motor)
+        self.tote_motor = tote_Forklift(5, 1440, 2880, 4320)
+        self.can_motor = can_Forklift(15, 1440, 2880, 4320, 5760)
 
         self.drive = drive.Drive(self.robot_drive,0)
 
@@ -57,28 +53,26 @@ class MyRobot(wpilib.SampleRobot):
         #self.combinedDistance = CombinedSensor(0,1)
         #self.combinedDistance2 = CombinedSensor(2,3)
 
-        self.s=True
         self.components = {
-            'tote_Forklift': self.tote_forklift,
-            'can_Forklift': self.can_forklift,
+            'tote_Forklift': self.tote_motor,
+            'can_Forklift': self.can_motor,
             'drive': self.drive
         }
 
         self.control_loop_wait_time = 0.025
-        self.automodes = AutonomousModeSelector('autonomous',
-                                                self.components)
+        #self.automodes = AutonomousModeSelector('autonomous', self.components)
 
 
 
     def autonomous(self):
-        self.automodes.run(self.control_loop_wait_time,
-                           self.update)
+        self.automodes.run(self.control_loop_wait_time, self.update)
 
     def operatorControl(self):
 
         print("Entering Teleop")
         while self.isOperatorControl() and self.isEnabled():
-            self.drive.move((self.joystick1.getY()), (self.joystick1.getX()), (self.joystick2.getX()) / 2)
+            self.drive.move((self.joystick1.getY())**3, (self.joystick1.getX())**3, (self.joystick2.getX()) / 2)
+
             #tote forklift goes up
             if self.joystick1.getRawButton(2):
                 self.tote_motor.set(.5)
@@ -87,25 +81,15 @@ class MyRobot(wpilib.SampleRobot):
                 self.tote_motor.set(-.5)
             #can forklift goes down
             elif self.joystick2.getRawButton(3):
-                self.can_motor.set(1)
+                self.can_motor.set(.5)
             #can forklift goes up
             elif self.joystick2.getRawButton(2):
-                self.can_motor.set(-.3)
+                self.can_motor.set(-.5)
 
             else:
                 self.tote_motor.set(0)
                 self.can_motor.set(0)
 
-            if self.joystick1.getRawButton(7) and self.s:
-                self.drive.switch_direction(self.joystick1.getRawButton(7))
-                self.s=False
-                #print("hellp")
-
-            elif not self.joystick1.getRawButton(7):
-                self.s=True
-
-            if self.tote_forklift.toteCheck():
-                pass
 
             #INFARED DRIVE#
             if(self.joystick1.getTrigger()==1):

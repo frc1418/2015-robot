@@ -98,7 +98,7 @@ class MyRobot(wpilib.SampleRobot):
             self.y=self.joystick1.getY()*self.reverse
             self.rotation=(self.joystick2.getX() / 2)
             
-            self.robot_drive.mecanumDrive_Cartesian((self.x), (self.y), (self.rotation), 0)
+            self.robot_drive.mecanumDrive_Cartesian((self.x)**3, (self.y)**3, (self.rotation), 0, )
 
             wpilib.Timer.delay(0.005)
             

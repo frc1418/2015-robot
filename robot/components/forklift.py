@@ -1,69 +1,38 @@
 import wpilib
 class Forklift (object):
-    def __init__ (self):
-        pass
-    
-    def set(self, setpoint):
-        self.setpoint = setpoint
-    
+    def __init__ (self, port, ONE, TWO, THREE, FOUR = 0):
+        self.one = ONE
+        self.two = TWO
+        self.three = THREE
+        self.four = FOUR
+        self.motor = wpilib.Talon(port)
+        self.setpoint=0
+    def set(self, setPoint):
+        self.setpoint = setPoint
+        
     def zeroEnc(self):
-        #takes encoder posistion, returns inches.
-        self.zero=self.encoderToInch(CANMotor.getEncPosition())
+        if not first:
+            if not self.lim1.get():
+                self.motor.set(-1)
+            else:
+                self.motor.set(0)
+                #self.motor.setSensorPosition(0)
+            #self.motor.changeControlMode(CanTalon.ControlMode.Position)
+            first = True
     
     def doit(self):
         #takes inches, gives motor encoder values
-        self.CANMotor.set(self.inchToEncoder(self.setpoint))
-
-
+        self.motor.set(self.setpoint)
 
 class tote_Forklift (Forklift):
-    def __init__ (self, CANMotor):
-        self.CANMotor=CANMotor
-        self.CANMotor = CANMotor
-        self.setpoint=CANMotor.getEncPosition()
-        #self.position = (self.setpoint*1440)/5.75
-        #List of positions in inches from 0
-        Pn1=0
-        P0=1
-        P1=2
-        P2=3
-        P3=4
+    def __init__ (self, port, ONE,TWO,THREE,):
+        Forklift.__init__(self, port, ONE,TWO,THREE)
         
+        self.lim = wpilib.DigitalInput(1)
         
-        self.lim1 =  wpilib.DigitalInput(1)
-        self.lim2 = wpilib.DigitalInput(2)
-        self.toteCheckTimer = wpilib.Timer()
-    
-    def inchToEncoder(self,c):
-        return (c*1440)/5.75   
-    def encoderToInch(self,c):
-        return (c*5.75)/1440 
-    
-    def toteCheck(self):
-        if(self.lim1.get() and self.lim2.get()):
-            if not self.toteCheckTimer.get()>0:
-                self.toteCheckTimer.start()
-        else:
-            self.toteCheckTimer.stop()
-            self.toteCheckTimer.reset()
-        if self.toteCheckTimer.hasPeriodPassed(.5):
-            self.toteCheckTimer.stop()
-            self.toteCheckTimer.reset()
-            return True
-        return False
-
-
 class can_Forklift (Forklift):
-    def __init__ (self, CANMotor):
-        self.CANMotor = CANMotor
-        self.setpoint=CANMotor.getEncPosition()
-        #self.position = (self.setpoint*1440)/9.625
-        #List of positions in inches from 0
-        P1=0
-        P2=1
-        P3=2
+    def __init__ (self, port, ONE, TWO, THREE, FOUR):
+        Forklift.__init__(self, port, ONE, TWO, THREE, FOUR)
+        self.lim = wpilib.DigitalInput(2)
     
-    def inchToEncoder(self,c):
-        return (c*1440)/9.625
-    def encoderToInch(self,c):
-        return (c*9.625)/1440
+    
