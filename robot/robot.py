@@ -46,10 +46,10 @@ class MyRobot(wpilib.SampleRobot):
 
         self.drive = drive.Drive(self.robot_drive,0)
 
-        self.longDistance = SharpIR2Y0A02(0)
-        self.longDistance2 = SharpIR2Y0A02(2)
-        self.shortDistance = SharpIRGP2Y0A41SK0F(1)
-        self.shortDistance2 = SharpIRGP2Y0A41SK0F(3)
+        self.longDistanceL = SharpIR2Y0A02(0)
+        self.longDistanceR = SharpIR2Y0A02(2)
+        self.shortDistanceL = SharpIRGP2Y0A41SK0F(1)
+        self.shortDistanceR = SharpIRGP2Y0A41SK0F(3)
         #self.combinedDistance = CombinedSensor(0,1)
         #self.combinedDistance2 = CombinedSensor(2,3)
 
@@ -100,10 +100,10 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.Timer.delay(self.control_loop_wait_time)
 
     def smartdashbord_update(self):
-        wpilib.SmartDashboard.putNumber('shortSensorValue', self.shortDistance.getDistance())
-        wpilib.SmartDashboard.putNumber('shortSensorValue2',self.shortDistance2.getDistance())
-        wpilib.SmartDashboard.putNumber('largeSensorValue', self.longDistance.getDistance())
-        wpilib.SmartDashboard.putNumber('largeSensorValue2', self.longDistance2.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
+        wpilib.SmartDashboard.putNumber('largeSensorValueL', self.longDistanceL.getDistance())
+        wpilib.SmartDashboard.putNumber('largeSensorValueR', self.longDistanceR.getDistance())
 
 
 
