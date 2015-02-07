@@ -1,5 +1,4 @@
 import wpilib
-from pygazebo.msg.pid_pb2 import PID
 
 class Forklift (object):
     def __init__ (self, motor_port, limit_port, init_down_speed):
@@ -41,7 +40,7 @@ class Forklift (object):
         if not self.manual_mode:
             return self.target_index
         
-        current_pos = self.motor.get_position()
+        current_pos = self.get_position()
         last_pos = None
         
         for i, pos in enumerate(self.positions):
@@ -148,9 +147,10 @@ class ToteForklift(Forklift):
             2, # stack2
             3, # stack3
             4, # stack4
+            5, # stack5
         ]
         
-        self.set_pid(1, 0, 0)
+        self.set_pid((1, 0, 0))
         
     def set_pos_stack5(self):
         self._set_position(5)
