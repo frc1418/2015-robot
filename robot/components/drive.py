@@ -7,7 +7,7 @@ class Drive(object):
 		through this class.
 	'''
 
-	def __init__(self, robotDrive , gyro):
+	def __init__(self, robotDrive, gyro):
 		'''
 			Constructor. 
 			
@@ -43,7 +43,7 @@ class Drive(object):
 		
 		self.x = x
 		self.y = y
-		self.rotation = rotation
+		self.rotation = max(min(1.0, rotation), -1) / 2.0
 		
 		
 
@@ -110,15 +110,16 @@ class Drive(object):
 			strafe = 0
 		self.move(0, strafe, rotation / 2)
 		
+	def set_direction(self, direction):
+		self.isTheRobotBackwards = bool(direction)
+	
+	def switch_direction(self):
+		self.isTheRobotBackwards = not self.isTheRobotBackwards
+		
 	#
 	# Actually tells the motors to do something
 	#
-
-		
-	def switch_direction(self, b):
-		
-		self.isTheRobotBackwards = not self.isTheRobotBackwards
-		
+	
 	def doit(self):
 		''' actually does stuff'''
 		if(self.isTheRobotBackwards):
