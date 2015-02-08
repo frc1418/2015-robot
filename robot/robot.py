@@ -84,7 +84,8 @@ class MyRobot(wpilib.SampleRobot):
         self.can_forklift.set_manual(0)
         self.tote_forklift.set_manual(0)
 
-        print("Entering Teleop")
+        self.logger.info("Entering teleop mode")
+        
         while self.isOperatorControl() and self.isEnabled():
             self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX())
 
@@ -154,6 +155,9 @@ class MyRobot(wpilib.SampleRobot):
 
     def disabled(self):
         '''Called when the robot is in disabled mode'''
+        
+        self.logger.info("Entering disabled mode")
+        
         while not self.isEnabled():
             self.smartdashbord_update()
             wpilib.Timer.delay(.01)
