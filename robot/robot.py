@@ -67,7 +67,8 @@ class MyRobot(wpilib.SampleRobot):
         self.toteDown = Button(self.joystick2,2)
         self.toteTop = Button(self.joystick2,6)
         self.toteBottom = Button(self.joystick2,7)
-
+        
+        self.triggerPressed = False
 
 
 
@@ -131,6 +132,14 @@ class MyRobot(wpilib.SampleRobot):
             #INFRARED DRIVE#
             if self.joystick2.getTrigger():
                 self.drive.move(0, 0, self.align.get_speed())
+            
+            #REVERSE DRIVE#
+            if self.joystick1.getTrigger() and (self.triggerPressed==False):
+                self.drive.switch_direction()
+                self.triggerPressed = True
+            if self.joystick1.getTrigger()==False:
+                self.triggerPressed=False
+
             
             self.smartdashbord_update()
             self.update()
