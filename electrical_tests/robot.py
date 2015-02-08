@@ -22,39 +22,34 @@ class MyRobot(wpilib.SampleRobot):
         self.bin_talon.setSensorPosition(0)
         '''
         
-        ##INITIALIZE JOYSTICKS##
+        # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
 
         
-        ##INITIALIZE MOTORS##
+        # #INITIALIZE MOTORS##
         self.lf_motor = wpilib.Talon(0)
         self.lr_motor = wpilib.Talon(1)
         self.rf_motor = wpilib.Talon(2)
         self.rr_motor = wpilib.Talon(3)
-        self.forkliftMotor = wpilib.CANTalon(5)
-        self.forkliftMotor2 = wpilib.CANTalon(15)
-        self.forkliftMotor.changeControlMode(CANTalon.ControlMode.PercentVbus)
-        self.forkliftMotor2.changeControlMode(CANTalon.ControlMode.PercentVbus)
+        self.toteMotor = wpilib.CANTalon(5)
+        self.canMotor = wpilib.CANTalon(15)
         self.reverse = 1
         
         
-        ##SMART DASHBOARD
-        wpilib.SmartDashboard.putNumber('Pos', 1440)
-        wpilib.SmartDashboard.putNumber('P', .001)
-        wpilib.SmartDashboard.putNumber('Dist', '3')
+        # #SMART DASHBOARD
 
-        ##ROBOT DRIVE##
+        # #ROBOT DRIVE##
         self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
 
     def disabled(self):
-        #self.talon.setSensorPosition(0)
+        # self.talon.setSensorPosition(0)
         wpilib.Timer.delay(.01)
     
     def operatorControl(self):
-        #self.myRobot.setSafetyEnabled(True)
+        # self.myRobot.setSafetyEnabled(True)
         
         while self.isOperatorControl() and self.isEnabled():    
             
@@ -70,23 +65,19 @@ class MyRobot(wpilib.SampleRobot):
             #self.XOfRobot=self.XOfRobot+(self.accelerometer.getX()*.5*(self.timercounter**2))
             #self.YOfRobot=self.YOfRobot+(self.acwcelerometer.getY()*.5*(self.timercounter**2))
             '''
-            Canset1=0
             if self.joystick1.getRawButton(2):
-                Canset1=(.5)
+                self.toteMotor.set(1)
             if self.joystick1.getRawButton(3):
-                Canset1=(-.5)
-            
-            self.forkliftMotor.set(Canset1)
-            #print("setting 1 to %n",Canset1)
+                self.toteMotor.set(-1)
+            else:
+                self.toteMotor.set(0)
 
-            Canset2=0
             if self.joystick2.getRawButton(3):
-                Canset2=(.5)
+                self.canMotor.set(1)
             if self.joystick2.getRawButton(2):
-                Canset2=(-.5)
-            
-            self.forkliftMotor2.set(Canset2)
-            #print("setting 2 to %n",Canset2)
+                self.canMotor.set(-1)
+            else:
+                self.canMotor.set(0)
             
             if self.joystick1.getTrigger():
                 self.reverse = 1
@@ -94,12 +85,13 @@ class MyRobot(wpilib.SampleRobot):
                 self.reverse = -1
                 
                 
-            self.x=self.joystick1.getX()*self.reverse
-            self.y=self.joystick1.getY()*self.reverse
-            self.rotation=(self.joystick2.getX() / 2)
+            self.x = self.joystick1.getX() * self.reverse
+            self.y = self.joystick1.getY() * self.reverse
+            self.rotation = (self.joystick2.getX() / 2)
             
-            self.robot_drive.mecanumDrive_Cartesian((self.x)**3, (self.y)**3, (self.rotation), 0, )
-
+            self.robot_drive.mecanumDrive_Cartesian((self.x) ** 3, (self.y) ** 3, (self.rotation), 0,)
+            
+            
             wpilib.Timer.delay(0.005)
             
 if __name__ == '__main__':
