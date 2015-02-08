@@ -59,10 +59,10 @@ class MyRobot(wpilib.SampleRobot):
         self.automodes = AutonomousModeSelector('autonomous', self.components)
         
         ##Defining Buttons##
-        self.canUp = Button(self.joystick1,3)
-        self.canDown = Button(self.joystick1,2)
-        self.canTop = Button(self.joystick1,6)
-        self.canBottom = Button(self.joystick1,7)
+        #self.canUp = Button(self.joystick1,3)
+        #self.canDown = Button(self.joystick1,2)
+        #self.canTop = Button(self.joystick1,6)
+        #self.canBottom = Button(self.joystick1,7)
         self.toteUp = Button(self.joystick2,3)
         self.toteDown = Button(self.joystick2,2)
         self.toteTop = Button(self.joystick2,6)
@@ -76,8 +76,8 @@ class MyRobot(wpilib.SampleRobot):
 
     def operatorControl(self):
 
-        self.can_forklift.set_manual(0)
-        self.tote_forklift.set_manual(0)
+        #self.can_forklift.set_manual(0)
+        #self.tote_forklift.set_manual(0)
 
         self.logger.info("Entering teleop mode")
         
@@ -94,18 +94,18 @@ class MyRobot(wpilib.SampleRobot):
                 
             elif self.joystick1.getRawButton(4):
                 self.can_forklift.set_manual(-1)
-            
-            elif self.canUp.get():
-                self.can_forklift.raise_forklift()
-                
-            elif self.canUp.get():
-                self.can_forklift.lower_forklift()
-                
-            if self.canTop.get():
-                self.can_forklift.set_pos_top()
-            elif self.canBottom.get():
-                self.can_forklift.set_pos_bottom()
-            
+            #========DO NOT UNCOMMENT===========
+            #elif self.canUp.get():
+            #    self.can_forklift.raise_forklift()
+            #    
+            #elif self.canDown.get():
+            #    self.can_forklift.lower_forklift()
+            #    
+            #if self.canTop.get():
+            #    self.can_forklift.set_pos_top()
+            #elif self.canBottom.get():
+            #    self.can_forklift.set_pos_bottom()
+            #============================ 
             #
             # Tote forklift controls
             #
@@ -119,7 +119,7 @@ class MyRobot(wpilib.SampleRobot):
             elif self.toteUp.get():
                 self.tote_forklift.raise_forklift()
                 
-            elif self.toteUp.get():
+            elif self.toteDown.get():
                 self.tote_forklift.lower_forklift()
                 
             if self.toteTop.get():
@@ -128,7 +128,7 @@ class MyRobot(wpilib.SampleRobot):
                 self.tote_forklift.set_pos_bottom()
                 
                 
-            #INFARED DRIVE#
+            #INFRARED DRIVE#
             if self.joystick2.getTrigger():
                 self.drive.move(0, 0, self.align.get_speed())
             

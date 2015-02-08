@@ -1,7 +1,8 @@
 
 import wpilib
 from networktables.networktable import NetworkTable
-
+import logging
+logger = logging.getLogger("forklift")
 import enum
 
 class ForkliftMode(enum.Enum):
@@ -115,9 +116,9 @@ class Forklift (object):
         self.target_index = index
         self.target_position = self.positions[index].value
         
+        
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
-        print("Calibrating")
         if not self.isCalibrated:
             if self.limit.get():
                 self.motor.set(self.init_down_speed)
@@ -129,19 +130,22 @@ class Forklift (object):
                 self.isCalibrated = True
     
     def doit(self):
-        
         if self.want_manual:
             self.mode = ForkliftMode.MANUAL
         elif self.want_auto:
             self.mode = ForkliftMode.AUTO
-        
+            
         if self.last_mode != self.mode:
             if self.mode == ForkliftMode.MANUAL:
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.PercentVbus)
-            elif self.isCalibrated:
-                # Only switch the control mode if we're not calibrating!
-                self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+            elif self.mode == ForkliftMode.AUTO:
                 self.new_pid = [e.value for e in self.wanted_pid]
+                if self.isCalibrated:
+                    # Only switch the control mode if we're not calibrating!
+                    self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+            else:
+                raise ValueError("INVALID MODE")
+                
             
             self.last_mode = self.mode
         
@@ -157,13 +161,15 @@ class Forklift (object):
                 # Update the PID values if necessary
                 if self.current_pid != self.new_pid:
                     self.motor.setPID(*self.new_pid)
+                    logger.info('pid: %s', self.motor.getP())
                     self.current_pid = self.new_pid
-                
                 self.motor.set(self.target_position)
                 
         else:
             self.motor.set(0)
-               
+            
+        self.want_auto = False
+        self.want_manual = False
         self.manual_value = 0
 
 class ToteForklift(Forklift):
@@ -173,12 +179,12 @@ class ToteForklift(Forklift):
         sd = NetworkTable.getTable('SmartDashboard')
         
         self.positions = [
-            sd.getAutoUpdateValue('Tote Forklift|bottom', 0),
-            sd.getAutoUpdateValue('Tote Forklift|stack1', 1),
-            sd.getAutoUpdateValue('Tote Forklift|stack2', 2),
-            sd.getAutoUpdateValue('Tote Forklift|stack3', 3),
-            sd.getAutoUpdateValue('Tote Forklift|stack4', 4),
-            sd.getAutoUpdateValue('Tote Forklift|stack5', 5),
+            sd.getAutoUpdateValue('Tote Forklift|bottom', 443),
+            sd.getAutoUpdateValue('Tote Forklift|stack1', 5054),
+            sd.getAutoUpdateValue('Tote Forklift|stack2', 9452),
+            sd.getAutoUpdateValue('Tote Forklift|stack3', 11795),
+            sd.getAutoUpdateValue('Tote Forklift|stack4', 13940),
+            sd.getAutoUpdateValue('Tote Forklift|stack5', 13950),
           ]
         
         self.wanted_pid = (
@@ -236,7 +242,9 @@ class CanForklift(Forklift):
         )
         
         
-    def _update_pid(self):
+    def _set_position(self, index):
+        Forklift._set_position(self, index)
+        
         target_position = self.get_target_position() 
         if target_position is None or target_position > self.get_position():
             self.wanted_pid = self.up_pid
@@ -245,30 +253,24 @@ class CanForklift(Forklift):
             
         self.new_pid = [e.value for e in self.wanted_pid]
         
-    
+        
     def set_pos_holding(self):
         self._set_position(0)
-        self._update_pid()
         
     set_pos_top = set_pos_holding
         
     def set_pos_stack4(self):
         self._set_position(4)
-        self._update_pid()
         
     def set_pos_stack3(self):
         self._set_position(3)
-        self._update_pid()
         
     def set_pos_stack2(self):
         self._set_position(2)
-        self._update_pid()
         
     def set_pos_stack1(self):
         self._set_position(1)
-        self._update_pid()
         
     def set_pos_bottom(self):
         self._set_position(0)
-        self._update_pid()
     

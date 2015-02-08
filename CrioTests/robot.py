@@ -27,10 +27,10 @@ class MyRobot(wpilib.SimpleRobot):
             self.fixedSmallValue2 = ((max(0.00001,self.smallDistance2.GetVoltage()))/7.330)**(1/-0.7685)/2.54
 
             
-            wpilib.SmartDashboard.PutNumber('largeSensorValue', self.fixedLargeValue)
-            wpilib.SmartDashboard.PutNumber('smallSensorValue', self.fixedSmallValue)
-            wpilib.SmartDashboard.PutNumber('largeSensorValue2', self.fixedLargeValue2)
-            wpilib.SmartDashboard.PutNumber('smallSensorValue2', self.fixedSmallValue2)
+           # wpilib.SmartDashboard.PutNumber('largeSensorValue', self.fixedLargeValue)
+           # wpilib.SmartDashboard.PutNumber('smallSensorValue', self.fixedSmallValue)
+           # wpilib.SmartDashboard.PutNumber('largeSensorValue2', self.fixedLargeValue2)
+           # wpilib.SmartDashboard.PutNumber('smallSensorValue2', self.fixedSmallValue2)
             
             
             wpilib.Wait(0.025)
