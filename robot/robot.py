@@ -2,7 +2,7 @@
 
 import wpilib
 import math
-from components import drive
+from components import drive, alignment
 from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F
 from common.button import Button
@@ -39,22 +39,26 @@ class MyRobot(wpilib.SampleRobot):
         self.can_forklift = CanForklift(15, 1)
 
         self.drive = drive.Drive(self.robot_drive,0)
+        
 
-        self.longDistanceL = SharpIR2Y0A02(1)
-        self.longDistanceR = SharpIR2Y0A02(2)
-        self.shortDistanceL = SharpIRGP2Y0A41SK0F(3)
-        self.shortDistanceR = SharpIRGP2Y0A41SK0F(4)
+        self.longDistanceL = SharpIR2Y0A02(1) ## Robot's left
+        self.longDistanceR = SharpIR2Y0A02(2) ## Robot's right
+        self.shortDistanceL = SharpIRGP2Y0A41SK0F(3) ## Robot's left
+        self.shortDistanceR = SharpIRGP2Y0A41SK0F(4) ## Robot's right
 
+        self.align = alignment.Alignment(self.shortDistanceL, self.shortDistanceR)
+        
         self.components = {
             'tote_Forklift': self.tote_forklift,
             'can_Forklift': self.can_forklift,
-            'drive': self.drive
+            'drive': self.drive,
+            'alignment' : self.align
         }
 
         self.control_loop_wait_time = 0.025
         self.automodes = AutonomousModeSelector('autonomous', self.components)
         
-        #Defining Buttons#
+        ##Defining Buttons##
         self.canUp = Button(self.joystick1,3)
         self.canDown = Button(self.joystick1,2)
         self.canUpManual = Button(self.joystick1,5)
@@ -67,6 +71,7 @@ class MyRobot(wpilib.SampleRobot):
         self.toteDownManual = Button(self.joystick2,4)
         self.toteTop = Button(self.joystick2,6)
         self.toteBottom = Button(self.joystick2,7)
+        self.alignToTote = Button(self.joystick2, 1)
 
 
 
@@ -86,6 +91,7 @@ class MyRobot(wpilib.SampleRobot):
             #
             # Can forklift controls
             #
+            
 
             if self.canUpManual.get():
                 self.can_forklift.set_manual(1)
@@ -124,10 +130,11 @@ class MyRobot(wpilib.SampleRobot):
                 self.tote_forklift.set_pos_top()
             elif self.toteBottom.get():
                 self.tote_forklift.set_pos_bottom()
-
+                
+                
             #INFARED DRIVE#
-            if self.joystick1.getTrigger():
-                self.drive.infrared_rotation(self.longDistanceL.getDistance(),self.longDistanceR.getDistance(),12)
+            if self.alignToTote.get():
+                self.drive.move(0, 0, self.align.get_speed())
             
             self.smartdashbord_update()
             self.update()
