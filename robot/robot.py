@@ -162,6 +162,11 @@ class MyRobot(wpilib.SampleRobot):
             self.smartdashbord_update()
             wpilib.Timer.delay(.01)
 
+    def test(self):
+        '''Called when the robot is in test mode'''
+        while self.isTest() and self.isEnabled():
+            wpilib.LiveWindow.run()
+            wpilib.Timer.delay(.01)
 
 if __name__ == '__main__':
 
