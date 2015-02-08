@@ -32,7 +32,10 @@ class Forklift (object):
         self.mode = ForkliftMode.MANUAL
         self.last_mode = ForkliftMode.MANUAL
         
-        self.pid = None
+        # These need to be set by subclasses
+        self.wanted_pid = None
+        self.current_pid = (0, 0, 0)
+        self.new_pid = None
         
         
     def get_position(self):
@@ -107,11 +110,6 @@ class Forklift (object):
         
         self._set_position(index)
     
-    def set_pid(self, pid):
-        if self.pid != pid:
-            self.pid = pid
-            self.motor.setPID(*pid)
-    
     def _set_position(self, index):
         self.want_auto = True
         self.target_index = index
@@ -143,6 +141,7 @@ class Forklift (object):
             elif self.isCalibrated:
                 # Only switch the control mode if we're not calibrating!
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+                self.new_pid = [e.value for e in self.wanted_pid]
             
             self.last_mode = self.mode
         
@@ -154,6 +153,12 @@ class Forklift (object):
             self._calibrate()
             
             if self.isCalibrated:
+                
+                # Update the PID values if necessary
+                if self.current_pid != self.new_pid:
+                    self.motor.setPID(*self.new_pid)
+                    self.current_pid = self.new_pid
+                
                 self.motor.set(self.target_position)
                 
         else:
@@ -166,8 +171,6 @@ class ToteForklift(Forklift):
         super().__init__(motor_port, limit_port, -1)
         
         sd = NetworkTable.getTable('SmartDashboard')
-        tote_up_p = sd.getAutoUpdateValue('Tote Up P', 1)
-        tote_up_i = sd.getAutoUpdateValue('Tote Up I', 0)
         
         self.positions = [
             sd.getAutoUpdateValue('Tote Forklift|bottom', 0),
@@ -177,7 +180,12 @@ class ToteForklift(Forklift):
             sd.getAutoUpdateValue('Tote Forklift|stack4', 4),
             sd.getAutoUpdateValue('Tote Forklift|stack5', 5),
           ]
-        self.set_pid((1, 0, 0))
+        
+        self.wanted_pid = (
+            sd.getAutoUpdateValue('Tote Forklift|P', 1),
+            sd.getAutoUpdateValue('Tote Forklift|I', 0), 
+            sd.getAutoUpdateValue('Tote Forklift|D', 0)
+        )
             
     def set_pos_stack5(self):
         self._set_position(5)
@@ -206,11 +214,6 @@ class CanForklift(Forklift):
       
         sd = NetworkTable.getTable('SmartDashboard')
         
-        can_up_p = sd.getAutoUpdateValue('Can Up P', 1)
-        can_up_i = sd.getAutoUpdateValue('Can Up I', 0)
-        can_down_p = sd.getAutoUpdateValue('Can Down P', 1)
-        can_down_i = sd.getAutoUpdateValue('CanDown I', 0)
-        
         self.positions = [
             sd.getAutoUpdateValue('Can Forklift|bottom', 0),
             sd.getAutoUpdateValue('Can Forklift|stack1', 1),
@@ -220,17 +223,27 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|stack5', 5),
         ]
         
-        self.up_pid = (can_up_p.get(), can_up_i.get(), 0)
-        self.down_pid = (can_down_p.get(), can_down_i.get(),0)
-   
+        self.up_pid = (
+            sd.getAutoUpdateValue('Can Forklift|Up P', 1),
+            sd.getAutoUpdateValue('Can Forklift|Up I', 0),
+            sd.getAutoUpdateValue('Can Forklift|Up D', 0)
+        )
+        
+        self.down_pid = (
+            sd.getAutoUpdateValue('Can Forklift|Down P', 1),
+            sd.getAutoUpdateValue('Can Forklift|Down I', 0),
+            sd.getAutoUpdateValue('Can Forklift|Down D', 0)
+        )
         
         
     def _update_pid(self):
         target_position = self.get_target_position() 
         if target_position is None or target_position > self.get_position():
-            self.set_pid(self.up_pid)
+            self.wanted_pid = self.up_pid
         else:
-            self.set_pid(self.down_pid)
+            self.wanted_pid = self.down_pid
+            
+        self.new_pid = [e.value for e in self.wanted_pid]
         
     
     def set_pos_holding(self):
