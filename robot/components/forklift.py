@@ -117,9 +117,9 @@ class Forklift (object):
         
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
-        
+        print("Calibrating")
         if not self.isCalibrated:
-            if not self.limit.get():
+            if self.limit.get():
                 self.motor.set(self.init_down_speed)
             else:
                 self.motor.set(0)

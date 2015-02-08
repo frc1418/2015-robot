@@ -137,10 +137,10 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.Timer.delay(self.control_loop_wait_time)
 
     def smartdashbord_update(self):
-        wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
-        wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
-        wpilib.SmartDashboard.putNumber('largeSensorValueL', self.longDistanceL.getDistance())
-        wpilib.SmartDashboard.putNumber('largeSensorValueR', self.longDistanceR.getDistance())
+       # wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
+       # wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
+       # wpilib.SmartDashboard.putNumber('largeSensorValueL', self.longDistanceL.getDistance())
+       # wpilib.SmartDashboard.putNumber('largeSensorValueR', self.longDistanceR.getDistance())
         if self.can_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('Can Target', -1)
         else:   

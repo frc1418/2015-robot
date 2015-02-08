@@ -53,9 +53,9 @@ class MyRobot(wpilib.SampleRobot):
         
         while self.isOperatorControl() and self.isEnabled():    
             
-            
-            wpilib.SmartDashboard.putNumber('Enc', self.toteMotor.getEncPosition())
             '''
+            wpilib.SmartDashboard.putNumber('Enc', self.toteMotor.getEncPosition())
+            
             if wpilib.SmartDashboard.getNumber('P') is not self.talon.getP():
                 self.talon.setP(wpilib.SmartDashboard.getNumber('P'))
             
