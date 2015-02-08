@@ -58,17 +58,12 @@ class MyRobot(wpilib.SampleRobot):
         ##Defining Buttons##
         self.canUp = Button(self.joystick1,3)
         self.canDown = Button(self.joystick1,2)
-        self.canUpManual = Button(self.joystick1,5)
-        self.canDownManual = Button(self.joystick1,4)
         self.canTop = Button(self.joystick1,6)
         self.canBottom = Button(self.joystick1,7)
         self.toteUp = Button(self.joystick2,3)
         self.toteDown = Button(self.joystick2,2)
-        self.toteUpManual = Button(self.joystick2,5)
-        self.toteDownManual = Button(self.joystick2,4)
         self.toteTop = Button(self.joystick2,6)
         self.toteBottom = Button(self.joystick2,7)
-        self.alignToTote = Button(self.joystick2, 1)
 
 
 
@@ -91,10 +86,10 @@ class MyRobot(wpilib.SampleRobot):
             #
             
 
-            if self.canUpManual.get():
+            if self.joystick1.getRawButton(5):
                 self.can_forklift.set_manual(1)
                 
-            elif self.canDownManual.get():
+            elif self.joystick1.getRawButton(4):
                 self.can_forklift.set_manual(-1)
             
             elif self.canUp.get():
@@ -112,10 +107,10 @@ class MyRobot(wpilib.SampleRobot):
             # Tote forklift controls
             #
              
-            if self.toteUpManual.get():
+            if self.joystick2.getRawButton(5):
                 self.tote_forklift.set_manual(1)
                 
-            elif self.toteDownManual.get():
+            elif self.joystick2.getRawButton(4):
                 self.tote_forklift.set_manual(-1)
             
             elif self.toteUp.get():
@@ -131,7 +126,7 @@ class MyRobot(wpilib.SampleRobot):
                 
                 
             #INFARED DRIVE#
-            if self.alignToTote.get():
+            if self.joystick2.getTrigger():
                 self.drive.move(0, 0, self.align.get_speed())
             
             self.smartdashbord_update()
