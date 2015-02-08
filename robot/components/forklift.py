@@ -2,7 +2,16 @@
 import wpilib
 from networktables.networktable import NetworkTable
 
+import enum
+
+class ForkliftMode(enum.Enum):
+    MANUAL = 1
+    AUTO = 2
+
 class Forklift (object):
+    
+    
+    
     def __init__ (self, motor_port, limit_port, init_down_speed):
 
         self.target_position = None
@@ -15,9 +24,13 @@ class Forklift (object):
         
         self.isCalibrated = False
         
-        self.current_manual_mode = True
-        self.manual_mode = True
+        self.want_manual = False
         self.manual_value = 0
+        
+        self.want_auto = False
+        
+        self.mode = ForkliftMode.MANUAL
+        self.last_mode = ForkliftMode.MANUAL
         
         self.pid = None
         
@@ -32,15 +45,18 @@ class Forklift (object):
         '''
             :param value: Motor value between -1 and 1
         '''
-        self.manual_mode = True
+        self.want_manual = True
         self.manual_value = value
     
     
     def _detect_position_index(self):
         '''Returns the current position index'''
         
-        if not self.manual_mode:
+        if self.mode == ForkliftMode.AUTO:
             return self.target_index
+        
+        # If we're not in auto mode, we need to try and detect where the
+        # forklift is... 
         
         current_pos = self.get_position()
         last_pos = None
@@ -97,7 +113,7 @@ class Forklift (object):
             self.motor.setPID(*pid)
     
     def _set_position(self, index):
-        self.manual_mode = False
+        self.want_auto = True
         self.target_index = index
         self.target_position = self.positions[index].value
         
@@ -116,19 +132,24 @@ class Forklift (object):
     
     def doit(self):
         
-        if self.current_manual_mode != self.manual_mode:
-            if self.manual_mode:
+        if self.want_manual:
+            self.mode = ForkliftMode.MANUAL
+        elif self.want_auto:
+            self.mode = ForkliftMode.AUTO
+        
+        if self.last_mode != self.mode:
+            if self.mode == ForkliftMode.MANUAL:
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.PercentVbus)
             elif self.isCalibrated:
                 # Only switch the control mode if we're not calibrating!
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
-                
-            self.current_manual_mode = self.manual_mode
+            
+            self.last_mode = self.mode
         
-        if self.manual_mode:
+        if self.mode == ForkliftMode.MANUAL:
             self.motor.set(self.manual_value)
         
-        elif self.target_position is not None:
+        elif self.mode == ForkliftMode.AUTO:
             
             self._calibrate()
             
@@ -137,7 +158,7 @@ class Forklift (object):
                 
         else:
             self.motor.set(0)
-                
+               
         self.manual_value = 0
 
 class ToteForklift(Forklift):
