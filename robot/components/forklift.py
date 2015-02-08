@@ -144,7 +144,10 @@ class ToteForklift(Forklift):
         super().__init__(motor_port, limit_port, -1)
         
         sd = NetworkTable.getTable('SmartDashboard')
-        
+        tote_up_p = sd.getAutoUpdateValue('Tote Up P', 1)
+        tote_up_i = sd.getAutoUpdateValue('Tote Up I', 0)
+        tote_down_p = sd.getAutoUpdateValue('Tote Down P', 1)
+        tote_down_i = sd.getAutoUpdateValue('Tote Down I', 0)
         self.positions = [
             sd.getAutoUpdateValue('Tote Forklift|bottom', 0),
             sd.getAutoUpdateValue('Tote Forklift|stack1', 1),
@@ -153,9 +156,16 @@ class ToteForklift(Forklift):
             sd.getAutoUpdateValue('Tote Forklift|stack4', 4),
             sd.getAutoUpdateValue('Tote Forklift|stack5', 5),
           ]
-        
-        self.set_pid((1, 0, 0))
-        
+        self.set_pid((1, 0, 0)  )
+        self.up_pid = (tote_up_p, tote_up_i, 0)
+        self.down_pid = (tote_down_p, tote_down_i,0)
+    def _update_pid(self):
+        target_position = self.get_target_position() 
+        if target_position is None or target_position > self.get_position():
+            self.set_pid(self.up_pid)
+        else:
+            self.set_pid(self.down_pid)
+            
     def set_pos_stack5(self):
         self._set_position(5)
         
@@ -183,6 +193,11 @@ class CanForklift(Forklift):
       
         sd = NetworkTable.getTable('SmartDashboard')
         
+        can_up_p = sd.getAutoUpdateValue('Can Up P', 1)
+        can_up_i = sd.getAutoUpdateValue('Can Up I', 0)
+        can_down_p = sd.getAutoUpdateValue('Can Down P', 1)
+        can_down_i = sd.getAutoUpdateValue('CanDown I', 0)
+        
         self.positions = [
             sd.getAutoUpdateValue('Can Forklift|bottom', 0),
             sd.getAutoUpdateValue('Can Forklift|stack1', 1),
@@ -192,8 +207,9 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|stack5', 5),
                ]
         
-        self.down_pid = (1, 0, 0)
-        self.up_pid = (1, 0, 0)
+        self.up_pid = (can_up_p, can_up_i, 0)
+        self.down_pid = (can_down_p, can_down_i,0)
+   
         
         self.motor.set
         
@@ -203,7 +219,7 @@ class CanForklift(Forklift):
             self.set_pid(self.up_pid)
         else:
             self.set_pid(self.down_pid)
-    
+        
     
     def set_pos_holding(self):
         self._set_position(0)
