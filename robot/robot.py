@@ -33,8 +33,11 @@ class MyRobot(wpilib.SampleRobot):
 
 
         self.gyro = wpilib.Gyro(0)
-        self.tote_forklift = ToteForklift(5, 0)
-        self.can_forklift = CanForklift(15, 1)
+        self.tote_forklift = ToteForklift(5, 2)
+        self.can_forklift = CanForklift(15, 3)
+        self.lim1 = wpilib.DigitalInput(0)
+        self.lim2= wpilib.DigitalInput(1)
+        
 
         self.drive = drive.Drive(self.robot_drive,0)
         
