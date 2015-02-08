@@ -180,7 +180,7 @@ class ToteForklift(Forklift):
 class CanForklift(Forklift):
     def __init__ (self, motor_port, limit_port):
         super().__init__(motor_port, limit_port, -1)
-        
+      
         sd = NetworkTable.getTable('SmartDashboard')
         
         self.positions = [
