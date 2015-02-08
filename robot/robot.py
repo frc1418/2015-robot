@@ -3,7 +3,7 @@
 import wpilib
 from components import drive, alignment
 from components.forklift import ToteForklift, CanForklift
-from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F
+from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
 
 from robotpy_ext.autonomous import AutonomousModeSelector
@@ -43,11 +43,14 @@ class MyRobot(wpilib.SampleRobot):
         
 
         self.longDistanceL = SharpIR2Y0A02(1) ## Robot's left
-        self.longDistanceR = SharpIR2Y0A02(2) ## Robot's right
-        self.shortDistanceL = SharpIRGP2Y0A41SK0F(3) ## Robot's left
+        self.longDistanceR = SharpIR2Y0A02(3) ## Robot's right
+        self.shortDistanceL = SharpIRGP2Y0A41SK0F(2) ## Robot's left
         self.shortDistanceR = SharpIRGP2Y0A41SK0F(4) ## Robot's right
+        
+        self.leftSensors = CombinedSensor(self.longDistanceL, self.shortDistanceL)
+        self.rightSensors = CombinedSensor(self.longDistanceR, self.shortDistanceR)
 
-        self.align = alignment.Alignment(self.shortDistanceL, self.shortDistanceR)
+        self.align = alignment.Alignment(self.leftSensors, self.rightSensors)
         
         self.components = {
             'tote_Forklift': self.tote_forklift,
@@ -137,10 +140,10 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.Timer.delay(self.control_loop_wait_time)
 
     def smartdashbord_update(self):
-       # wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
-       # wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
-       # wpilib.SmartDashboard.putNumber('largeSensorValueL', self.longDistanceL.getDistance())
-       # wpilib.SmartDashboard.putNumber('largeSensorValueR', self.longDistanceR.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
+        wpilib.SmartDashboard.putNumber('largeSensorValueL', self.longDistanceL.getDistance())
+        wpilib.SmartDashboard.putNumber('largeSensorValueR', self.longDistanceR.getDistance())
         if self.can_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('Can Target', -1)
         else:   

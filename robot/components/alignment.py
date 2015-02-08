@@ -1,5 +1,7 @@
 import wpilib
 from networktables.networktable import NetworkTable
+import logging
+logger = logging.getLogger("Aligning")
 class Alignment (object):
     def __init__(self, leftInfrared, rightInfrared):
         self.rightSensor = rightInfrared
@@ -10,7 +12,7 @@ class Alignment (object):
     def get_speed(self):
         r_voltage = self.rightSensor.getVoltage()
         l_voltage = self.leftSensor.getVoltage()
-        if abs(r_voltage-l_voltage)<2:
+        if abs(r_voltage-l_voltage)<.3:
             rotateSpeed=0
         elif r_voltage>l_voltage: 
             diff = r_voltage-l_voltage
@@ -18,4 +20,5 @@ class Alignment (object):
         elif l_voltage>r_voltage:
             diff = l_voltage-r_voltage
             rotateSpeed = min(self.t, diff*self.c)
+        logger.info("Aligning")   
         return rotateSpeed
