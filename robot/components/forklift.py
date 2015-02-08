@@ -115,7 +115,6 @@ class Forklift (object):
                 self.isCalibrated = True
     
     def doit(self):
-        
         if self.current_manual_mode != self.manual_mode:
             if self.manual_mode:
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.PercentVbus)
@@ -153,7 +152,7 @@ class ToteForklift(Forklift):
             sd.getAutoUpdateValue('Tote Forklift|stack3', 3),
             sd.getAutoUpdateValue('Tote Forklift|stack4', 4),
             sd.getAutoUpdateValue('Tote Forklift|stack5', 5),
-        ]
+          ]
         
         self.set_pid((1, 0, 0))
         
@@ -176,6 +175,7 @@ class ToteForklift(Forklift):
         
     def set_pos_bottom(self):
         self._set_position(0)
+   
         
 class CanForklift(Forklift):
     def __init__ (self, motor_port, limit_port):
@@ -190,7 +190,7 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|stack3', 3),
             sd.getAutoUpdateValue('Can Forklift|stack4', 4),
             sd.getAutoUpdateValue('Can Forklift|stack5', 5),
-        ]
+               ]
         
         self.down_pid = (1, 0, 0)
         self.up_pid = (1, 0, 0)

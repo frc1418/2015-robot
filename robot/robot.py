@@ -143,6 +143,18 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
         wpilib.SmartDashboard.putNumber('largeSensorValueL', self.longDistanceL.getDistance())
         wpilib.SmartDashboard.putNumber('largeSensorValueR', self.longDistanceR.getDistance())
+        if self.can_forklift.target_position is None:
+            wpilib.SmartDashboard.putNumber('Can Targer', -1)
+        else:   
+            wpilib.SmartDashboard.putNumber('Can Target', self.can_forklift.target_position)
+        wpilib.SmartDashboard.putDouble('Can Encoder', self.can_forklift.motor.getEncPosition())
+        if self.tote_forklift.target_position is None:
+            wpilib.SmartDashboard.putNumber('Tote Target', -1)
+        else:
+            wpilib.SmartDashboard.putNumber('Tote Targer', self.tote_forklift.target_position)
+        wpilib.SmartDashboard.putDouble('Tote Encoder', self.tote_forklift.motor.getEncPosition())
+    
+    
 
 
 

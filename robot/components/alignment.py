@@ -10,7 +10,6 @@ class Alignment (object):
     def get_speed(self):
         r_voltage = self.rightSensor.getVoltage()
         l_voltage = self.leftSensor.getVoltage()
-        c = wpilib.SmartDashboard.getDouble('Align Constant')
         if abs(r_voltage-l_voltage)<2:
             rotateSpeed=0
         elif r_voltage>l_voltage: 
@@ -18,5 +17,5 @@ class Alignment (object):
             rotateSpeed = min(self.t, diff*self.c)*-1
         elif l_voltage>r_voltage:
             diff = l_voltage-r_voltage
-            rotateSpeed = min(self.t, diff*c)
+            rotateSpeed = min(self.t, diff*self.c)
         return rotateSpeed
