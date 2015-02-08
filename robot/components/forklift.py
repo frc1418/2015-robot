@@ -1,4 +1,6 @@
+
 import wpilib
+from networktables.networktable import NetworkTable
 
 class Forklift (object):
     def __init__ (self, motor_port, limit_port, init_down_speed):
@@ -44,17 +46,18 @@ class Forklift (object):
         last_pos = None
         
         for i, pos in enumerate(self.positions):
-            if current_pos < pos:
+            pos_value = pos.value
+            if current_pos < pos_value:
                 if i == 0:
                     return 0
                 
                 # Pick the position that is closer
-                if pos - current_pos > current_pos - last_pos:
+                if pos_value - current_pos > current_pos - last_pos:
                     return i
                 else:
                     return i - 1
                 
-            last_pos = pos
+            last_pos = pos_value
             
         return len(self.positions) - 1
     
@@ -96,7 +99,7 @@ class Forklift (object):
     def _set_position(self, index):
         self.manual_mode = False
         self.target_index = index
-        self.target_position = self.positions[index]
+        self.target_position = self.positions[index].value
         
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
@@ -141,13 +144,15 @@ class ToteForklift(Forklift):
     def __init__ (self, motor_port, limit_port):
         super().__init__(motor_port, limit_port, -1)
         
+        sd = NetworkTable.getTable('SmartDashboard')
+        
         self.positions = [
-            0,  # bottom
-            1, # stack1
-            2, # stack2
-            3, # stack3
-            4, # stack4
-            5, # stack5
+            sd.getAutoUpdateValue('Tote Forklift|bottom', 0),
+            sd.getAutoUpdateValue('Tote Forklift|stack1', 1),
+            sd.getAutoUpdateValue('Tote Forklift|stack2', 2),
+            sd.getAutoUpdateValue('Tote Forklift|stack3', 3),
+            sd.getAutoUpdateValue('Tote Forklift|stack4', 4),
+            sd.getAutoUpdateValue('Tote Forklift|stack5', 5),
         ]
         
         self.set_pid((1, 0, 0))
@@ -176,28 +181,30 @@ class CanForklift(Forklift):
     def __init__ (self, motor_port, limit_port):
         super().__init__(motor_port, limit_port, -1)
         
+        sd = NetworkTable.getTable('SmartDashboard')
+        
         self.positions = [
-            0, # bottom
-            1, # stack1
-            2, # stack2
-            3, # stack3
-            4, # stack4
-            5, # stack5
+            sd.getAutoUpdateValue('Can Forklift|bottom', 0),
+            sd.getAutoUpdateValue('Can Forklift|stack1', 1),
+            sd.getAutoUpdateValue('Can Forklift|stack2', 2),
+            sd.getAutoUpdateValue('Can Forklift|stack3', 3),
+            sd.getAutoUpdateValue('Can Forklift|stack4', 4),
+            sd.getAutoUpdateValue('Can Forklift|stack5', 5),
         ]
         
         self.down_pid = (1, 0, 0)
         self.up_pid = (1, 0, 0)
         
-        #self.motor.setPID
+        self.motor.set
         
     def _update_pid(self):
-        if self.get_target_position() > self.get_position():
-            self.set_pid(self.down_pid)
-        else:
+        target_position = self.get_target_position() 
+        if target_position is None or target_position > self.get_position():
             self.set_pid(self.up_pid)
+        else:
+            self.set_pid(self.down_pid)
     
     
-      
     def set_pos_holding(self):
         self._set_position(0)
         self._update_pid()
