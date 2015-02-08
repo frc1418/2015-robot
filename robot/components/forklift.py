@@ -168,8 +168,7 @@ class ToteForklift(Forklift):
         sd = NetworkTable.getTable('SmartDashboard')
         tote_up_p = sd.getAutoUpdateValue('Tote Up P', 1)
         tote_up_i = sd.getAutoUpdateValue('Tote Up I', 0)
-        tote_down_p = sd.getAutoUpdateValue('Tote Down P', 1)
-        tote_down_i = sd.getAutoUpdateValue('Tote Down I', 0)
+        
         self.positions = [
             sd.getAutoUpdateValue('Tote Forklift|bottom', 0),
             sd.getAutoUpdateValue('Tote Forklift|stack1', 1),
@@ -178,15 +177,7 @@ class ToteForklift(Forklift):
             sd.getAutoUpdateValue('Tote Forklift|stack4', 4),
             sd.getAutoUpdateValue('Tote Forklift|stack5', 5),
           ]
-        self.set_pid((1, 0, 0)  )
-        self.up_pid = (tote_up_p, tote_up_i, 0)
-        self.down_pid = (tote_down_p, tote_down_i,0)
-    def _update_pid(self):
-        target_position = self.get_target_position() 
-        if target_position is None or target_position > self.get_position():
-            self.set_pid(self.up_pid)
-        else:
-            self.set_pid(self.down_pid)
+        self.set_pid((1, 0, 0))
             
     def set_pos_stack5(self):
         self._set_position(5)
@@ -227,7 +218,7 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|stack3', 3),
             sd.getAutoUpdateValue('Can Forklift|stack4', 4),
             sd.getAutoUpdateValue('Can Forklift|stack5', 5),
-               ]
+        ]
         
         self.up_pid = (can_up_p.get(), can_up_i.get(), 0)
         self.down_pid = (can_down_p.get(), can_down_i.get(),0)
