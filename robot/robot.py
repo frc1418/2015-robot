@@ -47,8 +47,8 @@ class MyRobot(wpilib.SampleRobot):
         self.shortDistanceL = SharpIRGP2Y0A41SK0F(2) ## Robot's left
         self.shortDistanceR = SharpIRGP2Y0A41SK0F(4) ## Robot's right
         
-        self.leftSensors = CombinedSensor(self.longDistanceL, self.shortDistanceL)
-        self.rightSensors = CombinedSensor(self.longDistanceR, self.shortDistanceR)
+        self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
+        self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
 
         self.align = alignment.Alignment(self.leftSensors, self.rightSensors)
         

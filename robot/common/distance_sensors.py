@@ -19,12 +19,20 @@ class SharpIRGP2Y0A41SK0F:
         return max(  min(    ((  max(self.Distance.getVoltage(),0.00001)/7.330)**(1/-0.7685))  ,35)  ,4)
     def getVoltage(self):
         return self.Distance.getVoltage()
+
 class CombinedSensor:
-    def __init__(self, longDist, shortDist):
+    def __init__(self, longDist, longOff, shortDist, shortOff):
         self.longDistance = longDist
         self.shortDistance = shortDist
+        self.longOff = longOff
+        self.shortOff = shortOff
+        
     def getDistance(self):
-        if self.shortDistance.getDistance()>25 :
-            return self.longDistance.getDistance()
+        
+        long = self.longDistance.getDistance()
+        short = self.shortDistance.getDistance()
+        
+        if short < 30:
+            return short - self.shortOff
         else:
-            return self.shortDistance.getDistance()
+            return long - self.longOff
