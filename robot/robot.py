@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 import wpilib
-import math
 from components import drive, alignment
 from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F
 from common.button import Button
-from wpilib.smartdashboard import SmartDashboard
 
 from robotpy_ext.autonomous import AutonomousModeSelector
 
@@ -51,8 +49,7 @@ class MyRobot(wpilib.SampleRobot):
         self.components = {
             'tote_Forklift': self.tote_forklift,
             'can_Forklift': self.can_forklift,
-            'drive': self.drive,
-            'alignment' : self.align
+            'drive': self.drive
         }
 
         self.control_loop_wait_time = 0.025

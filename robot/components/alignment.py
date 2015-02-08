@@ -1,22 +1,22 @@
 import wpilib
-from components import drive
-
+from networktables.networktable import NetworkTable
 class Alignment (object):
     def __init__(self, leftInfrared, rightInfrared):
         self.rightSensor = rightInfrared
         self.leftSensor = leftInfrared
-    
-    
+        sd = NetworkTable.getTable('SmartDashboard')
+        self.c = sd.getAutoUpdateValue('Align Constant', .1)
+        self.t = sd.getAutoUpdateValue('Voltage Threshold', .5)
     def get_speed(self):
-        if abs(self.rightSensor.getVoltage()-self.leftSensor.getVoltage())<2:
+        r_voltage = self.rightSensor.getVoltage()
+        l_voltage = self.leftSensor.getVoltage()
+        c = wpilib.SmartDashboard.getDouble('Align Constant')
+        if abs(r_voltage-l_voltage)<2:
             rotateSpeed=0
-        elif self.rightSensor.getVoltage()>self.leftSensor.getVoltage   (): 
-            diff = self.rightSensor.getVoltage()-self.leftSensor.getVoltage()
-            rotateSpeed = min(.5, diff*.1)*-1
-        elif self.rightSensor.getVoltage()<self.leftSensor.getVoltage():
-            diff = self.leftSensor.getVoltage()-self.rightSensor.getVoltage()
-            rotateSpeed = min(.5, diff*.1)
+        elif r_voltage>l_voltage: 
+            diff = r_voltage-l_voltage
+            rotateSpeed = min(self.t, diff*self.c)*-1
+        elif l_voltage>r_voltage:
+            diff = l_voltage-r_voltage
+            rotateSpeed = min(self.t, diff*c)
         return rotateSpeed
-    def doit(self):
-        pass
-            
