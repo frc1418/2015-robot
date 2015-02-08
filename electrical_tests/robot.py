@@ -38,7 +38,7 @@ class MyRobot(wpilib.SampleRobot):
         
         
         # #SMART DASHBOARD
-
+        
         # #ROBOT DRIVE##
         self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
@@ -53,9 +53,9 @@ class MyRobot(wpilib.SampleRobot):
         
         while self.isOperatorControl() and self.isEnabled():    
             
-            '''
-            wpilib.SmartDashboard.putNumber('Enc', self.talon.getEncPosition())
             
+            wpilib.SmartDashboard.putNumber('Enc', self.toteMotor.getEncPosition())
+            '''
             if wpilib.SmartDashboard.getNumber('P') is not self.talon.getP():
                 self.talon.setP(wpilib.SmartDashboard.getNumber('P'))
             
@@ -67,14 +67,14 @@ class MyRobot(wpilib.SampleRobot):
             '''
             if self.joystick1.getRawButton(2):
                 self.toteMotor.set(1)
-            if self.joystick1.getRawButton(3):
+            elif self.joystick1.getRawButton(3):
                 self.toteMotor.set(-1)
             else:
                 self.toteMotor.set(0)
 
             if self.joystick2.getRawButton(3):
                 self.canMotor.set(1)
-            if self.joystick2.getRawButton(2):
+            elif self.joystick2.getRawButton(2):
                 self.canMotor.set(-1)
             else:
                 self.canMotor.set(0)
@@ -89,7 +89,7 @@ class MyRobot(wpilib.SampleRobot):
             self.y = self.joystick1.getY() * self.reverse
             self.rotation = (self.joystick2.getX() / 2)
             
-            self.robot_drive.mecanumDrive_Cartesian((self.x) ** 3, (self.y) ** 3, (self.rotation), 0,)
+            self.robot_drive.mecanumDrive_Cartesian((self.x), (self.y), (self.rotation), 0,)
             
             
             wpilib.Timer.delay(0.005)
