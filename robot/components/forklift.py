@@ -72,7 +72,7 @@ class Forklift (object):
             index = target_index + 1
             
         if index >= len(self.positions):
-            index = len(self.positions)
+            index = len(self.positions)-1
         
         self._set_position(index)
     
@@ -115,6 +115,7 @@ class Forklift (object):
                 self.isCalibrated = True
     
     def doit(self):
+        
         if self.current_manual_mode != self.manual_mode:
             if self.manual_mode:
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.PercentVbus)
@@ -207,11 +208,10 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|stack5', 5),
                ]
         
-        self.up_pid = (can_up_p, can_up_i, 0)
-        self.down_pid = (can_down_p, can_down_i,0)
+        self.up_pid = (can_up_p.get(), can_up_i.get(), 0)
+        self.down_pid = (can_down_p.get(), can_down_i.get(),0)
    
         
-        self.motor.set
         
     def _update_pid(self):
         target_position = self.get_target_position() 
