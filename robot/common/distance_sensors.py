@@ -6,7 +6,8 @@ class SharpIR2Y0A02:
         self.Distance = wpilib.AnalogInput(num)
         
     def getDistance(self):
-        return max(  min(  ((  max(self.Distance.getVoltage(),0.00001)/22.73)**(1/-0.7533))  ,200)  ,30)
+        #13.40x^(-0.7806)
+        return max(  min(  ((  max(self.Distance.getVoltage(),0.00001)/13.40)**(1/-0.7806))  ,200)  ,30)
     def getVoltage(self):
         return self.Distance.getVoltage()
 
@@ -16,7 +17,8 @@ class SharpIRGP2Y0A41SK0F:
         self.Distance = wpilib.AnalogInput(num)
 
     def getDistance(self):
-        return max(  min(    ((  max(self.Distance.getVoltage(),0.00001)/7.330)**(1/-0.7685))  ,35)  ,4)
+        #9.592x^(-0.8819)
+        return max(  min(    ((  max(self.Distance.getVoltage(),0.00001)/9.592)**(1/-0.8819))  ,35)  ,4)
     def getVoltage(self):
         return self.Distance.getVoltage()
 
