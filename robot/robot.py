@@ -70,8 +70,8 @@ class MyRobot(wpilib.SampleRobot):
         self.toteDown = Button(self.joystick2,2)
         self.toteTop = Button(self.joystick2,6)
         self.toteBottom = Button(self.joystick2,7)
-        
-        self.triggerPressed = False
+        self.reverseDirection = Button(self.joystick1, 1)
+        self.aligned = False
 
 
 
@@ -134,14 +134,19 @@ class MyRobot(wpilib.SampleRobot):
                 
             #INFRARED DRIVE#
             if self.joystick2.getTrigger():
-                self.drive.move(0, 0, self.align.get_speed())
-            
+                self.drive.move(0,0, self.align.get_speed())
+                if self.align.get_speed()==0:
+                    self.aligned = True
+                
+                if self.aligned:
+                    self.drive.move(1, 0, 0)
+                    
+                if self.lim1.get() and self.lim2.get():
+                    self.tote_forklift.raise_forklift() 
+                    self.aligned = False  
             #REVERSE DRIVE#
-            if self.joystick1.getTrigger() and (self.triggerPressed==False):
+            if self.reverseDirection.get():
                 self.drive.switch_direction()
-                self.triggerPressed = True
-            if self.joystick1.getTrigger()==False:
-                self.triggerPressed=False
 
             
             self.smartdashbord_update()
