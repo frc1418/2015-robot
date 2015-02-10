@@ -120,14 +120,24 @@ class Forklift (object):
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
         if not self.isCalibrated:
-            if self.limit.get():
-                self.motor.set(self.init_down_speed)
+            if isinstance(Forklift, CanForklift):
+                if not self.motor.isRevLimitSwitchClosed():
+                    self.motor.set(self.init_down_speed)
+                else:
+                    self.motor.set(0)
+                    self.motor.setSensorPosition(0)
+                
+                    self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+                    self.isCalibrated = True
             else:
-                self.motor.set(0)
-                self.motor.setSensorPosition(0)
-            
-                self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
-                self.isCalibrated = True
+                if self.limit.get():
+                    self.motor.set(self.init_down_speed)
+                else:
+                    self.motor.set(0)
+                    self.motor.setSensorPosition(0)
+                
+                    self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+                    self.isCalibrated = True
     
     def doit(self):
         if self.want_manual:
@@ -217,16 +227,13 @@ class ToteForklift(Forklift):
 class CanForklift(Forklift):
     def __init__ (self, motor_port, limit_port):
         super().__init__(motor_port, limit_port, -1)
-      
         sd = NetworkTable.getTable('SmartDashboard')
-        
         self.positions = [
             sd.getAutoUpdateValue('Can Forklift|bottom', 0),
-            sd.getAutoUpdateValue('Can Forklift|stack1', 1),
-            sd.getAutoUpdateValue('Can Forklift|stack2', 2),
-            sd.getAutoUpdateValue('Can Forklift|stack3', 3),
-            sd.getAutoUpdateValue('Can Forklift|stack4', 4),
-            sd.getAutoUpdateValue('Can Forklift|stack5', 5),
+            sd.getAutoUpdateValue('Can Forklift|stack1', -3304),
+            sd.getAutoUpdateValue('Can Forklift|stack2', -7406),
+            sd.getAutoUpdateValue('Can Forklift|stack3', -11214),
+            sd.getAutoUpdateValue('Can Forklift|stack4', -15022),
         ]
         
         self.up_pid = (
@@ -255,7 +262,7 @@ class CanForklift(Forklift):
         
         
     def set_pos_holding(self):
-        self._set_position(0)
+        self._set_position(4)
         
     set_pos_top = set_pos_holding
         

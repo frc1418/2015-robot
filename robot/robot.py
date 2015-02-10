@@ -13,39 +13,41 @@ class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
         print("Team 1418's 2015 Code")
 
-        ##INITIALIZE JOYSTICKS##
+        # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
 
-        #hello
-        ##INITIALIZE MOTORS##
+        # hello
+        # #INITIALIZE MOTORS##
         self.lf_motor = wpilib.Talon(0)
         self.lr_motor = wpilib.Talon(1)
         self.rf_motor = wpilib.Talon(2)
         self.rr_motor = wpilib.Talon(3)
 
-        ##ROBOT DRIVE##
+        # #ROBOT DRIVE##
         self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
 
-        ##INITIALIZE SENSORS#
+        # #INITIALIZE SENSORS#
 
 
         self.gyro = wpilib.Gyro(0)
         self.tote_forklift = ToteForklift(5, 2)
         self.can_forklift = CanForklift(15, 3)
         self.lim1 = wpilib.DigitalInput(0)
-        self.lim2= wpilib.DigitalInput(1)
+        self.lim2 = wpilib.DigitalInput(1)
+        
+        self.next_pos = 1
         
 
-        self.drive = drive.Drive(self.robot_drive,0)
+        self.drive = drive.Drive(self.robot_drive, 0)
         
 
-        self.longDistanceL = SharpIR2Y0A02(1) ## Robot's left
-        self.longDistanceR = SharpIR2Y0A02(3) ## Robot's right
-        self.shortDistanceL = SharpIRGP2Y0A41SK0F(2) ## Robot's left
-        self.shortDistanceR = SharpIRGP2Y0A41SK0F(4) ## Robot's right
+        self.longDistanceL = SharpIR2Y0A02(1)  # # Robot's left
+        self.longDistanceR = SharpIR2Y0A02(3)  # # Robot's right
+        self.shortDistanceL = SharpIRGP2Y0A41SK0F(2)  # # Robot's left
+        self.shortDistanceR = SharpIRGP2Y0A41SK0F(7)  # # Robot's right
         
         self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
         self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
@@ -61,27 +63,29 @@ class MyRobot(wpilib.SampleRobot):
         self.control_loop_wait_time = 0.025
         self.automodes = AutonomousModeSelector('autonomous', self.components)
         
-        ##Defining Buttons##
-        #self.canUp = Button(self.joystick1,3)
-        #self.canDown = Button(self.joystick1,2)
-        #self.canTop = Button(self.joystick1,6)
-        #self.canBottom = Button(self.joystick1,7)
-        self.toteUp = Button(self.joystick2,3)
-        self.toteDown = Button(self.joystick2,2)
-        self.toteTop = Button(self.joystick2,6)
-        self.toteBottom = Button(self.joystick2,7)
+        # #Defining Buttons##
+        self.canUp = Button(self.joystick1,3)
+        self.canDown = Button(self.joystick1,2)
+        self.canTop = Button(self.joystick1,6)
+        self.canBottom = Button(self.joystick1,7)
+        self.toteUp = Button(self.joystick2, 3)
+        self.toteDown = Button(self.joystick2, 2)
+        self.toteTop = Button(self.joystick2, 6)
+        self.toteBottom = Button(self.joystick2, 7)
         self.reverseDirection = Button(self.joystick1, 1)
+        self.alignTrigger = Button(self.joystick2, 1)
+        self.aligning = False
         self.aligned = False
 
-
+        
 
     def autonomous(self):
         self.automodes.run(self.control_loop_wait_time, self.update)
 
     def operatorControl(self):
 
-        #self.can_forklift.set_manual(0)
-        #self.tote_forklift.set_manual(0)
+        # self.can_forklift.set_manual(0)
+        # self.tote_forklift.set_manual(0)
 
         self.logger.info("Entering teleop mode")
         
@@ -98,21 +102,20 @@ class MyRobot(wpilib.SampleRobot):
                 
             elif self.joystick1.getRawButton(4):
                 self.can_forklift.set_manual(-1)
-            #========DO NOT UNCOMMENT===========
-            #elif self.canUp.get():
-            #    self.can_forklift.raise_forklift()
-            #    
-            #elif self.canDown.get():
-            #    self.can_forklift.lower_forklift()
-            #    
-            #if self.canTop.get():
-            #    self.can_forklift.set_pos_top()
-            #elif self.canBottom.get():
-            #    self.can_forklift.set_pos_bottom()
-            #============================ 
-            #
-            # Tote forklift controls
-            #
+            
+            elif self.canUp.get():
+                self.can_forklift.raise_forklift()
+                
+            elif self.canDown.get():
+                self.can_forklift.lower_forklift()
+                
+            if self.canTop.get():
+                self.can_forklift.set_pos_top()
+            elif self.canBottom.get():
+                self.can_forklift.set_pos_bottom()
+            
+             # #Tote forklift controls##
+            
              
             if self.joystick2.getRawButton(5):
                 self.tote_forklift.set_manual(1)
@@ -132,22 +135,33 @@ class MyRobot(wpilib.SampleRobot):
                 self.tote_forklift.set_pos_bottom()
                 
                 
-            #INFRARED DRIVE#
-            if self.joystick2.getTrigger():
-                self.drive.move(0,0, self.align.get_speed())
-                if self.align.get_speed()==0:
+            # INFRARED DRIVE#
+            
+            if self.aligning:
+                self.drive.move(0, 0, self.align.get_speed())
+                if self.align.get_speed() == 0:
                     self.aligned = True
-                
-                if self.aligned:
-                    self.drive.move(1, 0, 0)
                     
-                if self.lim1.get() and self.lim2.get():
-                    self.tote_forklift.raise_forklift() 
+                if self.aligned:
+                    self.drive.move(-.3, 0, 0)
+                    
+                if not self.lim1.get() and self.lim2.get():
+                    self.drive.move(-.3, -.2, 0)
+                elif not self.lim2.get() and self.lim1.get():
+                    self.drive.move(-.3, .2, 0)
+                elif not self.lim1.get() and not self.lim2.get():
+                    self.tote_forklift._set_position(self.next_pos)
                     self.aligned = False  
-            #REVERSE DRIVE#
+                    self.aligning = False
+            elif self.alignTrigger.get():
+                self.aligning = True
+                self.next_pos = self.tote_forklift.get_position() + 1
+            # REVERSE DRIVE#
             if self.reverseDirection.get():
                 self.drive.switch_direction()
-
+            
+            if self.can_forklift.motor.isRevLimitSwitchClosed():
+                self.can_forklift.motor.setSensorPosition(0)
             
             self.smartdashbord_update()
             self.update()
@@ -155,7 +169,7 @@ class MyRobot(wpilib.SampleRobot):
 
     def smartdashbord_update(self):
         wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
-        wpilib.SmartDashboard.putNumber('shortSensorValueR',self.shortDistanceR.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
         wpilib.SmartDashboard.putNumber('longSensorValueL', self.longDistanceL.getDistance())
         wpilib.SmartDashboard.putNumber('longSensorValueR', self.longDistanceR.getDistance())
         if self.can_forklift.target_position is None:
@@ -168,7 +182,9 @@ class MyRobot(wpilib.SampleRobot):
         else:
             wpilib.SmartDashboard.putNumber('Tote Target', self.tote_forklift.target_position)
         wpilib.SmartDashboard.putDouble('Tote Encoder', self.tote_forklift.motor.getEncPosition())
-    
+        wpilib.SmartDashboard.putBoolean('Lim 1', self.lim1.get())
+        wpilib.SmartDashboard.putBoolean('Lim2', self.lim2.get())
+                                         
     
 
 
