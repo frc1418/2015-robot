@@ -120,24 +120,14 @@ class Forklift (object):
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
         if not self.isCalibrated:
-            if isinstance(Forklift, CanForklift):
-                if not self.motor.isRevLimitSwitchClosed():
-                    self.motor.set(self.init_down_speed)
-                else:
-                    self.motor.set(0)
-                    self.motor.setSensorPosition(0)
-                
-                    self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
-                    self.isCalibrated = True
+            if self.get_limit_switch():
+                self.motor.set(self.init_down_speed)
             else:
-                if self.limit.get():
-                    self.motor.set(self.init_down_speed)
-                else:
-                    self.motor.set(0)
-                    self.motor.setSensorPosition(0)
-                
-                    self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
-                    self.isCalibrated = True
+                self.motor.set(0)
+                self.motor.setSensorPosition(0)
+            
+                self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+                self.isCalibrated = True
     
     def doit(self):
         if self.want_manual:
@@ -222,7 +212,9 @@ class ToteForklift(Forklift):
         
     def set_pos_bottom(self):
         self._set_position(0)
-   
+    
+    def get_limit_switch(self):
+        return self.limit.get()
         
 class CanForklift(Forklift):
     def __init__ (self, motor_port, limit_port):
@@ -280,4 +272,6 @@ class CanForklift(Forklift):
         
     def set_pos_bottom(self):
         self._set_position(0)
+    def get_limit_switch(self):
+        return not self.motor.isRevLimitSwitchClosed()
     

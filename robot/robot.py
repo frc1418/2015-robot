@@ -35,8 +35,9 @@ class MyRobot(wpilib.SampleRobot):
         self.gyro = wpilib.Gyro(0)
         self.tote_forklift = ToteForklift(5, 2)
         self.can_forklift = CanForklift(15, 3)
-        self.lim1 = wpilib.DigitalInput(0)
-        self.lim2 = wpilib.DigitalInput(1)
+        
+        self.lim1 = wpilib.DigitalInput(0) ##Left limit switch
+        self.lim2 = wpilib.DigitalInput(1) ##Right limit switch
         
         self.next_pos = 1
         
