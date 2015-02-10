@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 import wpilib
 from components import drive, alignment
@@ -58,7 +57,8 @@ class MyRobot(wpilib.SampleRobot):
         self.components = {
             'tote_Forklift': self.tote_forklift,
             'can_Forklift': self.can_forklift,
-            'drive': self.drive
+            'drive': self.drive,
+            'align': self.align
         }
 
         self.control_loop_wait_time = 0.025
@@ -139,6 +139,8 @@ class MyRobot(wpilib.SampleRobot):
             # INFRARED DRIVE#
             
             if self.aligning:
+                self.limit1 = self.lim1.get()
+                self.limit2 = self.lim2.get()
                 self.drive.move(0, 0, self.align.get_speed())
                 if self.align.get_speed() == 0:
                     self.aligned = True
@@ -146,11 +148,11 @@ class MyRobot(wpilib.SampleRobot):
                 if self.aligned:
                     self.drive.move(-.3, 0, 0)
                     
-                if not self.lim1.get() and self.lim2.get():
+                if not self.limit1 and self.limit2:
                     self.drive.move(-.3, -.2, 0)
-                elif not self.lim2.get() and self.lim1.get():
+                elif not self.limit2 and self.limit1:
                     self.drive.move(-.3, .2, 0)
-                elif not self.lim1.get() and not self.lim2.get():
+                elif not self.limit1 and not self.limit2:
                     self.tote_forklift._set_position(self.next_pos)
                     self.aligned = False  
                     self.aligning = False
