@@ -35,8 +35,8 @@ class MyRobot(wpilib.SampleRobot):
         self.tote_forklift = ToteForklift(5, 2)
         self.can_forklift = CanForklift(15, 3)
         
-        self.lim1 = wpilib.DigitalInput(0) ##Left limit switch
-        self.lim2 = wpilib.DigitalInput(1) ##Right limit switch
+        self.toteLimitL = wpilib.DigitalInput(0) ##Left limit switch
+        self.toteLimitR = wpilib.DigitalInput(1) ##Right limit switch
         
         self.next_pos = 1
         
@@ -52,7 +52,9 @@ class MyRobot(wpilib.SampleRobot):
         self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
         self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
 
-        self.align = alignment.Alignment(self.leftSensors, self.rightSensors)
+        self.align = alignment.Alignment(self.leftSensors, self.rightSensors,
+                                         self.toteLimitL, self.toteLimitR,
+                                         self.tote_forklift, self.drive)
         
         self.components = {
             'tote_Forklift': self.tote_forklift,
@@ -73,11 +75,9 @@ class MyRobot(wpilib.SampleRobot):
         self.toteDown = Button(self.joystick2, 2)
         self.toteTop = Button(self.joystick2, 6)
         self.toteBottom = Button(self.joystick2, 7)
+        
         self.reverseDirection = Button(self.joystick1, 1)
-        self.alignTrigger = Button(self.joystick2, 1)
-        self.aligning = False
-        self.aligned = False
-
+        #self.alignTrigger = Button(self.joystick2, 1)
         
 
     def autonomous(self):
@@ -115,7 +115,7 @@ class MyRobot(wpilib.SampleRobot):
             elif self.canBottom.get():
                 self.can_forklift.set_pos_bottom()
             
-             # #Tote forklift controls##
+            # #Tote forklift controls##
             
              
             if self.joystick2.getRawButton(5):
@@ -137,28 +137,10 @@ class MyRobot(wpilib.SampleRobot):
                 
                 
             # INFRARED DRIVE#
+            if self.joystick2.getTrigger():
+                self.align.align()
             
-            if self.aligning:
-                self.limit1 = self.lim1.get()
-                self.limit2 = self.lim2.get()
-                self.drive.move(0, 0, self.align.get_speed())
-                if self.align.get_speed() == 0:
-                    self.aligned = True
-                    
-                if self.aligned:
-                    self.drive.move(-.3, 0, 0)
-                    
-                if not self.limit1 and self.limit2:
-                    self.drive.move(-.3, -.2, 0)
-                elif not self.limit2 and self.limit1:
-                    self.drive.move(-.3, .2, 0)
-                elif not self.limit1 and not self.limit2:
-                    self.tote_forklift._set_position(self.next_pos)
-                    self.aligned = False  
-                    self.aligning = False
-            elif self.alignTrigger.get():
-                self.aligning = True
-                self.next_pos = self.tote_forklift.get_position() + 1
+          
             # REVERSE DRIVE#
             if self.reverseDirection.get():
                 self.drive.switch_direction()
@@ -175,18 +157,21 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
         wpilib.SmartDashboard.putNumber('longSensorValueL', self.longDistanceL.getDistance())
         wpilib.SmartDashboard.putNumber('longSensorValueR', self.longDistanceR.getDistance())
+        
         if self.can_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('Can Target', -1)
         else:   
             wpilib.SmartDashboard.putNumber('Can Target', self.can_forklift.target_position)
         wpilib.SmartDashboard.putDouble('Can Encoder', self.can_forklift.motor.getEncPosition())
+        
         if self.tote_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('Tote Target', -1)
         else:
             wpilib.SmartDashboard.putNumber('Tote Target', self.tote_forklift.target_position)
         wpilib.SmartDashboard.putDouble('Tote Encoder', self.tote_forklift.motor.getEncPosition())
-        wpilib.SmartDashboard.putBoolean('Lim 1', self.lim1.get())
-        wpilib.SmartDashboard.putBoolean('Lim2', self.lim2.get())
+        
+        wpilib.SmartDashboard.putBoolean('ToteLimitL', self.toteLimitL.get())
+        wpilib.SmartDashboard.putBoolean('ToteLimitR', self.toteLimitR.get())
                                          
     
 
