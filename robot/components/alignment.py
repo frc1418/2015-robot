@@ -45,4 +45,5 @@ class Alignment (object):
             self.aligned = False  
             self.aligning = False
         
-        
+    def doit(self):
+        pass

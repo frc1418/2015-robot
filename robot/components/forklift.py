@@ -222,10 +222,10 @@ class CanForklift(Forklift):
         sd = NetworkTable.getTable('SmartDashboard')
         self.positions = [
             sd.getAutoUpdateValue('Can Forklift|bottom', 0),
-            sd.getAutoUpdateValue('Can Forklift|stack1', -3304),
-            sd.getAutoUpdateValue('Can Forklift|stack2', -7406),
-            sd.getAutoUpdateValue('Can Forklift|stack3', -11214),
-            sd.getAutoUpdateValue('Can Forklift|stack4', -15022),
+            sd.getAutoUpdateValue('Can Forklift|stack1', 3304),
+            sd.getAutoUpdateValue('Can Forklift|stack2', 7406),
+            sd.getAutoUpdateValue('Can Forklift|stack3', 11214),
+            sd.getAutoUpdateValue('Can Forklift|stack4', 15022),
         ]
         
         self.up_pid = (
@@ -272,6 +272,7 @@ class CanForklift(Forklift):
         
     def set_pos_bottom(self):
         self._set_position(0)
+    
     def get_limit_switch(self):
         return not self.motor.isRevLimitSwitchClosed()
     
