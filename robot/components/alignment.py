@@ -51,21 +51,23 @@ class Alignment (object):
         rightLimit = self.rightToteLimit.get()
         
         rotation = self.get_rotation_speed()
-        self.drive.move(-.2, 0, rotation)
+        self.drive.move(-.1, 0, 0)
             
         if abs(rotation) < 0.01:
             self.drive.move(-.3, 0, 0)
             
         if not leftLimit and rightLimit:
-            self.drive.move(-.3, -.2, 0)
+            self.drive.move(-.3, 0, -.1)
         elif leftLimit and not rightLimit:
-            self.drive.move(-.3, .2, 0)
+            self.drive.move(-.3, 0, .1)
         elif not leftLimit and not rightLimit:
-            self.tote_forklift.raise_forklift()
+            self.forkLift.raise_forklift()
             self.aligned = True
         
     def doit(self):
         
         if not self.aligning:
             self.aligned = False
+        
+        self.aligning = False
         

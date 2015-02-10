@@ -128,6 +128,11 @@ class Forklift (object):
             
                 self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
                 self.isCalibrated = True
+                
+                self.on_calibrate()
+    
+    def on_calibrate(self):
+        pass
     
     def doit(self):
         if self.want_manual:
@@ -225,7 +230,7 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|stack1', 3304),
             sd.getAutoUpdateValue('Can Forklift|stack2', 7406),
             sd.getAutoUpdateValue('Can Forklift|stack3', 11214),
-            sd.getAutoUpdateValue('Can Forklift|stack4', 15022),
+            sd.getAutoUpdateValue('Can Forklift|stack4', 19000),
         ]
         
         self.up_pid = (
@@ -240,6 +245,8 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|Down D', 0)
         )
         
+        self.motor.enableForwardSoftLimit(False)
+        
         
     def _set_position(self, index):
         Forklift._set_position(self, index)
@@ -251,7 +258,10 @@ class CanForklift(Forklift):
             self.wanted_pid = self.down_pid
             
         self.new_pid = [e.value for e in self.wanted_pid]
-        
+    
+    def on_calibrate(self):
+        self.motor.setForwardSoftLimit(19000)
+        self.motor.enableForwardSoftLimit(True)
         
     def set_pos_holding(self):
         self._set_position(4)
