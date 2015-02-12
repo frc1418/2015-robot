@@ -184,7 +184,9 @@ class MyRobot(wpilib.SampleRobot):
 
         wpilib.SmartDashboard.putBoolean('ToteLimitL', self.toteLimitL.get())
         wpilib.SmartDashboard.putBoolean('ToteLimitR', self.toteLimitR.get())
-
+        
+        wpilib.SmartDashboard.putBoolean('Tote Calibrated', self.tote_forklift.isCalibrated)
+        wpilib.SmartDashboard.putBoolean('Can Calibrated', self.can_forklift.isCalibrated)
 
 
 
