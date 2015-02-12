@@ -193,7 +193,7 @@ class ToteForklift(Forklift):
           ]
         
         self.wanted_pid = (
-            sd.getAutoUpdateValue('Tote Forklift|P', 1),
+            sd.getAutoUpdateValue('Tote Forklift|P', 10),
             sd.getAutoUpdateValue('Tote Forklift|I', 0), 
             sd.getAutoUpdateValue('Tote Forklift|D', 0)
         )
@@ -234,13 +234,13 @@ class CanForklift(Forklift):
         ]
         
         self.up_pid = (
-            sd.getAutoUpdateValue('Can Forklift|Up P', 1),
+            sd.getAutoUpdateValue('Can Forklift|Up P', 10),
             sd.getAutoUpdateValue('Can Forklift|Up I', 0),
             sd.getAutoUpdateValue('Can Forklift|Up D', 0)
         )
         
         self.down_pid = (
-            sd.getAutoUpdateValue('Can Forklift|Down P', 1),
+            sd.getAutoUpdateValue('Can Forklift|Down P', 10),
             sd.getAutoUpdateValue('Can Forklift|Down I', 0),
             sd.getAutoUpdateValue('Can Forklift|Down D', 0)
         )
