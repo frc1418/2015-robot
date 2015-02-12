@@ -171,7 +171,7 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
 
         if self.can_forklift.target_position is None:
-            wpilib.SmartDashboard.putNumber('tanTarget', -1)
+            wpilib.SmartDashboard.putNumber('canTarget', -1)
         else:
             wpilib.SmartDashboard.putNumber('canTarget', self.can_forklift.target_position)
         wpilib.SmartDashboard.putDouble('canEncoder', self.can_forklift.motor.getEncPosition())
@@ -184,7 +184,7 @@ class MyRobot(wpilib.SampleRobot):
 
         wpilib.SmartDashboard.putBoolean('toteLimitL', self.toteLimitL.get())
         wpilib.SmartDashboard.putBoolean('toteLimitR', self.toteLimitR.get())
-        
+
         wpilib.SmartDashboard.putBoolean('toteCalibrated', self.tote_forklift.isCalibrated)
         wpilib.SmartDashboard.putBoolean('canCalibrated', self.can_forklift.isCalibrated)
 
