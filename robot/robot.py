@@ -173,8 +173,8 @@ class MyRobot(wpilib.SampleRobot):
         if self.can_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('tanTarget', -1)
         else:
-            wpilib.SmartDashboard.putNumber('tanTarget', self.can_forklift.target_position)
-        wpilib.SmartDashboard.putDouble('tanEncoder', self.can_forklift.motor.getEncPosition())
+            wpilib.SmartDashboard.putNumber('canTarget', self.can_forklift.target_position)
+        wpilib.SmartDashboard.putDouble('canEncoder', self.can_forklift.motor.getEncPosition())
 
         if self.tote_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('toteTarget', -1)
