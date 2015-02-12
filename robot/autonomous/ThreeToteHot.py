@@ -15,8 +15,8 @@ class ThreeToteHot(StatefulAutonomous):
     @timed_state(duration = 3, next_state = 'reverse1', first=True)
     def tote1(self):
         self.aligning = True
-        if self.aligning.aligned:
-            self.tote_Forklift.set_pos_3()
+        if self.align.aligned:
+            self.tote_Forklift.set_pos_stack3()
     @timed_state(duration = .7, next_state = 'strafe1')
     def reverse1(self):
         self.aligning = False
