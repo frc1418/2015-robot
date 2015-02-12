@@ -1,24 +1,58 @@
 import wpilib
+import math
 
 class SharpIR2Y0A02:
-    #large Distance
+    '''
+        Sharp IR sensor GP2Y0A02YK0F
+        
+        Long distance sensor: 20cm to 150cm
+        
+        Output is in centimeters
+        
+        Distance can be calculated using 62.28*x ^ -1.092
+    '''
+    
     def __init__(self,num):
-        self.Distance = wpilib.AnalogInput(num)
+        self.distance = wpilib.AnalogInput(num)
         
     def getDistance(self):
-        #13.40x^(-0.7806)
-        return max(  min(  ((  max(self.Distance.getVoltage(),0.00001)/13.40)**(1/-0.7806))  ,200)  ,30)
+        '''Returns distance in centimeters'''
+        
+        # Don't allow zero/negative values
+        v = max(self.distance.getVoltage(), 0.00001)
+        d = 62.28*math.pow(v, -1.092)
+        
+        # Constrain output 
+        return max(min(d, 145.0), 22.5)
+    
     def getVoltage(self):
-        return self.Distance.getVoltage()
+        return self.distance.getVoltage()
 
 class SharpIRGP2Y0A41SK0F:
+    '''
+        Sharp IR sensor GP2Y0A41SK0F
+        
+        Short distance sensor: 4cm to 40cm
+        
+        Output is in centimeters
+        
+        Distance can be calculated using 
+    '''
+    
     #short Distance
     def __init__(self,num):
         self.Distance = wpilib.AnalogInput(num)
 
     def getDistance(self):
-        #9.592x^(-0.8819)
-        return max(  min(    ((  max(self.Distance.getVoltage(),0.00001)/9.592)**(1/-0.8819))  ,35)  ,4)
+        '''Returns distance in centimeters'''
+        
+        # Don't allow zero/negative values
+        v = max(self.distance.getVoltage(), 0.00001)
+        d = 12.84*math.pow(v, -0.9824)
+        
+        # Constrain output 
+        return max(min(d, 40.0), 4.0)
+    
     def getVoltage(self):
         return self.Distance.getVoltage()
 
