@@ -41,7 +41,7 @@ class SharpIRGP2Y0A41SK0F:
     
     #short Distance
     def __init__(self,num):
-        self.Distance = wpilib.AnalogInput(num)
+        self.distance = wpilib.AnalogInput(num)
 
     def getDistance(self):
         '''Returns distance in centimeters'''
@@ -54,7 +54,7 @@ class SharpIRGP2Y0A41SK0F:
         return max(min(d, 40.0), 4.0)
     
     def getVoltage(self):
-        return self.Distance.getVoltage()
+        return self.distance.getVoltage()
 
 class CombinedSensor:
     def __init__(self, longDist, longOff, shortDist, shortOff):
