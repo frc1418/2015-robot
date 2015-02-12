@@ -19,7 +19,7 @@ class Alignment (object):
         
         sd = NetworkTable.getTable('SmartDashboard')
         self.c = sd.getAutoUpdateValue('Align Constant', .7)
-        self.c = sd.getAutoUpdateValue('Speed Constant', .5)
+        self.s = sd.getAutoUpdateValue('Speed Constant', .5)
         self.t = sd.getAutoUpdateValue('Dist Threshold', .5)
         
         self.next_pos = None
@@ -29,7 +29,7 @@ class Alignment (object):
         r_voltage = self.rightSensor.getDistance()
         l_voltage = self.leftSensor.getDistance()
         
-        if abs(r_voltage-l_voltage)<3:
+        if abs(r_voltage-l_voltage)<1:
             rotateSpeed=0
         elif r_voltage>l_voltage: 
             diff = r_voltage-l_voltage
@@ -57,7 +57,7 @@ class Alignment (object):
             self.drive.move(-.3, 0, 0)
             
         if not leftLimit and rightLimit:
-            self.drive.move(-.3, 0, -.1)
+            self.drive.move(-.3, 0., -.1)
         elif leftLimit and not rightLimit:
             self.drive.move(-.3, 0, .1)
         elif not leftLimit and not rightLimit:

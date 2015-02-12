@@ -44,7 +44,14 @@ class MyRobot(wpilib.SampleRobot):
 
         self.drive = drive.Drive(self.robot_drive, 0)
 
-
+        try:
+            self.camera = wpilib.USBCamera()
+            self.camera.startCapture()
+            self.camera.setExposureAuto()
+            self.cameraServer = wpilib.CameraServer()
+            self.cameraServer.startAutomaticCapture(self.camera)
+        except:
+            self.camera = None
         self.longDistanceL = SharpIR2Y0A02(1)  # # Robot's left
         self.longDistanceR = SharpIR2Y0A02(3)  # # Robot's right
         self.shortDistanceL = SharpIRGP2Y0A41SK0F(2)  # # Robot's left
@@ -158,6 +165,10 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
         wpilib.SmartDashboard.putNumber('longSensorValueL', self.longDistanceL.getDistance())
         wpilib.SmartDashboard.putNumber('longSensorValueR', self.longDistanceR.getDistance())
+        wpilib.SmartDashboard.putNumber('shortSensorVoltageL', self.shortDistanceL.getVoltage())
+        wpilib.SmartDashboard.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
+        wpilib.SmartDashboard.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
+        wpilib.SmartDashboard.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
 
         if self.can_forklift.target_position is None:
             wpilib.SmartDashboard.putNumber('Can Target', -1)
