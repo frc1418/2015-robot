@@ -5,7 +5,7 @@ class DriveForward(StatefulAutonomous):
 
     MODE_NAME = 'Drive Forward'
 
-    DEFAULT = True
+    DEFAULT = False 
 
     def initialize(self):
         pass
