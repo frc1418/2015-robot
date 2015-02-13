@@ -6,6 +6,7 @@ from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
 
+from robotpy_ext.misc import PreciseDelay
 from robotpy_ext.autonomous import AutonomousModeSelector
 
 class MyRobot(wpilib.SampleRobot):
@@ -95,6 +96,8 @@ class MyRobot(wpilib.SampleRobot):
 
         # self.can_forklift.set_manual(0)
         # self.tote_forklift.set_manual(0)
+        
+        delay = PreciseDelay(self.control_loop_wait_time)
 
         self.logger.info("Entering teleop mode")
 
@@ -158,7 +161,9 @@ class MyRobot(wpilib.SampleRobot):
 
             self.smartdashbord_update()
             self.update()
-            wpilib.Timer.delay(self.control_loop_wait_time)
+            
+            # Replaces wpilib.Timer.delay()
+            delay.wait()
 
     def smartdashbord_update(self):
         wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
