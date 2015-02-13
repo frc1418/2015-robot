@@ -88,8 +88,15 @@ class MyRobot(wpilib.SampleRobot):
 
         self.reverseDirection = Button(self.joystick1, 1)
         #self.alignTrigger = Button(self.joystick2, 1)
-
-
+        
+        self.toteTo=0
+        self.oldToteTo=0
+        self.canTo=0
+        self.oldCanTo=0
+        self.reverseRobot = False
+        self.oldReverseRobot = False
+        self.autoWinch = False
+        
     def autonomous(self):
         self.automodes.run(self.control_loop_wait_time, self.update)
 
@@ -159,7 +166,41 @@ class MyRobot(wpilib.SampleRobot):
 
             if self.can_forklift.motor.isRevLimitSwitchClosed():
                 self.can_forklift.motor.setSensorPosition(0)
-
+            
+            
+            if self.toteTo != self.oldToteTo:
+                if self.toteTo == 0:
+                    self.tote_forklift._set_position(0)
+                elif self.toteTo == 1:
+                    self.tote_forklift._set_position(1)
+                elif self.toteTo == 2:
+                    self.tote_forklift._set_position(2)
+                elif self.toteTo == 3:
+                    self.tote_forklift._set_position(3)
+            self.oldToteTo = self.toteTo
+            
+            if self.canTo != self.oldCanTo:
+                print("can set to something")
+                if self.canTo == 0:
+                    self.can_forklift._set_position(0)
+                    print("can bottom")
+                elif self.canTo == 1:
+                    self.can_forklift._set_position(1)
+                    print("can 1")
+                elif self.canTo == 2:
+                    self.can_forklift._set_position(2)
+                    print("can 2")
+                elif self.canTo == 3:
+                    self.can_forklift._set_position(3)
+                    print("can 3")
+            self.oldCanTo = self.canTo
+            
+            if self.reverseRobot != self.oldReverseRobot:
+                if self.reverseRobot == 0:
+                    self.drive.switch_direction()
+            self.oldReverseRobot = self.reverseRobot
+            
+            
             self.smartdashbord_update()
             self.update()
             
@@ -193,10 +234,11 @@ class MyRobot(wpilib.SampleRobot):
 
         wpilib.SmartDashboard.putBoolean('toteCalibrated', self.tote_forklift.isCalibrated)
         wpilib.SmartDashboard.putBoolean('canCalibrated', self.can_forklift.isCalibrated)
-
-
-
-
+        
+        self.toteTo = wpilib.SmartDashboard.getInt('liftTo',self.toteTo)
+        self.canTo = wpilib.SmartDashboard.getInt('binTo',self.canTo)
+        self.autoWinch = wpilib.SmartDashboard.getBoolean('autoLift', self.autoWinch)
+        self.reverseRobot = wpilib.SmartDashboard.getBoolean('reverseRobot',self.reverseRobot)
     def update (self):
         for component in self.components.values():
             component.doit()
