@@ -24,6 +24,7 @@ class Alignment (object):
         
         self.next_pos = None
         self.aligning = False
+        self.aligned = False
         
     def get_rotation_speed(self):
         r_voltage = self.rightSensor.getDistance()

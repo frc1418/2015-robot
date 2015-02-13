@@ -43,7 +43,7 @@ class MyRobot(wpilib.SampleRobot):
         self.next_pos = 1
 
 
-        self.drive = drive.Drive(self.robot_drive, 0)
+        self.drive = drive.Drive(self.robot_drive, self.gyro)
 
         try:
             self.camera = wpilib.USBCamera()
@@ -64,7 +64,8 @@ class MyRobot(wpilib.SampleRobot):
         self.align = alignment.Alignment(self.leftSensors, self.rightSensors,
                                          self.toteLimitL, self.toteLimitR,
                                          self.tote_forklift, self.drive)
-
+        
+        
         self.components = {
             'tote_Forklift': self.tote_forklift,
             'can_Forklift': self.can_forklift,
@@ -103,7 +104,7 @@ class MyRobot(wpilib.SampleRobot):
 
         while self.isOperatorControl() and self.isEnabled():
             self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX())
-
+            
             #
             # Can forklift controls
             #
