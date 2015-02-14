@@ -55,38 +55,33 @@ class Forklift (object):
         self.manual_value = value
     
     
-    def _detect_position_index(self):
+    def _detect_position_index(self, offset):
         '''Returns the current position index'''
         
         if self.mode == ForkliftMode.AUTO:
             return self.target_index
         
+        if not self.isCalibrated:
+            return None
+        
         # If we're not in auto mode, we need to try and detect where the
         # forklift is... 
         
         current_pos = self.get_position()
-        last_pos = None
         
         for i, pos in enumerate(self.positions):
             pos_value = pos.value
-            if current_pos < pos_value:
-                if i == 0:
-                    return 0
-                
-                # Pick the position that is closer
-                if pos_value - current_pos > current_pos - last_pos:
-                    return i
-                else:
-                    return i - 1
-                
-            last_pos = pos_value
+            if current_pos < pos_value + offset:
+                return i
             
         return len(self.positions) - 1
     
     def raise_forklift(self):
         '''Raises the forklift by one position'''
         
-        target_index = self._detect_position_index()
+        target_index = self._detect_position_index(-250) - 1
+        if target_index == -1:
+            target_index = 0
         
         if target_index is None:
             index = 1
@@ -101,7 +96,7 @@ class Forklift (object):
     def lower_forklift(self):
         '''Lowers the forklift by one position'''
         
-        target_index = self._detect_position_index()
+        target_index = self._detect_position_index(250)
         
         if target_index is None:
             index = 0
