@@ -15,7 +15,7 @@ class Button:
         
         now = self.timer.getMsClock()
         if(self.joystick.getRawButton(self.buttonnum)):
-            if (now-self.latest) > 200: 
+            if (now-self.latest) > 600: 
                 self.latest = now
                 return True
         return False

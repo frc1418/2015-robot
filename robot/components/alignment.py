@@ -18,9 +18,9 @@ class Alignment (object):
         self.drive = drive
         
         sd = NetworkTable.getTable('SmartDashboard')
-        self.c = sd.getAutoUpdateValue('Align Constant', .7)
-        self.s = sd.getAutoUpdateValue('Speed Constant', .5)
-        self.t = sd.getAutoUpdateValue('Dist Threshold', .5)
+        self.rotate_speed = sd.getAutoUpdateValue('Align | Rotation Speed', .1)
+        self.drive_speed = sd.getAutoUpdateValue('Align | Speed', -.5)
+        self.threshold = sd.getAutoUpdateValue('Align | DistThreshold', 3)
         
         self.next_pos = None
         self.aligning = False
@@ -30,19 +30,19 @@ class Alignment (object):
         r_voltage = self.rightSensor.getDistance()
         l_voltage = self.leftSensor.getDistance()
         
-        if abs(r_voltage-l_voltage)<1:
+        if abs(r_voltage-l_voltage)<self.threshold.value:
             rotateSpeed=0
         elif r_voltage>l_voltage: 
             diff = r_voltage-l_voltage
-            rotateSpeed = min(self.t.value, diff*self.c.value)*-1
+            rotateSpeed = min(self.s.value, diff*self.rotate_speed.value)*-1
         elif l_voltage>r_voltage:
             diff = l_voltage-r_voltage
-            rotateSpeed = min(self.t.value, diff*self.c.value)
+            rotateSpeed = min(self.s.value, diff*self.rotate_speed.value)
         #logger.info("Aligning")   
         return rotateSpeed
     
     def align(self):
-        
+        '''Will align the totes based on values from infrared sensors'''
         self.aligning = True
         
         if self.aligned:
@@ -52,21 +52,31 @@ class Alignment (object):
         rightLimit = self.rightToteLimit.get()
         
         rotation = self.get_rotation_speed()
-        self.drive.move(-.1, 0, 0)
             
         if abs(rotation) < 0.01:
-            self.drive.move(-.3, 0, 0)
+            self.drive.move(self.drive_speed.value, 0, 0)
             
         if not leftLimit and rightLimit:
-            self.drive.move(-.3, 0., -.1)
+            self.drive.move(self.drive_speed.value, 0., -.1)
         elif leftLimit and not rightLimit:
-            self.drive.move(-.3, 0, .1)
+            self.drive.move(self.drive_speed.value, 0, .1)
         elif not leftLimit and not rightLimit:
             self.forkLift.raise_forklift()
             self.aligned = True
-        
+    
+    def is_in_range(self):
+        rightDist = self.rightSensor.getDistance()
+        leftDist = self.leftSensor.getDistance()
+        if rightDist>4 and rightDist<145 and leftDist>4 and leftDist<145:
+            return True
+        return False
+    
+    def is_against_tote(self):
+        if not self.rightToteLimit.get() and not self.leftToteLimit.get():
+            return True
+        return False
+    
     def doit(self):
-        
         if not self.aligning:
             self.aligned = False
         
