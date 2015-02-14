@@ -38,6 +38,8 @@ class Forklift (object):
         self.current_pid = (0, 0, 0)
         self.new_pid = None
         
+        self.sd = NetworkTable.getTable('SmartDashboard')
+        
         
     def get_position(self):
         return self.motor.getEncPosition()
@@ -176,6 +178,16 @@ class Forklift (object):
         self.want_auto = False
         self.want_manual = False
         self.manual_value = 0
+        
+    def update_sd(self, name):
+        
+        self.sd.putNumber('%s|Encoder' % name, self.motor.getEncPosition())
+        self.sd.putBoolean('%s|Calibrated' % name, self.isCalibrated)
+        if self.target_position is None:
+            self.sd.putNumber('%s|Target Position' % name, -1)
+        else:
+            self.sd.putNumber('%s|Target Position' % name, self.target_index)
+        
 
 class ToteForklift(Forklift):
     def __init__ (self, motor_port, limit_port):

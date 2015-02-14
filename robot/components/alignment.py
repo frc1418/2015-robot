@@ -18,9 +18,10 @@ class Alignment (object):
         self.drive = drive
         
         sd = NetworkTable.getTable('SmartDashboard')
-        self.rotate_speed = sd.getAutoUpdateValue('Align | Rotation Speed', .1)
-        self.drive_speed = sd.getAutoUpdateValue('Align | Speed', -.5)
-        self.threshold = sd.getAutoUpdateValue('Align | DistThreshold', 3)
+        self.rotate_speed = sd.getAutoUpdateValue('Align|Rotation Speed', .1)
+        self.drive_speed = sd.getAutoUpdateValue('Align|Speed', -.2)
+        self.threshold = sd.getAutoUpdateValue('Align|DistThreshold', 3)
+        self.strafe_speed = sd.getAutoUpdateValue('Align|StrafeSpeed', .1)
         
         self.next_pos = None
         self.aligning = False
@@ -34,10 +35,10 @@ class Alignment (object):
             rotateSpeed=0
         elif r_voltage>l_voltage: 
             diff = r_voltage-l_voltage
-            rotateSpeed = min(self.s.value, diff*self.rotate_speed.value)*-1
+            rotateSpeed = min(self.drive_speed.value, diff*self.rotate_speed.value)*-1
         elif l_voltage>r_voltage:
             diff = l_voltage-r_voltage
-            rotateSpeed = min(self.s.value, diff*self.rotate_speed.value)
+            rotateSpeed = min(self.drive_speed.value, diff*self.rotate_speed.value)
         #logger.info("Aligning")   
         return rotateSpeed
     
@@ -53,16 +54,16 @@ class Alignment (object):
         
         rotation = self.get_rotation_speed()
             
-        if abs(rotation) < 0.01:
-            self.drive.move(self.drive_speed.value, 0, 0)
-            
-        if not leftLimit and rightLimit:
-            self.drive.move(self.drive_speed.value, 0., -.1)
-        elif leftLimit and not rightLimit:
-            self.drive.move(self.drive_speed.value, 0, .1)
+        if not leftLimit and rightLimit: ##Right side not touching tote
+            self.drive.move(self.drive_speed.value, -self.strafe_speed.value, rotation)
+        elif leftLimit and not rightLimit: ##Left side is not touching tote
+            self.drive.move(self.drive_speed.value, self.strafe_speed.value, rotation)
         elif not leftLimit and not rightLimit:
+            print("DOING IT")
             self.forkLift.raise_forklift()
             self.aligned = True
+        else:
+            self.drive.move(self.drive_speed.value, 0, 0)
     
     def is_in_range(self):
         rightDist = self.rightSensor.getDistance()
