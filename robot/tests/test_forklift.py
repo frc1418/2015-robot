@@ -10,7 +10,7 @@ def test_detect_position(hal_data):
     
     # Should return None when not calibrated
     assert forklift.isCalibrated == False
-    assert forklift._detect_position_index(250) == None
+    assert forklift._detect_position_index(250, 0) == None
     
     forklift.isCalibrated = True
     
@@ -40,7 +40,7 @@ def test_detect_position(hal_data):
     
     for enc_value, expected_pos, expected_idx in down_tests:
         can['enc_position'] = enc_value
-        assert forklift._detect_position_index(250) == expected_pos
+        assert forklift._detect_position_index(250, 0) == expected_pos
         
         forklift.set_manual(0)
         forklift.lower_forklift()
@@ -49,26 +49,26 @@ def test_detect_position(hal_data):
         
     up_tests = [
         # encoder, expected position + 1, target_inde
-        (-2000, 0, 1),
-        (-200, 1, 1),
-        (200, 1, 1),
-        (500, 1, 1),
-        (800, 2, 2),
-        (900, 2, 2),
-        (1000, 2, 2),
-        (1200, 2, 2),
-        (1500, 2, 2),
-        (1700, 2, 2),
-        (1900, 3, 3),
-        (2000, 3, 3),
-        (2200, 3, 3),
-        (2500, 3, 3)   
+        (-2000, -1, 1),
+        (-200, 0, 1),
+        (200, 0, 1),
+        (500, 0, 1),
+        (800, 1, 2),
+        (900, 1, 2),
+        (1000, 1, 2),
+        (1200, 1, 2),
+        (1500, 1, 2),
+        (1700, 1, 2),
+        (1900, 2, 3),
+        (2000, 2, 3),
+        (2200, 2, 3),
+        (2500, 2, 3)   
     ]
     
     for enc_value, expected_pos, expected_idx in up_tests:
         print(enc_value)
         can['enc_position'] = enc_value
-        assert forklift._detect_position_index(-250) == expected_pos
+        assert forklift._detect_position_index(-250, -1) == expected_pos
     
         forklift.set_manual(0)
         forklift.raise_forklift()

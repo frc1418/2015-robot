@@ -55,7 +55,7 @@ class Forklift (object):
         self.manual_value = value
     
     
-    def _detect_position_index(self, offset):
+    def _detect_position_index(self, offset, pos_idx):
         '''Returns the current position index'''
         
         if self.mode == ForkliftMode.AUTO:
@@ -72,14 +72,15 @@ class Forklift (object):
         for i, pos in enumerate(self.positions):
             pos_value = pos.value
             if current_pos < pos_value + offset:
-                return i
+                return i + pos_idx
             
-        return len(self.positions) - 1
+        return (len(self.positions) - 1) + pos_idx
     
     def raise_forklift(self):
         '''Raises the forklift by one position'''
         
-        target_index = self._detect_position_index(-250) - 1
+        target_index = self._detect_position_index(-250, -1)
+        
         if target_index == -1:
             target_index = 0
         
@@ -96,7 +97,7 @@ class Forklift (object):
     def lower_forklift(self):
         '''Lowers the forklift by one position'''
         
-        target_index = self._detect_position_index(250)
+        target_index = self._detect_position_index(250, 0)
         
         if target_index is None:
             index = 0
@@ -178,6 +179,7 @@ class Forklift (object):
         
         self.sd.putNumber('%s|Encoder' % name, self.motor.getEncPosition())
         self.sd.putBoolean('%s|Calibrated' % name, self.isCalibrated)
+        self.sd.putBoolean('%s|Manual' % name, self.mode == ForkliftMode.MANUAL)
         if self.target_position is None:
             self.sd.putNumber('%s|Target Position' % name, -1)
         else:
