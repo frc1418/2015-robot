@@ -5,11 +5,12 @@ logger = logging.getLogger("Aligning")
 
 class Alignment (object):
     
-    def __init__(self, leftInfrared, rightInfrared, leftToteLimit, rightToteLimit,
+    def __init__(self, leftInfrared, rightInfrared, backInfrared, leftToteLimit, rightToteLimit,
                  forkLift, drive):
         
         self.leftSensor = leftInfrared
         self.rightSensor = rightInfrared
+        self.backSensor = backInfrared
         
         self.leftToteLimit = leftToteLimit
         self.rightToteLimit = rightToteLimit
@@ -59,7 +60,6 @@ class Alignment (object):
         elif leftLimit and not rightLimit: ##Left side is not touching tote
             self.drive.move(self.drive_speed.value, self.strafe_speed.value, rotation)
         elif not leftLimit and not rightLimit:
-            print("DOING IT")
             self.forkLift.raise_forklift()
             self.aligned = True
         else:

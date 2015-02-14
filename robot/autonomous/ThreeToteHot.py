@@ -3,7 +3,7 @@ import components
 class ThreeToteHot(StatefulAutonomous):
     MODE_NAME = 'Three Totes'
     
-    DEFAULT = True
+    DEFAULT = False
         
     def initialize(self):
         self.aligning = False

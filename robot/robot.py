@@ -57,11 +57,13 @@ class MyRobot(wpilib.SampleRobot):
         self.longDistanceR = SharpIR2Y0A02(3)  # # Robot's right
         self.shortDistanceL = SharpIRGP2Y0A41SK0F(2)  # # Robot's left
         self.shortDistanceR = SharpIRGP2Y0A41SK0F(7)  # # Robot's right
+        
+        self.backSensor = SharpIRGP2Y0A41SK0F(6)
 
         self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
         self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
 
-        self.align = alignment.Alignment(self.leftSensors, self.rightSensors,
+        self.align = alignment.Alignment(self.leftSensors, self.rightSensors, self.backSensor,
                                          self.toteLimitL, self.toteLimitR,
                                          self.tote_forklift, self.drive)
         
@@ -211,6 +213,8 @@ class MyRobot(wpilib.SampleRobot):
         wpilib.SmartDashboard.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
         wpilib.SmartDashboard.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
         wpilib.SmartDashboard.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
+        
+        wpilib.SmartDashboard.putNumber('backSensorValue', self.backSensor.getDistance())
 
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
