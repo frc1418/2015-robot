@@ -236,10 +236,11 @@ class CanForklift(Forklift):
         sd = NetworkTable.getTable('SmartDashboard')
         self.positions = [
             sd.getAutoUpdateValue('Can Forklift|bottom', 0),
-            sd.getAutoUpdateValue('Can Forklift|stack1', 3304),
-            sd.getAutoUpdateValue('Can Forklift|stack2', 7406),
-            sd.getAutoUpdateValue('Can Forklift|stack3', 11214),
-            sd.getAutoUpdateValue('Can Forklift|stack4', 19000),
+            sd.getAutoUpdateValue('Can Forklift|stack1', 1513),
+            sd.getAutoUpdateValue('Can Forklift|stack2', 3559),
+            sd.getAutoUpdateValue('Can Forklift|stack3', 5855),
+            sd.getAutoUpdateValue('Can Forklift|stack4', 7715),
+            sd.getAutoUpdateValue('Can Forklift|top', 10100),
         ]
         
         self.up_pid = (
