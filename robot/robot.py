@@ -67,8 +67,8 @@ class MyRobot(wpilib.SampleRobot):
         
         
         self.components = {
-            'tote_Forklift': self.tote_forklift,
-            'can_Forklift': self.can_forklift,
+            'tote_forklift': self.tote_forklift,
+            'can_forklift': self.can_forklift,
             'drive': self.drive,
             'align': self.align
         }
