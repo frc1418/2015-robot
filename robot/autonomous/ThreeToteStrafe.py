@@ -5,7 +5,7 @@ from components.alignment import Alignment
 from components.forklift import ToteForklift
 class ThreeToteStrafe(StatefulAutonomous):
     MODE_NAME = 'Three Totes Strafe'
-    DEFAULT = True
+    DEFAULT = False
     
     drive = Drive
     align = Alignment
