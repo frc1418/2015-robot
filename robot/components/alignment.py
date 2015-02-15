@@ -19,7 +19,7 @@ class Alignment (object):
         
         sd = NetworkTable.getTable('SmartDashboard')
         self.rotate_speed = sd.getAutoUpdateValue('Align|Rotation Speed', .1)
-        self.drive_speed = sd.getAutoUpdateValue('Align|Speed', -.2)
+        self.drive_speed = sd.getAutoUpdateValue('Align|Speed', -.3)
         self.threshold = sd.getAutoUpdateValue('Align|DistThreshold', 3)
         self.strafe_speed = sd.getAutoUpdateValue('Align|StrafeSpeed', .1)
         

@@ -14,6 +14,9 @@ class DriveForward(StatefulAutonomous):
     def drive_wait(self):
         pass
 
+    def drive_backwards(self):
+        self.drive.move(0,-1,0)
+
     @timed_state(duration=5)
     def drive_forward(self):
-        self.drive.move(0, 1, 0)
+        self.drive.move(0,1,0)
