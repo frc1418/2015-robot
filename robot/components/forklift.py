@@ -123,6 +123,7 @@ class Forklift (object):
         if abs(self.get_position()-self.target_position)<250:
             return True
         return False
+    
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
         if not self.isCalibrated:

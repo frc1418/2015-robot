@@ -101,12 +101,17 @@ class Drive(object):
 	def switch_direction(self):
 		self.isTheRobotBackwards = not self.isTheRobotBackwards
 	
-	def wall_strafe(self, speed):
-		
+	def wall_goto(self):
+	
 		y = (self.backInfrared.getDistance() - 15.0)/50.0
 		y = max(min(self.strafe_back_speed.value, y), self.strafe_fwd_speed.value)
 		
 		self.y = y
+	
+	def wall_strafe(self, speed):
+		
+		self.wall_goto()
+		
 		self.x = speed
 		
 		self.angle_rotation(0)
