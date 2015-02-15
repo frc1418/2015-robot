@@ -55,7 +55,7 @@ class MyRobot(wpilib.SampleRobot):
         self.backSensor = SharpIRGP2Y0A41SK0F(6)
 
         self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
-        self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
+        self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 6)
         
         self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
 
@@ -224,12 +224,18 @@ class MyRobot(wpilib.SampleRobot):
         self.sd.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
         self.sd.putNumber('longSensorValueL', self.longDistanceL.getDistance())
         self.sd.putNumber('longSensorValueR', self.longDistanceR.getDistance())
-        self.sd.putNumber('shortSensorVoltageL', self.shortDistanceL.getVoltage())
-        self.sd.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
-        self.sd.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
-        self.sd.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
+        #self.sd.putNumber('shortSensorVoltageL', self.shortDistanceL.getVoltage())
+        #self.sd.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
+        #self.sd.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
+        #self.sd.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
         
         self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
+        
+        self.sd.putBoolean('toteInRange', self.align.is_in_range())
+        
+        self.sd.putNumber('combinedL', self.leftSensors.getDistance())
+        self.sd.putNumber('combinedR', self.rightSensors.getDistance())
+        
 
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')

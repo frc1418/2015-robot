@@ -67,7 +67,7 @@ class Alignment (object):
     def is_in_range(self):
         rightDist = self.rightSensor.getDistance()
         leftDist = self.leftSensor.getDistance()
-        if rightDist>4 and rightDist<145 and leftDist>4 and leftDist<145:
+        if rightDist>4 and rightDist<120 and leftDist>4 and leftDist<120:
             return True
         return False
     
