@@ -161,9 +161,9 @@ class MyRobot(wpilib.SampleRobot):
                 self.drive.reset_gyro_angle()
                 
             if self.joystick2.getRawButton(8):
-                self.drive.wall_strafe(-.5)
+                self.drive.wall_strafe(-.7)
             elif self.joystick2.getRawButton(9):
-                self.drive.wall_strafe(.5)
+                self.drive.wall_strafe(.7)
 
             # REVERSE DRIVE#
             if self.reverseDirection.get():
