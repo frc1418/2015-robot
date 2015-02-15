@@ -46,7 +46,6 @@ class MyRobot(wpilib.SampleRobot):
         self.next_pos = 1
 
 
-        self.drive = drive.Drive(self.robot_drive, self.gyro)
         
         self.longDistanceL = SharpIR2Y0A02(1)  # # Robot's left
         self.longDistanceR = SharpIR2Y0A02(3)  # # Robot's right
@@ -57,8 +56,10 @@ class MyRobot(wpilib.SampleRobot):
 
         self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
         self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
+        
+        self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
 
-        self.align = alignment.Alignment(self.leftSensors, self.rightSensors, self.backSensor,
+        self.align = alignment.Alignment(self.leftSensors, self.rightSensors,
                                          self.toteLimitL, self.toteLimitR,
                                          self.tote_forklift, self.drive)
         
@@ -156,6 +157,13 @@ class MyRobot(wpilib.SampleRobot):
             if self.joystick2.getTrigger():
                 self.align.align()
 
+            if self.joystick2.getRawButton(11):
+                self.drive.reset_gyro_angle()
+                
+            if self.joystick2.getRawButton(8):
+                self.drive.wall_strafe(-.5)
+            elif self.joystick2.getRawButton(9):
+                self.drive.wall_strafe(.5)
 
             # REVERSE DRIVE#
             if self.reverseDirection.get():
