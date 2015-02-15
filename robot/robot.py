@@ -6,13 +6,16 @@ from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
 
+from networktables import NetworkTable
+
 from robotpy_ext.misc import PreciseDelay
 from robotpy_ext.autonomous import AutonomousModeSelector
 
 class MyRobot(wpilib.SampleRobot):
 
     def robotInit(self):
-        print("Team 1418's 2015 Code")
+        
+        self.sd = NetworkTable.getTable('SmartDashboard')
 
         # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
@@ -197,27 +200,27 @@ class MyRobot(wpilib.SampleRobot):
             delay.wait()
 
     def smartdashbord_update(self):
-        wpilib.SmartDashboard.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
-        wpilib.SmartDashboard.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
-        wpilib.SmartDashboard.putNumber('longSensorValueL', self.longDistanceL.getDistance())
-        wpilib.SmartDashboard.putNumber('longSensorValueR', self.longDistanceR.getDistance())
-        wpilib.SmartDashboard.putNumber('shortSensorVoltageL', self.shortDistanceL.getVoltage())
-        wpilib.SmartDashboard.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
-        wpilib.SmartDashboard.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
-        wpilib.SmartDashboard.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
+        self.sd.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
+        self.sd.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
+        self.sd.putNumber('longSensorValueL', self.longDistanceL.getDistance())
+        self.sd.putNumber('longSensorValueR', self.longDistanceR.getDistance())
+        self.sd.putNumber('shortSensorVoltageL', self.shortDistanceL.getVoltage())
+        self.sd.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
+        self.sd.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
+        self.sd.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
         
-        wpilib.SmartDashboard.putNumber('backSensorValue', self.backSensor.getDistance())
+        self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
 
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
         
-        wpilib.SmartDashboard.putBoolean('toteLimitL', self.toteLimitL.get())
-        wpilib.SmartDashboard.putBoolean('toteLimitR', self.toteLimitR.get())
+        self.sd.putBoolean('toteLimitL', self.toteLimitL.get())
+        self.sd.putBoolean('toteLimitR', self.toteLimitR.get())
   
-        self.toteTo = wpilib.SmartDashboard.getInt('liftTo',self.toteTo)
-        self.canTo = wpilib.SmartDashboard.getInt('binTo',self.canTo)
-        self.autoLift = wpilib.SmartDashboard.getBoolean('autoLift', self.autoLift)
-        self.reverseRobot = wpilib.SmartDashboard.getBoolean('reverseRobot',self.reverseRobot)
+        self.toteTo = self.sd.getInt('liftTo',self.toteTo)
+        self.canTo = self.sd.getInt('binTo',self.canTo)
+        self.autoLift = self.sd.getBoolean('autoLift', self.autoLift)
+        self.reverseRobot = self.sd.getBoolean('reverseRobot',self.reverseRobot)
     
     def update (self):
         for component in self.components.values():
