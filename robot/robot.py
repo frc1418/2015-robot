@@ -44,15 +44,7 @@ class MyRobot(wpilib.SampleRobot):
 
 
         self.drive = drive.Drive(self.robot_drive, self.gyro)
-
-        try:
-            self.camera = wpilib.USBCamera()
-            self.camera.startCapture()
-            self.camera.setExposureAuto()
-            self.cameraServer = wpilib.CameraServer()
-            self.cameraServer.startAutomaticCapture(self.camera)
-        except:
-            self.camera = None
+        
         self.longDistanceL = SharpIR2Y0A02(1)  # # Robot's left
         self.longDistanceR = SharpIR2Y0A02(3)  # # Robot's right
         self.shortDistanceL = SharpIRGP2Y0A41SK0F(2)  # # Robot's left
