@@ -13,8 +13,6 @@ class WallStrafe(StatefulAutonomous):
 
     def initialize(self):
         self.register_sd_var('over', -.5)
-        self.register_sd_var('backwards', .15)
-        self.register_sd_var('fwd_min', -.2)
     
     def on_enable(self):
         super().on_enable()
@@ -23,11 +21,5 @@ class WallStrafe(StatefulAutonomous):
     @timed_state(duration=10.0, first=True)
     def do_the_drive(self):
         
-        y = (self.align.backSensor.getDistance() - 15.0)/50.0
-        
-        y = max(min(self.backwards, y), self.fwd_min)
-        
-        self.drive.move(y, self.over, 0)
-        
-        self.drive.angle_rotation(0)
+        self.drive.wall_strafe(self.over)
         

@@ -13,8 +13,6 @@ class ThreeToteStrafe(StatefulAutonomous):
     
     def initialize(self):
         self.register_sd_var('over', -.5)
-        self.register_sd_var('backwards', .15)
-        self.register_sd_var('fwd_min', -.2)
     
     def on_enable(self):
         super().on_enable()
@@ -25,15 +23,6 @@ class ThreeToteStrafe(StatefulAutonomous):
         
         # This gets executed afterwards
         self.drive.angle_rotation(0)
-    
-    def strafe_left(self):
-        
-        y = (self.align.backSensor.getDistance() - 15.0)/50.0
-        y = max(min(self.backwards, y), self.fwd_min)
-        
-        self.drive.move(y, self.over, 0)
-        
-    
     
     @timed_state(duration = 1,next_state='lift_tote_one', first=True)
     def go_until_limit(self):
@@ -58,7 +47,7 @@ class ThreeToteStrafe(StatefulAutonomous):
     @timed_state(duration=3, next_state = 'go_until_sensors')
     def strafe_n(self):
         '''strafes over for n seconds'''
-        self.strafe_left()
+        self.drive.wall_strafe(self.over)
     
     
     @timed_state(duration=2, next_state='go_until_limit_two')
@@ -66,7 +55,7 @@ class ThreeToteStrafe(StatefulAutonomous):
         '''moves the rest of the way to the crate until the sensors have a reading'''
         self.tote_forklift.set_pos_stack1()
         if not self.align.is_in_range():
-            self.strafe_left()
+            self.drive.wall_strafe(self.over)
    
     
     @timed_state(duration=1, next_state = 'lift_tote_two')
@@ -97,7 +86,7 @@ class ThreeToteStrafe(StatefulAutonomous):
     def go_until_sensors_two(self):
         '''strafes until infrared sensors have a reading'''
         if not self.align.is_in_range():
-            self.strafe_left()
+            self.drive.wall_strafe(self.over)
         else:
             self.next_state('drive_forward')
   

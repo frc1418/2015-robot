@@ -1,5 +1,7 @@
 import wpilib
 
+from networktables import NetworkTable
+
 class Drive(object):
 	'''
 		The sole interaction between the robot and its driving system
@@ -7,7 +9,7 @@ class Drive(object):
 		through this class.
 	'''
 
-	def __init__(self, robotDrive, gyro):
+	def __init__(self, robotDrive, gyro, backInfrared):
 		'''
 			Constructor. 
 			
@@ -24,6 +26,13 @@ class Drive(object):
 		self.gyro_enabled = True
 		
 		self.robotDrive = robotDrive
+		
+		# Strafe stuff
+		self.backInfrared = backInfrared
+		
+		sd = NetworkTable.getTable('SmartDashboard')
+		self.strafe_back_speed = sd.getAutoUpdateValue('strafe_back', .15)
+		self.strafe_fwd_speed = sd.getAutoUpdateValue('strafe_fwd', -.2)
 		
 
 	#
@@ -91,7 +100,17 @@ class Drive(object):
 	
 	def switch_direction(self):
 		self.isTheRobotBackwards = not self.isTheRobotBackwards
+	
+	def wall_strafe(self, speed):
 		
+		y = (self.backInfrared.getDistance() - 15.0)/50.0
+		y = max(min(self.strafe_back_speed.value, y), self.strafe_fwd_speed.value)
+		
+		self.y = y
+		self.x = speed
+		
+		self.angle_rotation(0)
+	
 	#
 	# Actually tells the motors to do something
 	#

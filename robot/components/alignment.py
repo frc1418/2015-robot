@@ -5,12 +5,11 @@ logger = logging.getLogger("Aligning")
 
 class Alignment (object):
     
-    def __init__(self, leftInfrared, rightInfrared, backInfrared, leftToteLimit, rightToteLimit,
+    def __init__(self, leftInfrared, rightInfrared, leftToteLimit, rightToteLimit,
                  forkLift, drive):
         
         self.leftSensor = leftInfrared
         self.rightSensor = rightInfrared
-        self.backSensor = backInfrared
         
         self.leftToteLimit = leftToteLimit
         self.rightToteLimit = rightToteLimit
