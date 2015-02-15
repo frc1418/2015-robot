@@ -41,7 +41,7 @@ class Drive(object):
 	# conflicts.
 	#
 	
-	def move(self, y, x, rotation):
+	def move(self, y, x, rotation, squaredInputs=False):
 		'''
 			Causes the robot to move
 		
@@ -49,6 +49,15 @@ class Drive(object):
 			:param y: The speed that the robot should drive in the Y direction. -1 is forward. [-1.0..1.0] 
 			:param rotation:  The rate of rotation for the robot that is completely independent of the translation. 1 is rotate to the right [-1.0..1.0]
 		'''
+		if squaredInputs:
+			if x >= 0.0:
+				x = (x * x)
+			else:
+				x = -(x * x)
+			if y >= 0.0:
+				y = (y * y)
+			else:
+				y = -(y * y)
 		
 		self.x = x
 		self.y = y

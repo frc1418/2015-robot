@@ -108,7 +108,7 @@ class MyRobot(wpilib.SampleRobot):
         self.logger.info("Entering teleop mode")
 
         while self.isOperatorControl() and self.isEnabled():
-            self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX())
+            self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
             
             #
             # Can forklift controls
