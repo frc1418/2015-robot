@@ -296,6 +296,9 @@ class CanForklift(Forklift):
         
     def set_pos_bottom(self):
         self._set_position(0)
+        
+    def set_pos_7000(self):
+        self._set_position(7000)
     
     def get_limit_switch(self):
         return not self.motor.isRevLimitSwitchClosed()

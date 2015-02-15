@@ -189,6 +189,9 @@ class MyRobot(wpilib.SampleRobot):
                     self.can_forklift._set_position(3)
                 elif self.canTo == 2048:
                     self.can_forklift.set_pos_top()
+                elif self.canTo == 7000:
+                    self.can_forklift.set_pos_7000()
+                    
 
             self.oldCan = self.canTo
             
