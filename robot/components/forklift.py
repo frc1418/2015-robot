@@ -113,7 +113,11 @@ class Forklift (object):
         self.want_auto = True
         self.target_index = index
         self.target_position = self.positions[index].value
-        
+    
+    def set_auto_position(self, target):
+        self.want_auto = True
+        self.target_index = 0
+        self.target_position = target 
         
     def on_target(self):
         if abs(self.get_position()-self.target_position)<250:
@@ -259,6 +263,8 @@ class CanForklift(Forklift):
             sd.getAutoUpdateValue('Can Forklift|Down D', 0)
         )
         
+        self.wanted_pid = self.up_pid
+        
         self.motor.enableForwardSoftLimit(False)
         
         
@@ -298,7 +304,7 @@ class CanForklift(Forklift):
         self._set_position(0)
         
     def set_pos_7000(self):
-        self._set_position(7000)
+        self.set_auto_position(7000)
     
     def get_limit_switch(self):
         return not self.motor.isRevLimitSwitchClosed()
