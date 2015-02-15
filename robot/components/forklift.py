@@ -115,6 +115,10 @@ class Forklift (object):
         self.target_position = self.positions[index].value
         
         
+    def on_target(self):
+        if abs(self.get_position()-self.target_position)<250:
+            return True
+        return False
     def _calibrate(self):
         '''Moves the motor towards the limit switch if needed'''
         if not self.isCalibrated:

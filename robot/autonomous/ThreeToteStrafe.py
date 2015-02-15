@@ -47,14 +47,15 @@ class ThreeToteStrafe(StatefulAutonomous):
             self.drive.move(-.1,0,0)
     
     
-    @timed_state(duration=2, next_state='strafe_n')
+    @timed_state(duration=10, next_state='strafe_n')
     def lift_tote_one(self):
         '''lifts tote until it is above the can'''
         self.tote_forklift.set_pos_stack2()
-        self.next_state('strafe_n')
+        if self.tote_forklift.on_target():
+            self.next_state('strafe_n')
     
     
-    @timed_state(duration=2, next_state = 'go_until_sensors')
+    @timed_state(duration=3, next_state = 'go_until_sensors')
     def strafe_n(self):
         '''strafes over for n seconds'''
         self.strafe_left()
@@ -78,11 +79,12 @@ class ThreeToteStrafe(StatefulAutonomous):
     
     
    
-    @timed_state(duration=1, next_state='strafe_n_two')
+    @timed_state(duration=10, next_state='strafe_n_two')
     def lift_tote_two(self):
         '''lifts the tote over the can'''
         self.tote_forklift.set_pos_stack3()
-        self.next_state('strafe_n_two')
+        if self.tote_forklift.on_target():
+            self.next_state('strafe_n_two')
    
     
     @timed_state(duration=2, next_state='drive_forward')
@@ -109,11 +111,13 @@ class ThreeToteStrafe(StatefulAutonomous):
         self.drive.move(-1, 0, 0)
     
     
-    @timed_state(duration=3, next_state = 'reverse')
+    @timed_state(duration=10, next_state = 'reverse')
     def drop(self, initial_call):
         '''lowers the totes onto a stack'''
         if initial_call:
             self.tote_forklift.set_pos_bottom()
+        if self.tote_forklift.on_target():
+            self.next_state('reverse')
     
     
     @timed_state(duration = .3)
