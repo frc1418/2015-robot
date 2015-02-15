@@ -99,8 +99,8 @@ class MyRobot(wpilib.SampleRobot):
 
     def operatorControl(self):
 
-        # self.can_forklift.set_manual(0)
-        # self.tote_forklift.set_manual(0)
+        self.can_forklift.set_manual(0)
+        self.tote_forklift.set_manual(0)
         
         delay = PreciseDelay(self.control_loop_wait_time)
 
@@ -174,6 +174,8 @@ class MyRobot(wpilib.SampleRobot):
                     self.tote_forklift._set_position(2)
                 elif self.toteTo == 3:
                     self.tote_forklift._set_position(3)
+                elif self.toteTo == 2048:
+                    self.tote_forklift.set_pos_top()
             self.oldTote = self.toteTo
             
             if self.canTo != self.oldCan:
@@ -185,6 +187,9 @@ class MyRobot(wpilib.SampleRobot):
                     self.can_forklift._set_position(2)
                 elif self.canTo == 3:
                     self.can_forklift._set_position(3)
+                elif self.canTo == 2048:
+                    self.can_forklift.set_pos_top()
+
             self.oldCan = self.canTo
             
             if self.reverseRobot != self.oldReverseRobot:
