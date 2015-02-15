@@ -182,6 +182,8 @@ class MyRobot(wpilib.SampleRobot):
                     self.tote_forklift._set_position(2)
                 elif self.toteTo == 3:
                     self.tote_forklift._set_position(3)
+                elif self.toteTo == 4:
+                    self.tote_forklift._set_position(4)
                 elif self.toteTo == 2048:
                     self.tote_forklift.set_pos_top()
             self.oldTote = self.toteTo
@@ -195,8 +197,13 @@ class MyRobot(wpilib.SampleRobot):
                     self.can_forklift._set_position(2)
                 elif self.canTo == 3:
                     self.can_forklift._set_position(3)
+                elif self.canTo == 4:
+                    self.can_forklift._set_position(4)  
                 elif self.canTo == 2048:
                     self.can_forklift.set_pos_top()
+                elif self.canTo == 7000:
+                    self.can_forklift.set_pos_7000()
+                    
 
             self.oldCan = self.canTo
             
