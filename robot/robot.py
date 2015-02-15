@@ -236,6 +236,8 @@ class MyRobot(wpilib.SampleRobot):
         
         self.sd.putBoolean('toteLimitL', self.toteLimitL.get())
         self.sd.putBoolean('toteLimitR', self.toteLimitR.get())
+        
+        self.sd.putNumber('gyroAngle', self.gyro.getAngle())
   
         self.toteTo = self.sd.getInt('liftTo',self.toteTo)
         self.canTo = self.sd.getInt('binTo',self.canTo)
