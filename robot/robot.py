@@ -177,8 +177,8 @@ class MyRobot(wpilib.SampleRobot):
                 self.drive.wall_strafe(.7)
 
             # REVERSE DRIVE#
-            #if self.reverseDirection.get():
-            #    self.drive.switch_direction()
+            if self.reverseDirection.get():
+                self.drive.switch_direction()
 
             if self.can_forklift.motor.isRevLimitSwitchClosed():
                 self.can_forklift.motor.setSensorPosition(0)

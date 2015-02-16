@@ -57,7 +57,7 @@ class Sensor:
         self.can_enc = self.can_motor.getEncPosition()
         
         # Calculate if its in range
-        in_range = (self.leftDistance < 120 and self.rightDistance < 120)
+        in_range = (self.leftDistance < 30 and self.rightDistance < 30)
         
         # if it's in the way, then set it to the last thing
         self.interfered = self.tote_enc in self._tote_exclude_range
