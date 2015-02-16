@@ -65,17 +65,7 @@ class Alignment:
         else:
             self.drive.move(self.drive_speed.value, 0, 0)
     
-    def is_in_range(self):
-        rightDist = self.rightSensor.getDistance()
-        leftDist = self.leftSensor.getDistance()
-        if rightDist<120 and leftDist<120:
-            return True
-        return False
     
-    def is_against_tote(self):
-        if not self.rightToteLimit.get() and not self.leftToteLimit.get():
-            return True
-        return False
     
     def doit(self):
         if not self.aligning:
