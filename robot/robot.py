@@ -219,29 +219,12 @@ class MyRobot(wpilib.SampleRobot):
             delay.wait()
 
     def smartdashbord_update(self):
-
-        self.sd.putNumber('shortSensorValueL', self.sensor.shortDistanceL)
-        self.sd.putNumber('shortSensorValueR', self.sensor.shortDistanceR)
-        self.sd.putNumber('longSensorValueL', self.sensor.longDistanceL)
-        self.sd.putNumber('longSensorValueR', self.sensor.longDistanceR)
-        #self.sd.putNumber('shortSensorVoltageL', self.sensor.shortDistanceL)
-        #self.sd.putNumber('shortSensorVoltageR', self.sensor.shortDistanceR)
-        #self.sd.putNumber('longSensorVoltageL', self.sensor.longDistanceL)
-        #self.sd.putNumber('longSensorVoltageR', self.sensor.longDistanceR)
         
         self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
-        
-        self.sd.putBoolean('toteInRange', self.align.is_in_range())
-        
-        self.sd.putNumber('combinedL', self.sensor.leftSensors)
-        self.sd.putNumber('combinedR', self.sensor.rightSensors)
-        
 
+        self.sensor.update_sd()
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
-        
-        self.sd.putBoolean('toteLimitL', self.sensor.toteLimitL)
-        self.sd.putBoolean('toteLimitR', self.sensor.toteLimitR)
         
         self.sd.putNumber('gyroAngle', self.gyro.getAngle())
   
