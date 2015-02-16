@@ -62,7 +62,8 @@ class MyRobot(wpilib.SampleRobot):
             'tote_forklift': self.tote_forklift,
             'can_forklift': self.can_forklift,
             'drive': self.drive,
-            'align': self.align
+            'align': self.align,
+            'sensors': self.sensor
         }
 
         self.control_loop_wait_time = 0.025

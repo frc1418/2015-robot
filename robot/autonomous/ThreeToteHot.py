@@ -1,5 +1,4 @@
 from robotpy_ext.autonomous import timed_state, StatefulAutonomous
-import components
 class ThreeToteHot(StatefulAutonomous):
     MODE_NAME = 'Three Totes'
     
@@ -9,6 +8,7 @@ class ThreeToteHot(StatefulAutonomous):
         self.aligning = False
         self.aligned = self.align.aligned
         self.angle = 0
+
         
         #self.register_sd_var('driveSpeed', .3)
         #self.register_sd_var('rotateLeftTime', 5)
@@ -36,13 +36,13 @@ class ThreeToteHot(StatefulAutonomous):
     def drive_left(self):
         self.drive.move(-.35,0,0)
         self.drive.angle_rotation(self.angle)
-        if not self.align.leftToteLimit.get() and not self.align.rightToteLimit.get():
+        if not self.sensors.toteLimitLSensor and not self.sensors.toteLimitR:
             self.tote_forklift.set_pos_stack1()
     @timed_state(duration=5)
     def drive_right(self):
         self.drive.move(-.35,0,0)
         self.drive.angle_rotation(self.angle)
-        if not self.align.leftToteLimit.get() and not self.align.rightToteLimit.get():
+        if not self.sensors.toteLimitL and not self.sensors.toteLimitR:
             self.tote_forklift.set_pos_stack2()
     @timed_state(duration=5)
     def drive_forward(self):
