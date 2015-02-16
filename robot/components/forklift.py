@@ -11,8 +11,6 @@ class ForkliftMode(enum.Enum):
 
 class Forklift (object):
     
-    
-    
     def __init__ (self, limit_port, init_down_speed):
   
         self.target_position = None
@@ -75,7 +73,7 @@ class Forklift (object):
     def raise_forklift(self):
         '''Raises the forklift by one position'''
         
-        target_index = self._detect_position_index(-250, -1)
+        target_index = self._detect_position_index(-170, -1)
         
         if target_index == -1:
             target_index = 0
@@ -93,7 +91,7 @@ class Forklift (object):
     def lower_forklift(self):
         '''Lowers the forklift by one position'''
         
-        target_index = self._detect_position_index(250, 0)
+        target_index = self._detect_position_index(170, 0)
         
         if target_index is None:
             index = 0
@@ -116,7 +114,7 @@ class Forklift (object):
         self.target_position = target 
         
     def on_target(self):
-        if abs(self.get_position()-self.target_position)<250:
+        if abs(self.get_position()-self.target_position)<170:
             return True
         return False
     
