@@ -52,7 +52,7 @@ class TwoToteStrafe(StatefulAutonomous):
             self.next_state('lift_tote1')
     
     
-    @timed_state(duration=1, next_state='wait_tote1')
+    @timed_state(duration=.75, next_state='wait_tote1')
     def lift_tote1(self, state_tm, initial_call):
         '''lifts tote until it is above the can'''
         
@@ -92,9 +92,9 @@ class TwoToteStrafe(StatefulAutonomous):
     # Final stretch
     #
     
-    @timed_state(duration=.25, next_state='drive_forward')
-    def go_more(self):
-        self.drive.wall_strafe(self.over)
+    #@timed_state(duration=.25, next_state='drive_forward')
+    #def go_more(self):
+    #    self.drive.wall_strafe(self.over)
         
   
     

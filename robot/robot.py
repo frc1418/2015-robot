@@ -228,7 +228,7 @@ class MyRobot(wpilib.SampleRobot):
         #self.sd.putNumber('shortSensorVoltageR', self.sensor.shortDistanceR)
         #self.sd.putNumber('longSensorVoltageL', self.sensor.longDistanceL)
         #self.sd.putNumber('longSensorVoltageR', self.sensor.longDistanceR)
-              
+        
         self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
         
         self.sd.putBoolean('toteInRange', self.align.is_in_range())

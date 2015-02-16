@@ -51,7 +51,7 @@ class SharpIRGP2Y0A41SK0F:
         d = 12.84*math.pow(v, -0.9824)
         
         # Constrain output 
-        return max(min(d, 40.0), 4.0)
+        return max(min(d, 25), 4.0)
     
     def getVoltage(self):
         return self.distance.getVoltage()
@@ -68,7 +68,7 @@ class CombinedSensor:
         long = self.longDistance.getDistance()
         short = self.shortDistance.getDistance()
         
-        if short < 30:
+        if short < 25:
             return short - self.shortOff
         else:
             return long - self.longOff

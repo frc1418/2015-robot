@@ -31,12 +31,18 @@ class ThreeToteStrafe(StatefulAutonomous):
     # First tote operations
     #
     
-    @timed_state(duration=1.5, next_state='lift_tote1', first=True)
-    def get_tote1(self, initial_call):
-        '''This method will drive at .1 until the robot hits the tote'''
+    @timed_state(duration=1, first=True)
+    def calibrate(self, initial_call):
         
         if initial_call:
             self.tote_forklift.set_pos_bottom()
+            
+        if self.tote_forklift.isCalibrated:
+            self.next_state('get_tote1')
+    
+    @timed_state(duration=1, next_state='lift_tote1')
+    def get_tote1(self, initial_call):
+        '''This method will drive at .1 until the robot hits the tote'''
         
         self.drive.move(self.move_fwd, 0, 0)
         
@@ -51,10 +57,10 @@ class ThreeToteStrafe(StatefulAutonomous):
         if initial_call:
             self.tote_forklift.set_pos_stack2()
             
-        if state_tm > .4:
-            self.drive.move(self.tote_adjust, 0, 0)
+        if state_tm > .55:
+            self.drive.move(0, self.tote_adjust, 0)
     
-    @timed_state(duration=3, next_state='strafe_can1')
+    @timed_state(duration=4, next_state='strafe_can1')
     def wait_tote1(self):
     
         self.drive.wall_goto()
@@ -63,7 +69,7 @@ class ThreeToteStrafe(StatefulAutonomous):
             self.next_state('strafe_can1')
     
     
-    @timed_state(duration=1, next_state = 'go_until_tote2')
+    @timed_state(duration=1.75, next_state = 'go_until_tote2')
     def strafe_can1(self):
         '''strafes over for n seconds'''
         self.drive.wall_strafe(self.over)
@@ -72,7 +78,7 @@ class ThreeToteStrafe(StatefulAutonomous):
     # Second tote operations
     #
     
-    @timed_state(duration=2, next_state='wait_forklift_tote2')
+    @timed_state(duration=2.5, next_state='wait_forklift_tote2')
     def go_until_tote2(self, initial_call):
         '''moves the rest of the way to the crate until the sensors have a reading'''
         
