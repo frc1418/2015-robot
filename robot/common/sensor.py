@@ -26,7 +26,7 @@ class Sensor:
         self.shortDistanceR = self.shortDistanceRSensor.getDistance() 
                 
         self.leftSensors = self.leftSensor.getDistance()
-        self.leftSensors = self.rightSensor.getDistance()
+        self.rightSensors = self.rightSensor.getDistance()
         
         self.tote_enc = self.tote_motor.getEncPosition()
         self.can_enc = self.can_motor.getEncPosition()

@@ -233,8 +233,8 @@ class MyRobot(wpilib.SampleRobot):
         
         self.sd.putBoolean('toteInRange', self.align.is_in_range())
         
-        self.sd.putNumber('combinedL', self.leftSensors.getDistance())
-        self.sd.putNumber('combinedR', self.rightSensors.getDistance())
+        self.sd.putNumber('combinedL', self.sensor.leftSensors)
+        self.sd.putNumber('combinedR', self.sensor.rightSensors)
         
 
         self.can_forklift.update_sd('Can Forklift')
