@@ -15,6 +15,7 @@ class Alignment:
             :type sensors: :class:`.Sensor`
         '''
         
+        self.sensors = sensors
         self.forkLift = forkLift
         self.drive = drive
         

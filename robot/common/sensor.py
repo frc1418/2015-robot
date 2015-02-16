@@ -1,9 +1,13 @@
 import wpilib
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
+from networktables import NetworkTable
 
 class Sensor:
     
     def __init__(self, tote_motor, can_motor):
+        
+        self.sd = NetworkTable.getTable('SmartDashboard')
+        
         self.toteLimitLSensor = wpilib.DigitalInput(0) ##Left limit switch
         self.toteLimitRSensor = wpilib.DigitalInput(1) ##Right limit switch
         
@@ -24,8 +28,9 @@ class Sensor:
         # Premature optimization, but it looks nicer
         self._tote_exclude_range = set()
         
-        
-        
+        for i in [1060, 1992, 4610, 5457, 7995]:
+            for j in range(i-85, i+85):
+                self._tote_exclude_range.add(j)
         
         self.update()
         
@@ -74,10 +79,10 @@ class Sensor:
         return self.in_range
     
     def update_sd(self):
-        self.sd.putNumber('shortSensorValueL', self.sensor.shortDistanceL)
-        self.sd.putNumber('shortSensorValueR', self.sensor.shortDistanceR)
-        self.sd.putNumber('longSensorValueL', self.sensor.longDistanceL)
-        self.sd.putNumber('longSensorValueR', self.sensor.longDistanceR)
+        self.sd.putNumber('shortSensorValueL', self.shortDistanceL)
+        self.sd.putNumber('shortSensorValueR', self.shortDistanceR)
+        self.sd.putNumber('longSensorValueL', self.longDistanceL)
+        self.sd.putNumber('longSensorValueR', self.longDistanceR)
         #self.sd.putNumber('shortSensorVoltageL', self.sensor.shortDistanceL)
         #self.sd.putNumber('shortSensorVoltageR', self.sensor.shortDistanceR)
         #self.sd.putNumber('longSensorVoltageL', self.sensor.longDistanceL)
@@ -86,8 +91,8 @@ class Sensor:
         self.sd.putBoolean('toteInRange', self.in_range)
         self.sd.putBoolean('toteInterfere', self.interfered)
         
-        self.sd.putNumber('combinedL', self.leftSensors)
-        self.sd.putNumber('combinedR', self.rightSensors)
+        self.sd.putNumber('combinedL', self.leftDistance)
+        self.sd.putNumber('combinedR', self.rightDistance)
         
         self.sd.putBoolean('toteLimitL', self.toteLimitL)
         self.sd.putBoolean('toteLimitR', self.toteLimitR)

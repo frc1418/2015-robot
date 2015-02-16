@@ -55,9 +55,7 @@ class MyRobot(wpilib.SampleRobot):
         
         self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
 
-        self.align = alignment.Alignment(self.sensor.leftSensor, self.sensor.rightSensor,
-                                         self.sensor.toteLimitLSensor, self.sensor.toteLimitRSensor,
-                                         self.tote_forklift, self.drive)
+        self.align = alignment.Alignment(self.sensor, self.tote_forklift, self.drive)
         
         
         self.components = {
