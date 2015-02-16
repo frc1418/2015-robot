@@ -96,5 +96,7 @@ class Sensor:
         
         self.sd.putBoolean('toteLimitL', self.toteLimitL)
         self.sd.putBoolean('toteLimitR', self.toteLimitR)
-        
+    
+    def doit(self):
+        pass
     

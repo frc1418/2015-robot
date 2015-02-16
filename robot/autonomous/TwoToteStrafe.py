@@ -13,7 +13,7 @@ class TwoToteStrafe(StatefulAutonomous):
     tote_forklift = ToteForklift
     
     def initialize(self):
-        self.register_sd_var('over', -.8)
+        self.register_sd_var('over', -.9)
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
         self.register_sd_var('final_fwd', -.5)
@@ -48,7 +48,7 @@ class TwoToteStrafe(StatefulAutonomous):
         
         self.drive.move(self.move_fwd, 0, 0)
         
-        if self.align.is_against_tote(): 
+        if self.sensors.is_against_tote(): 
             self.next_state('lift_tote1')
     
     
@@ -85,7 +85,7 @@ class TwoToteStrafe(StatefulAutonomous):
         
         self.drive.wall_strafe(self.over)
         
-        if self.align.is_in_range():
+        if self.sensors.is_in_range():
             self.next_state('go_more')
     
     #

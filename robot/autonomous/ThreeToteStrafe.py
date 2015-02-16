@@ -46,7 +46,7 @@ class ThreeToteStrafe(StatefulAutonomous):
         
         self.drive.move(self.move_fwd, 0, 0)
         
-        if self.align.is_against_tote(): 
+        if self.sensors.is_against_tote(): 
             self.next_state('lift_tote1')
     
     
@@ -87,7 +87,7 @@ class ThreeToteStrafe(StatefulAutonomous):
         
         self.drive.wall_strafe(self.over)
         
-        if self.align.is_in_range():
+        if self.sensors.is_in_range():
             if self.tote_forklift.on_target():
                 self.next_state('get_tote2')
             else:
@@ -104,7 +104,7 @@ class ThreeToteStrafe(StatefulAutonomous):
         
         self.drive.move(self.move_fwd, 0, 0)
         
-        if self.align.is_against_tote(): 
+        if self.sensors.is_against_tote(): 
             self.next_state('lift_tote2')
     
     
@@ -145,7 +145,7 @@ class ThreeToteStrafe(StatefulAutonomous):
         
         self.drive.wall_strafe(self.over)
         
-        if self.align.is_in_range():
+        if self.sensors.is_in_range():
             self.next_state('drive_forward')
     
     #
