@@ -1,18 +1,19 @@
-import wpilib
-from networktables.networktable import NetworkTable
+
+from networktables import NetworkTable
 import logging
 logger = logging.getLogger("Aligning")
 
-class Alignment (object):
+from common.sensor import Sensor
+
+class Alignment:
     
-    def __init__(self, leftInfrared, rightInfrared, leftToteLimit, rightToteLimit,
-                 forkLift, drive):
-        
-        self.leftSensor = leftInfrared
-        self.rightSensor = rightInfrared
-        
-        self.leftToteLimit = leftToteLimit
-        self.rightToteLimit = rightToteLimit
+    sensors = Sensor
+    
+    def __init__(self, sensors, forkLift, drive):
+        '''
+            :param sensors: Sensors object
+            :type sensors: :class:`.Sensor`
+        '''
         
         self.forkLift = forkLift
         self.drive = drive
@@ -28,8 +29,8 @@ class Alignment (object):
         self.aligned = False
         
     def get_rotation_speed(self):
-        r_voltage = self.rightSensor.getDistance()
-        l_voltage = self.leftSensor.getDistance()
+        l_voltage = self.sensors.leftDistance
+        r_voltage = self.sensors.rightDistance
         
         if abs(r_voltage-l_voltage)<self.threshold.value:
             rotateSpeed=0
@@ -49,8 +50,8 @@ class Alignment (object):
         if self.aligned:
             return
         
-        leftLimit = self.leftToteLimit.get()
-        rightLimit = self.rightToteLimit.get()
+        leftLimit = self.sensors.toteLimitL
+        rightLimit = self.sensors.toteLimitR
         
         rotation = self.get_rotation_speed()
             

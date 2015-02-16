@@ -1,6 +1,8 @@
 import wpilib
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
+
 class Sensor:
+    
     def __init__(self, tote_motor, can_motor):
         self.toteLimitLSensor = wpilib.DigitalInput(0) ##Left limit switch
         self.toteLimitRSensor = wpilib.DigitalInput(1) ##Right limit switch
@@ -16,6 +18,8 @@ class Sensor:
         self.tote_motor = tote_motor
         self.can_motor = can_motor
         
+        self.update()
+        
     def update(self):
         self.toteLimitL = self.toteLimitLSensor.get()
         self.toteLimitR = self.toteLimitRSensor.get()
@@ -25,9 +29,20 @@ class Sensor:
         self.shortDistanceL = self.shortDistanceLSensor.getDistance() 
         self.shortDistanceR = self.shortDistanceRSensor.getDistance() 
                 
-        self.leftSensors = self.leftSensor.getDistance()
-        self.rightSensors = self.rightSensor.getDistance()
+        self.leftDistance = self.leftSensor.getDistance()
+        self.rightDistance = self.rightSensor.getDistance()
         
         self.tote_enc = self.tote_motor.getEncPosition()
         self.can_enc = self.can_motor.getEncPosition()
-        
+    
+    def is_against_tote(self):
+        if not self.toteLimitL and not self.toteLimitR:
+            return True
+        return False
+    
+    def is_in_range(self):
+        if self.leftDistance < 120 and self.rightDistance < 120:
+            return True
+        return False
+    
+    
