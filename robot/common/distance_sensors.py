@@ -68,7 +68,7 @@ class CombinedSensor:
         long = self.longDistance.getDistance()
         short = self.shortDistance.getDistance()
         
-        if short < 25:
-            return short - self.shortOff
-        else:
-            return long - self.longOff
+        #if short < 25:
+        #    return short - self.shortOff
+        #else:
+        return max(long - self.longOff, 0)

@@ -16,8 +16,8 @@ class Sensor:
         self.shortDistanceLSensor = SharpIRGP2Y0A41SK0F(2)  # # Robot's left
         self.shortDistanceRSensor = SharpIRGP2Y0A41SK0F(7)  # # Robot's right
                 
-        self.leftSensor = CombinedSensor(self.longDistanceLSensor, 20, self.shortDistanceLSensor, 6)
-        self.rightSensor = CombinedSensor(self.longDistanceRSensor, 20, self.shortDistanceRSensor, 6)
+        self.leftSensor = CombinedSensor(self.longDistanceLSensor, 22, self.shortDistanceLSensor, 6)
+        self.rightSensor = CombinedSensor(self.longDistanceRSensor, 22, self.shortDistanceRSensor, 6)
         
         self.tote_motor = tote_motor
         self.can_motor = can_motor
@@ -28,8 +28,12 @@ class Sensor:
         # Premature optimization, but it looks nicer
         self._tote_exclude_range = set()
         
-        for i in [1033, 2031, 4554, 5393, 7902]:
-            for j in range(i-350, i+350):
+        # measured using the calibration routine
+        interference = [(1031, 1387), (1888, 2153), (4544, 4895), (5395, 5664), (8008, 8450)]
+        
+        #for i in [1033, 2031, 4554, 5393, 7902]:
+        for r1, r2 in interference:
+            for j in range(r1, r2):
                 self._tote_exclude_range.add(j)
         
         self.update()
@@ -65,7 +69,7 @@ class Sensor:
         #    if in_range:
         #        self.in_range_start = self.now
         #else:
-        #    self.in_range = in_range and self.now > self.in_range_start + 0.1
+        #    self.in_range = in_range and self.now > self.in_range_start + 0.05
         #        
         #    if not in_range:
         #        self.in_range_start = None

@@ -16,7 +16,7 @@ class TwoToteStrafe(SensorStatefulAutonomous):
     
     def initialize(self):
         self.logger = logging.getLogger('two-tote')
-        self.register_sd_var('over', -1)
+        self.register_sd_var('over', -.9)
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
         self.register_sd_var('final_fwd', -.5)

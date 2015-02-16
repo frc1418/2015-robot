@@ -16,7 +16,7 @@ class TwoToteStrafe(SensorStatefulAutonomous):
     
     def initialize(self):
         self.logger = logging.getLogger('two-tote')
-        self.register_sd_var('over', -1)
+        self.register_sd_var('over', -.9)
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
         self.register_sd_var('final_fwd', -.5)
@@ -77,12 +77,12 @@ class TwoToteStrafe(SensorStatefulAutonomous):
             self.next_state('strafe_can1')
     
     
-    @timed_state(duration=1, next_state = 'go_until_tote2')
+    @timed_state(duration=1.8, next_state = 'go_until_tote2')
     def strafe_can1(self):
         '''strafes over for n seconds'''
         self.drive.wall_strafe(self.over)
     
-    @timed_state(duration=1, next_state='drive_forward')
+    @timed_state(duration=3, next_state='drive_forward')
     def go_until_tote2(self, initial_call):
         '''moves the rest of the way to the crate until the sensors have a reading'''
         

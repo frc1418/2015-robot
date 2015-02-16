@@ -292,7 +292,7 @@ class CanForklift(Forklift):
         self.motor.enableForwardSoftLimit(True)
         
     def set_pos_holding(self):
-        self._set_position(4)
+        self._set_position(5)
         
     set_pos_top = set_pos_holding
         
