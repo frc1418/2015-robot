@@ -13,14 +13,13 @@ class Forklift (object):
     
     
     
-    def __init__ (self, motor_port, limit_port, init_down_speed):
-
+    def __init__ (self, limit_port, init_down_speed):
+  
         self.target_position = None
         self.target_index = None
         
         self.init_down_speed = init_down_speed
         
-        self.motor = wpilib.CANTalon(motor_port)
         self.limit = wpilib.DigitalInput(limit_port)
         
         self.isCalibrated = False
@@ -40,9 +39,6 @@ class Forklift (object):
         
         self.sd = NetworkTable.getTable('SmartDashboard')
         
-        
-    def get_position(self):
-        return self.motor.getEncPosition()
     
     def get_target_position(self):
         return self.target_position
@@ -196,8 +192,12 @@ class Forklift (object):
         
 
 class ToteForklift(Forklift):
-    def __init__ (self, motor_port, limit_port):
-        super().__init__(motor_port, limit_port, -1)
+    def __init__ (self, motor, sensor, limit_port):
+        super().__init__(limit_port, -1)
+        
+        self.sensor = sensor
+        
+        self.motor = motor
         
         sd = NetworkTable.getTable('SmartDashboard')
         
@@ -238,10 +238,18 @@ class ToteForklift(Forklift):
     
     def get_limit_switch(self):
         return self.limit.get()
-        
+    
+    def get_position(self):
+        return self.sensor.tote_enc
+
 class CanForklift(Forklift):
-    def __init__ (self, motor_port, limit_port):
-        super().__init__(motor_port, limit_port, -1)
+    def __init__ (self, motor, sensor ,limit_port):
+        super().__init__(limit_port, -1)
+        
+        self.sensor = sensor
+        
+        self.motor = motor
+        
         sd = NetworkTable.getTable('SmartDashboard')
         self.positions = [
             sd.getAutoUpdateValue('Can Forklift|bottom', 0),
@@ -309,4 +317,7 @@ class CanForklift(Forklift):
     
     def get_limit_switch(self):
         return not self.motor.isRevLimitSwitchClosed()
+    
+    def get_position(self):
+        return self.sensor.can_enc
     
