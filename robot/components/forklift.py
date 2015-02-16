@@ -200,12 +200,13 @@ class ToteForklift(Forklift):
         sd = NetworkTable.getTable('SmartDashboard')
         
         self.positions = [
-            sd.getAutoUpdateValue('Tote Forklift|bottom', 443),
-            sd.getAutoUpdateValue('Tote Forklift|stack1', 5054),
-            sd.getAutoUpdateValue('Tote Forklift|stack2', 9452),
-            sd.getAutoUpdateValue('Tote Forklift|stack3', 11795),
-            sd.getAutoUpdateValue('Tote Forklift|stack4', 13940),
-            sd.getAutoUpdateValue('Tote Forklift|stack5', 13950),
+            sd.getAutoUpdateValue('Tote Forklift|bottom', 400),
+            sd.getAutoUpdateValue('Tote Forklift|stack1', 4171),
+            sd.getAutoUpdateValue('Tote Forklift|stack2', 7638),
+            sd.getAutoUpdateValue('Tote Forklift|stack3', 9250),
+            sd.getAutoUpdateValue('Tote Forklift|stack4', 10200),
+            sd.getAutoUpdateValue('Tote Forklift|stack5', 10650),
+            sd.getAutoUpdateValue('Tote Forklift|stack6', 11600),
           ]
         
         self.wanted_pid = (

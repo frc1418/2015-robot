@@ -28,8 +28,8 @@ class Sensor:
         # Premature optimization, but it looks nicer
         self._tote_exclude_range = set()
         
-        for i in [1060, 1992, 4610, 5457, 7995]:
-            for j in range(i-85, i+85):
+        for i in [1033, 2031, 4554, 5393, 7902]:
+            for j in range(i-350, i+350):
                 self._tote_exclude_range.add(j)
         
         self.update()
