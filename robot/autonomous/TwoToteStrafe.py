@@ -1,10 +1,14 @@
 from robotpy_ext.autonomous import timed_state, StatefulAutonomous
+from common.custom_stateful import SensorStatefulAutonomous
+
 # Only for auto complete #
 from components.drive import Drive
 from components.alignment import Alignment
 from components.forklift import ToteForklift
 
-class TwoToteStrafe(StatefulAutonomous):
+import logging
+
+class TwoToteStrafe(SensorStatefulAutonomous):
     MODE_NAME = 'Two Totes Strafe'
     DEFAULT = True
     
@@ -13,7 +17,8 @@ class TwoToteStrafe(StatefulAutonomous):
     tote_forklift = ToteForklift
     
     def initialize(self):
-        self.register_sd_var('over', -.9)
+        self.logger = logging.getLogger('two-tote')
+        self.register_sd_var('over', -1)
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
         self.register_sd_var('final_fwd', -.5)
@@ -39,6 +44,7 @@ class TwoToteStrafe(StatefulAutonomous):
             self.tote_forklift.set_pos_bottom()
             
         if self.tote_forklift.isCalibrated:
+            self.logger.info("Calibrated")
             self.next_state('get_tote1')
     
     @timed_state(duration=1, next_state='lift_tote1')
@@ -48,7 +54,8 @@ class TwoToteStrafe(StatefulAutonomous):
         
         self.drive.move(self.move_fwd, 0, 0)
         
-        if self.sensors.is_against_tote(): 
+        if self.sensors.is_against_tote():
+            self.logger.info("Against tote")
             self.next_state('lift_tote1')
     
     
@@ -68,25 +75,24 @@ class TwoToteStrafe(StatefulAutonomous):
         self.drive.wall_goto()
         
         if self.tote_forklift.on_target():
+            self.logger.info("Wait: on target again")
             self.next_state('strafe_can1')
     
     
-    @timed_state(duration=1.75, next_state = 'go_until_tote2')
+    @timed_state(duration=1, next_state = 'go_until_tote2')
     def strafe_can1(self):
         '''strafes over for n seconds'''
         self.drive.wall_strafe(self.over)
     
-    @timed_state(duration=2.5, next_state='drive_forward')
+    @timed_state(duration=1, next_state='drive_forward')
     def go_until_tote2(self, initial_call):
         '''moves the rest of the way to the crate until the sensors have a reading'''
-        
-        #if initial_call:
-        #    self.tote_forklift.set_pos_stack1()
         
         self.drive.wall_strafe(self.over)
         
         if self.sensors.is_in_range():
-            self.next_state('go_more')
+            self.logger.info("Go: in range")
+            self.next_state('drive_forward')
     
     #
     # Final stretch
@@ -118,4 +124,4 @@ class TwoToteStrafe(StatefulAutonomous):
     @timed_state(duration = .75)
     def reverse(self):
         '''backs up so we aren't touching'''
-        self.drive.move(.1,0,0)
+        self.drive.move(.15,0,0)

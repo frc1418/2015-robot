@@ -60,14 +60,15 @@ class Sensor:
         if self.interfered:
             in_range = self.in_range
         
-        if self.in_range_start is None:
-            if in_range:
-                self.in_range_start = self.now
-        else:
-            self.in_range = in_range and self.now > self.in_range_start + 0.1
-                
-            if not in_range:
-                self.in_range_start = None
+        self.in_range = in_range
+        #if self.in_range_start is None:
+        #    if in_range:
+        #        self.in_range_start = self.now
+        #else:
+        #    self.in_range = in_range and self.now > self.in_range_start + 0.1
+        #        
+        #    if not in_range:
+        #        self.in_range_start = None
         
     
     def is_against_tote(self):
