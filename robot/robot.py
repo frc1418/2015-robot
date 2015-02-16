@@ -5,6 +5,8 @@ from components import drive, alignment
 from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
+from common.sensor import Sensor
+
 
 from networktables import NetworkTable
 
@@ -37,30 +39,24 @@ class MyRobot(wpilib.SampleRobot):
 
 
         self.gyro = wpilib.Gyro(0)
-        self.tote_forklift = ToteForklift(5, 2)
-        self.can_forklift = CanForklift(15, 3)
 
-        self.toteLimitL = wpilib.DigitalInput(0) ##Left limit switch
-        self.toteLimitR = wpilib.DigitalInput(1) ##Right limit switch
+        self.tote_motor = wpilib.CANTalon(5)
+        self.can_motor = wpilib.CANTalon(15)
 
+        self.sensor = Sensor(self.tote_motor, self.can_motor)
+        
+        self.tote_forklift = ToteForklift(self.tote_motor,self.sensor,2)
+        self.can_forklift = CanForklift(self.can_motor,self.sensor,3)
+                
         self.next_pos = 1
 
-
-        
-        self.longDistanceL = SharpIR2Y0A02(1)  # # Robot's left
-        self.longDistanceR = SharpIR2Y0A02(3)  # # Robot's right
-        self.shortDistanceL = SharpIRGP2Y0A41SK0F(2)  # # Robot's left
-        self.shortDistanceR = SharpIRGP2Y0A41SK0F(7)  # # Robot's right
-        
+                
         self.backSensor = SharpIRGP2Y0A41SK0F(6)
-
-        self.leftSensors = CombinedSensor(self.longDistanceL, 19.5, self.shortDistanceL, 6)
-        self.rightSensors = CombinedSensor(self.longDistanceR, 19.5, self.shortDistanceR, 5)
         
         self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
 
-        self.align = alignment.Alignment(self.leftSensors, self.rightSensors,
-                                         self.toteLimitL, self.toteLimitR,
+        self.align = alignment.Alignment(self.sensor.leftSensor, self.sensor.rightSensor,
+                                         self.sensor.toteLimitLSensor, self.sensor.toteLimitRSensor,
                                          self.tote_forklift, self.drive)
         
         
@@ -108,6 +104,9 @@ class MyRobot(wpilib.SampleRobot):
         self.logger.info("Entering teleop mode")
 
         while self.isOperatorControl() and self.isEnabled():
+            
+            self.sensor.update()
+            
             self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
             
             #
@@ -220,22 +219,22 @@ class MyRobot(wpilib.SampleRobot):
             delay.wait()
 
     def smartdashbord_update(self):
-        self.sd.putNumber('shortSensorValueL', self.shortDistanceL.getDistance())
-        self.sd.putNumber('shortSensorValueR', self.shortDistanceR.getDistance())
-        self.sd.putNumber('longSensorValueL', self.longDistanceL.getDistance())
-        self.sd.putNumber('longSensorValueR', self.longDistanceR.getDistance())
-        self.sd.putNumber('shortSensorVoltageL', self.shortDistanceL.getVoltage())
-        self.sd.putNumber('shortSensorVoltageR', self.shortDistanceR.getVoltage())
-        self.sd.putNumber('longSensorVoltageL', self.longDistanceL.getVoltage())
-        self.sd.putNumber('longSensorVoltageR', self.longDistanceR.getVoltage())
+        self.sd.putNumber('shortSensorValueL', self.sensor.shortDistanceL)
+        self.sd.putNumber('shortSensorValueR', self.sensor.shortDistanceR)
+        self.sd.putNumber('longSensorValueL', self.sensor.longDistanceL)
+        self.sd.putNumber('longSensorValueR', self.sensor.longDistanceR)
+        self.sd.putNumber('shortSensorVoltageL', self.sensor.shortDistanceL)
+        self.sd.putNumber('shortSensorVoltageR', self.sensor.shortDistanceR)
+        self.sd.putNumber('longSensorVoltageL', self.sensor.longDistanceL)
+        self.sd.putNumber('longSensorVoltageR', self.sensor.longDistanceR)
         
         self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
 
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
         
-        self.sd.putBoolean('toteLimitL', self.toteLimitL.get())
-        self.sd.putBoolean('toteLimitR', self.toteLimitR.get())
+        self.sd.putBoolean('toteLimitL', self.sensor.toteLimitL)
+        self.sd.putBoolean('toteLimitR', self.sensor.toteLimitR)
         
         self.sd.putNumber('gyroAngle', self.gyro.getAngle())
   
@@ -252,8 +251,9 @@ class MyRobot(wpilib.SampleRobot):
         '''Called when the robot is in disabled mode'''
 
         self.logger.info("Entering disabled mode")
-
+        
         while not self.isEnabled():
+            self.sensor.update()
             self.smartdashbord_update()
             wpilib.Timer.delay(.01)
 
