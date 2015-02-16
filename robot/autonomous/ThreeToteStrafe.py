@@ -1,14 +1,12 @@
 from robotpy_ext.autonomous import timed_state, StatefulAutonomous
 # Only for auto complete #
 from components.drive import Drive
-from components.alignment import Alignment
 from components.forklift import ToteForklift
 class ThreeToteStrafe(StatefulAutonomous):
     MODE_NAME = 'Three Totes Strafe'
     DEFAULT = False
     
     drive = Drive
-    align = Alignment
     tote_forklift = ToteForklift
     
     def initialize(self):

@@ -3,17 +3,15 @@ from common.custom_stateful import SensorStatefulAutonomous
 
 # Only for auto complete #
 from components.drive import Drive
-from components.alignment import Alignment
 from components.forklift import ToteForklift
 
 import logging
 
 class TwoToteStrafe(SensorStatefulAutonomous):
     MODE_NAME = 'Two Totes Strafe'
-    DEFAULT = True
+    DEFAULT = False
     
     drive = Drive
-    align = Alignment
     tote_forklift = ToteForklift
     
     def initialize(self):

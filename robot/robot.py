@@ -22,6 +22,8 @@ class MyRobot(wpilib.SampleRobot):
         # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
+        self.ui_joystick = wpilib.Joystick(2)
+        
 
         # hello
         # #INITIALIZE MOTORS##
@@ -78,7 +80,10 @@ class MyRobot(wpilib.SampleRobot):
         self.toteDown = Button(self.joystick2, 2)
         self.toteTop = Button(self.joystick2, 6)
         self.toteBottom = Button(self.joystick2, 7)
-
+        self.ui_joystick_tote_down = Button(self.ui_joystick, 4)
+        self.ui_joystick_can_up = Button(self.ui_joystick, 5)
+        self.ui_joystick_can_down = Button(self.ui_joystick, 3)
+        
         self.reverseDirection = Button(self.joystick1, 1)
         #self.alignTrigger = Button(self.joystick2, 1)
         
@@ -164,8 +169,8 @@ class MyRobot(wpilib.SampleRobot):
                 self.drive.wall_strafe(.7)
 
             # REVERSE DRIVE#
-            if self.reverseDirection.get():
-                self.drive.switch_direction()
+            #if self.reverseDirection.get():
+            #    self.drive.switch_direction()
 
             if self.can_forklift.motor.isRevLimitSwitchClosed():
                 self.can_forklift.motor.setSensorPosition(0)
@@ -210,6 +215,7 @@ class MyRobot(wpilib.SampleRobot):
                     self.drive.switch_direction()
             self.oldReverseRobot = self.reverseRobot
             
+            self.ui_joystick_buttons()
             
             self.smartdashbord_update()
             self.update()
@@ -231,7 +237,15 @@ class MyRobot(wpilib.SampleRobot):
         self.canTo = self.sd.getInt('binTo',self.canTo)
         self.autoLift = self.sd.getBoolean('autoLift', self.autoLift)
         self.reverseRobot = self.sd.getBoolean('reverseRobot',self.reverseRobot)
-    
+        
+    def ui_joystick_buttons(self):
+        if self.ui_joystick_can_down.get():
+            self.can_forklift.set_pos_bottom()
+        elif self.ui_joystick_can_up.get():
+            self.can_forklift.set_pos_top()
+        if self.ui_joystick_tote_down.get():
+            self.tote_forklift.set_pos_bottom()
+                            
     def update (self):
         for component in self.components.values():
             component.doit()

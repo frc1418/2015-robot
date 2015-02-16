@@ -5,8 +5,6 @@ class ThreeToteHot(StatefulAutonomous):
     DEFAULT = False
         
     def initialize(self):
-        self.aligning = False
-        self.aligned = self.align.aligned
         self.angle = 0
 
         
@@ -48,9 +46,3 @@ class ThreeToteHot(StatefulAutonomous):
     def drive_forward(self):
         self.drive.move(-.35,0,0)
         self.drive.angle_rotation(0)
-        
-            
-        
-            
-    
-    
