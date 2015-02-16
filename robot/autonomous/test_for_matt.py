@@ -9,7 +9,7 @@ import logging
 
 class TwoToteStrafe(SensorStatefulAutonomous):
     MODE_NAME = 'Test For Matt'
-    DEFAULT = True 
+    DEFAULT = False 
     
     drive = Drive
     tote_forklift = ToteForklift

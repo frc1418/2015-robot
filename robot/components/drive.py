@@ -116,6 +116,7 @@ class Drive(object):
 		y = max(min(self.strafe_back_speed.value, y), self.strafe_fwd_speed.value)
 		
 		self.y = y
+		return y
 	
 	def wall_strafe(self, speed):
 		
