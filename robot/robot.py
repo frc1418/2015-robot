@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import wpilib
+RelayValue = wpilib.Relay.Value
+
 from components import drive, alignment
 from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
@@ -41,6 +43,7 @@ class MyRobot(wpilib.SampleRobot):
 
         # #INITIALIZE SENSORS#
         
+        self.sweeper_relay = wpilib.Relay(0)
 
         self.gyro = wpilib.Gyro(0)
 
@@ -180,9 +183,12 @@ class MyRobot(wpilib.SampleRobot):
             if self.reverseDirection.get():
                 self.drive.switch_direction()
 
-            if self.can_forklift.motor.isRevLimitSwitchClosed():
-                self.can_forklift.motor.setSensorPosition(0)
-            
+            if self.joystick1.getRawButton(10):
+                self.sweeper_relay.set(RelayValue.kForward)
+            elif self.joystick1.getRawButton(11):
+                self.sweeper_relay.set(RelayValue.kReverse)
+            else:
+                self.sweeper_relay.set(RelayValue.kOff)
             
             if self.toteTo != self.oldTote:
                 if self.toteTo == 0:
