@@ -156,7 +156,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     def drop(self, initial_call):
         '''lowers the totes onto a stack'''
         if initial_call:
-            self.tote_forklift.set_pos_bottom()
+            self.tote_forklift.set_pos_stack1()
         
         if self.tote_forklift.on_target():
             self.next_state('reverse')
