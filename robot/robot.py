@@ -169,6 +169,7 @@ class MyRobot(wpilib.SampleRobot):
 
             # INFRARED DRIVE#
             if self.joystick2.getTrigger():
+                self.drive.isTheRobotBackwards = False
                 self.align.align()
 
             if self.joystick2.getRawButton(11):
