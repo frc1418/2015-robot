@@ -1,4 +1,4 @@
-
+import wpilib
 from pyfrc.physics.drivetrains import mecanum_drivetrain
 
 class PhysicsEngine:
@@ -22,7 +22,44 @@ class PhysicsEngine:
     def update_sim(self, hal_data, now, tm_diff):
         
         # Simulate the tote forklift
+        try:
+
+            toteDict = hal_data['CAN'][5]
+            canDict = hal_data['CAN'][15]
+        except:
+
+            pass
+
+        else:
+
+            if toteDict['mode_select'] == wpilib.CANTalon.ControlMode.PercentVbus:
+
+                toteDict['enc_position'] += int(toteDict['value']*tm_diff*2333/1023)
+
+            elif toteDict['mode_select'] == wpilib.CANTalon.ControlMode.Position:
+
+                if toteDict['enc_position']<toteDict['value']:
+
+                    toteDict['enc_position'] += int(tm_diff*2333)
+
+                else:
+
+                    toteDict['enc_position'] -= int(tm_diff*2333)
+
         
+            if canDict['mode_select'] == wpilib.CANTalon.ControlMode.PercentVbus:
+
+                canDict['enc_position'] += int(canDict['value']*tm_diff*2333/1023)
+
+            elif canDict['mode_select'] == wpilib.CANTalon.ControlMode.Position:
+
+                if canDict['enc_position']<canDict['value']:
+
+                    canDict['enc_position'] += int(tm_diff*2333)
+
+                else:
+
+                    canDict['enc_position'] -= int(tm_diff*2333)
         # Simulate the can forklift
         
         # Do something about the distance sensors?
