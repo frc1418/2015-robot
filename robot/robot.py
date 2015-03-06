@@ -20,14 +20,12 @@ from robotpy_ext.autonomous import AutonomousModeSelector
 class MyRobot(wpilib.SampleRobot):
 
     def robotInit(self):
-        
         self.sd = NetworkTable.getTable('SmartDashboard')
 
         # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
         self.ui_joystick = wpilib.Joystick(2)
-        
 
         # hello
         # #INITIALIZE MOTORS##
@@ -234,6 +232,7 @@ class MyRobot(wpilib.SampleRobot):
             
             self.smartdashbord_update()
             self.update()
+            
             
             # Replaces wpilib.Timer.delay()
             delay.wait()

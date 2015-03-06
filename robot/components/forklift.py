@@ -167,7 +167,6 @@ class Forklift (object):
                 # Update the PID values if necessary
                 if self.current_pid != self.new_pid:
                     self.motor.setPID(*self.new_pid)
-                    logger.info('pid: %s', self.motor.getP())
                     self.current_pid = self.new_pid
                 self.motor.set(self.target_position)
                 
