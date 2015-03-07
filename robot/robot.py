@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import wpilib
+import wpilib, pygame
 RelayValue = wpilib.Relay.Value
 
 from components import drive, alignment
@@ -17,15 +17,22 @@ from networktables import NetworkTable
 from robotpy_ext.misc import PreciseDelay
 from robotpy_ext.autonomous import AutonomousModeSelector
 
+pygame.joystick.init()
+#pygame.init()
+
 class MyRobot(wpilib.SampleRobot):
 
     def robotInit(self):
         self.sd = NetworkTable.getTable('SmartDashboard')
+        
+       
 
         # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
         self.ui_joystick = wpilib.Joystick(2)
+        
+        self.pinServo = wpilib.Servo(6)
 
         # hello
         # #INITIALIZE MOTORS##
@@ -113,7 +120,12 @@ class MyRobot(wpilib.SampleRobot):
         delay = PreciseDelay(self.control_loop_wait_time)
 
         self.logger.info("Entering teleop mode")
-
+        try:
+            joystick = pygame.joystick.Joystick(0)
+        except:
+            pass
+        else:
+            joystick.init()
         while self.isOperatorControl() and self.isEnabled():
             
             self.sensor.update()
@@ -233,7 +245,13 @@ class MyRobot(wpilib.SampleRobot):
             self.smartdashbord_update()
             self.update()
             
-            
+            try:
+                buttons = joystick.get_numbuttons()
+                for i in range( buttons ):
+                    button = joystick.get_button( i )
+                    print(button)
+            except:
+                pass
             # Replaces wpilib.Timer.delay()
             delay.wait()
 
@@ -287,3 +305,4 @@ class MyRobot(wpilib.SampleRobot):
 if __name__ == '__main__':
 
     wpilib.run(MyRobot)
+pygame.quit()
