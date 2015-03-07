@@ -102,6 +102,13 @@ class MyRobot(wpilib.SampleRobot):
         self.oldReverseRobot = False
         self.autoLift = False
         
+        self.sd.putNumber('liftTo', 0)
+        self.sd.putNumber('binTo', 0)
+        self.sd.putBoolean('autoLift', False)
+        self.sd.putBoolean('reverseRobot',False)
+        
+        
+        
     def autonomous(self):
         self.automodes.run(self.control_loop_wait_time, self.update)
 
