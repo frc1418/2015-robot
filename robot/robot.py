@@ -169,6 +169,9 @@ class MyRobot(wpilib.SampleRobot):
             if self.joystick2.getTrigger():
                 self.drive.isTheRobotBackwards = False
                 self.align.align()
+            elif self.autoLift:
+                if self.sensor.toteLimitL and self.sensor.toteLimitR:
+                    self.tote_forklift.raise_forklift()
 
             if self.joystick2.getRawButton(11):
                 self.drive.reset_gyro_angle()
