@@ -122,8 +122,10 @@ class Forklift (object):
         '''Moves the motor towards the limit switch if needed'''
         if not self.isCalibrated:
             if self.get_limit_switch():
+                print("HELLO")
                 self.motor.set(self.init_down_speed)
             else:
+                print(self, "IS CALIBRATED")
                 self.motor.set(0)
                 self.motor.setSensorPosition(0)
             
@@ -314,6 +316,7 @@ class CanForklift(Forklift):
         self.set_auto_position(7000)
     
     def get_limit_switch(self):
+        print(self.motor.isRevLimitSwitchClosed())
         return not self.motor.isRevLimitSwitchClosed()
     
     def get_position(self):
