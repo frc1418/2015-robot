@@ -1,7 +1,5 @@
 import wpilib
 from pyfrc.physics.drivetrains import mecanum_drivetrain
-from components.forklift import CanForklift
-
 class PhysicsEngine:
     
     
@@ -13,7 +11,7 @@ class PhysicsEngine:
         # keep track of the can encoder position
         self.toteAct = 1000
         self.canAct = 7000
-        self.first = True
+        self.canCalibrated = False
     def initialize(self, hal_data):
         hal_data['dio'][0]['value'] = True
         hal_data['dio'][1]['value'] = True
@@ -22,11 +20,9 @@ class PhysicsEngine:
         self.controller.add_gyro_channel(0)
         
     def update_sim(self, hal_data, now, tm_diff):
-        if self.first:
+        if not self.canCalibrated:
             try:
-                hal_data['CAN'][15]['limit_switch_closed_for'] = False
-                hal_data['CAN'][15]['limit_switch_closed_rev'] = False
-                self.first = False
+                hal_data['CAN'][15]['limit_switch_closed_rev'] = True
             except:
                 pass
                 
@@ -64,23 +60,25 @@ class PhysicsEngine:
     
                 elif canDict['mode_select'] == wpilib.CANTalon.ControlMode.Position:
     
-                    if canDict['enc_position']<canDict['value']:
+                    if canDict['enc_position'] < canDict['value']:
                         self.toteAct += posVal
                         canDict['enc_position'] += posVal
     
                     else:
                         self.toteAct -= posVal
                         canDict['enc_position'] -= posVal
-                if canDict['enc_position'] < 0 and  not hal_data['dio'][3]['value']:
+                
+                if canDict['enc_position'] < 0 and self.canCalibrated:
                     canDict['enc_position'] = 0
                 elif canDict['enc_position'] >11000:
-                    canDict['limit_switch_closed_fwd'] = True
+                    canDict['enc_position'] = 11000
                     
-                if self.toteAct == 0:
+                if self.toteAct in range (-50, 50):
                     hal_data['dio'][2]['value'] = False
-                if self.canAct == 0:
-                    print("ITS AT ZERO")
-                    hal_data['dio'][3]['value'] = False
+                
+                if self.canAct in range (-50, 50):
+                    hal_data['CAN'][15]['limit_switch_closed_rev'] = False
+                    self.canCalibrated = True
             # Simulate the can forklift
             
             # Do something about the distance sensors?
