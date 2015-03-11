@@ -7,7 +7,7 @@ from components.alignment import Alignment
 
 class StackAutonomous(StatefulAutonomous):
     MODE_NAME = 'Stack Auto'
-    DEFAULT = True
+    DEFAULT = False
     
     drive = Drive
     tote_forklift = ToteForklift
