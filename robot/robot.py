@@ -116,12 +116,13 @@ class MyRobot(wpilib.SampleRobot):
         
     def autonomous(self):
         self.automodes.run(self.control_loop_wait_time, self.update)
-
+    
+    
     def operatorControl(self):
-
+        
         self.can_forklift.set_manual(0)
         self.tote_forklift.set_manual(0)
-        
+        self.tote_forklift.set_pos_stack5()
         delay = PreciseDelay(self.control_loop_wait_time)
 
         self.logger.info("Entering teleop mode")

@@ -1,5 +1,6 @@
 import wpilib
 from pyfrc.physics.drivetrains import mecanum_drivetrain
+from hal_impl.data import hal_data
 class PhysicsEngine:
     
     
@@ -83,6 +84,7 @@ class PhysicsEngine:
             
             # Do something about the distance sensors?
             
+            # Gyro
             
             # Simulate the drivetrain
             lf_motor = hal_data['pwm'][0]['value']

@@ -20,7 +20,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
         self.register_sd_var('final_fwd', -.5)
-    
+        self.angRot = 0
     def on_enable(self):
         super().on_enable()
         self.drive.reset_gyro_angle()
@@ -29,7 +29,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         super().on_iteration(tm)
         
         # This gets executed afterwards
-        self.drive.angle_rotation(0)
+        self.drive.angle_rotation(self.angRot)
         
     #
     # First tote operations
@@ -139,7 +139,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     # Final stretch
     #
     
-    #@timed_state(duration=.25, next_state='drive_forward')
+    #@timed_state(duration= .25, next_state='drive_forward')
     #def go_more(self):
     #    self.drive.wall_strafe(self.over)
         
@@ -148,18 +148,18 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     @timed_state(duration=2.5, next_state='drop')
     def drive_forward(self, initial_call):
         '''pushes 3rd tote into the auto zone'''
-        
-        self.drive.move(self.final_fwd, 0, 0)
+        print(.011*self.drive.return_gyro_angle())
+        self.drive.move(self.final_fwd, -.02*self.drive.return_gyro_angle(), 0)
     
-    
+        self.angRot = 90
     @timed_state(duration=2, next_state = 'reverse')
     def drop(self, initial_call):
         '''lowers the totes onto a stack'''
         if initial_call:
-            self.tote_forklift.set_pos_stack1()
+            self.tote_forklift.set_auto_position(2000)
         
-        if self.tote_forklift.on_target():
-            self.next_state('reverse')
+        #if self.tote_forklift.on_target():
+        #    self.next_state('reverse')
     
     
     @timed_state(duration = .5)
