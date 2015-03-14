@@ -10,7 +10,18 @@ class MyRobot(wpilib.SampleRobot):
 
         ##INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
-        self.joystick2 = wpilib.Joystick(0)
+        self.joystick2 = wpilib.Joystick(1)
+        
+        ##INITIALIZE MOTORS##
+        self.lf_motor = wpilib.CANTalon(6)
+        self.lr_motor = wpilib.CANTalon(2)
+        self.rf_motor = wpilib.CANTalon(8)
+        self.rr_motor = wpilib.CANTalon(4)
+        
+        ##ROBOT DRIVE##
+        self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
 
     def disabled(self):
         wpilib.Timer.delay(.01)
@@ -26,7 +37,7 @@ class MyRobot(wpilib.SampleRobot):
             self.y = self.joystick1.getY()
             self.rotation = (self.joystick2.getX() / 2)
             
-            #self.robot_drive.mecanumDrive_Cartesian((self.x), (self.y), (self.rotation), 0,)
+            self.robot_drive.mecanumDrive_Cartesian(self.x, self.y, self.rotation, 0)
             wpilib.Timer.delay(0.025)
             
 if __name__ == '__main__':
