@@ -28,18 +28,18 @@ class MyRobot(wpilib.SampleRobot):
     
     def operatorControl(self):
         while self.isOperatorControl() and self.isEnabled():
-            if self.joystick1.getRawButton(3):
+            if self.joystick2.getRawButton(3):
                 self.servo.set(1)
-            if self.joystick1.getRawButton(2):
+            if self.joystick2.getRawButton(2):
                 self.servo.set(0)
                 
             self.x = self.joystick1.getX()
             self.y = self.joystick1.getY()
             
             #Forward and Backward for testing
-            if self.joystick2.getRawButton(2):
+            if self.joystick1.getRawButton(2):
                 self.y = 0.5;
-            if self.joystick2.getRawButton(3):
+            if self.joystick1.getRawButton(3):
                 self.y = -0.5;
             
             self.rotation = (self.joystick2.getX() / 2)
