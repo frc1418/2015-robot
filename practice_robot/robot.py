@@ -35,6 +35,13 @@ class MyRobot(wpilib.SampleRobot):
                 
             self.x = self.joystick1.getX()
             self.y = self.joystick1.getY()
+            
+            #Forward and Backward for testing
+            if self.joystick2.getRawButton(2):
+                self.y = 0.5;
+            if self.joystick2.getRawButton(3):
+                self.y = -0.5;
+            
             self.rotation = (self.joystick2.getX() / 2)
             
             self.robot_drive.mecanumDrive_Cartesian(self.x, self.y, self.rotation, 0)
