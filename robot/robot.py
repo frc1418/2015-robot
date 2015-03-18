@@ -122,7 +122,8 @@ class MyRobot(wpilib.SampleRobot):
         
         self.can_forklift.set_manual(0)
         self.tote_forklift.set_manual(0)
-        self.tote_forklift.set_pos_stack5()
+        
+        
         delay = PreciseDelay(self.control_loop_wait_time)
 
         self.logger.info("Entering teleop mode")
@@ -244,6 +245,10 @@ class MyRobot(wpilib.SampleRobot):
                     self.drive.switch_direction()
             self.oldReverseRobot = self.reverseRobot
             
+            # This needs to be implemented differently
+            #if self.sensor.is_against_tote():
+            #    self.align.align()
+            
             self.ui_joystick_buttons()
             
             self.smartdashbord_update()
@@ -255,7 +260,6 @@ class MyRobot(wpilib.SampleRobot):
     def smartdashbord_update(self):
         
         self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
-
         self.sensor.update_sd()
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
@@ -266,6 +270,7 @@ class MyRobot(wpilib.SampleRobot):
         self.canTo = self.sd.getInt('binTo',self.canTo)
         self.autoLift = self.sd.getBoolean('autoLift', self.autoLift)
         self.reverseRobot = self.sd.getBoolean('reverseRobot',self.reverseRobot)
+        self.initGoto5 = self.sd.putBoolean('TeleInitGoto', False)
         
     def ui_joystick_buttons(self):
         
