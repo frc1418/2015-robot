@@ -9,7 +9,7 @@ class Drive(object):
 		through this class.
 	'''
 
-	def __init__(self, robotDrive, gyro, backInfrared):
+	def __init__(self, robotDrive, gyro, backInfrared, accelerometer):
 		'''
 			Constructor. 
 			
@@ -21,6 +21,7 @@ class Drive(object):
 		self.y = 0
 		self.rotation = 0
 		self.gyro = gyro
+		self.accelerometer = accelerometer
 		
 		self.angle_constant = .040
 		self.gyro_enabled = True
@@ -34,7 +35,13 @@ class Drive(object):
 		self.strafe_back_speed = sd.getAutoUpdateValue('strafe_back', .15)
 		self.strafe_fwd_speed = sd.getAutoUpdateValue('strafe_fwd', -.2)
 		
-
+		self.xDist = 0
+		self.yDist = 0
+		self.xVel = 0
+		self.yVel = 0
+		
+		self.xTimer = wpilib.Timer()
+		self.yTimer = wpilib.Timer()
 	#
 	# Verb functions -- these functions do NOT talk to motors directly. This
 	# allows multiple callers in the loop to call our functions without 
@@ -102,8 +109,27 @@ class Drive(object):
 			return False
 		
 		return True
-		
+	def get_dist_x(self):
+		self.xDistTimer.reset()
+		accel = self.acclerometer.getX()
+		tm = self.xDistTimer.get()
+		self.xVel += accel*tm
+		self.xDist += self.xVel*self.xAccelTimer + .5*accel*(tm**2)
+		return self.xDist
 	
+	def reset_x(self):
+		self.xDist = 0 
+
+	def get_dist_y(self):
+		self.yDistTimer.reset()
+		accel = self.acclerometer.gety()
+		tm = self.yDistTimer.get()
+		self.yVel += accel*tm
+		self.yDist = self.yVel*self.yAccelTimer + .5*accel*(tm**2) 
+		return self.yDist		
+	
+	def reset_y(self):
+		self.yDist = 0
 	def set_direction(self, direction):
 		self.isTheRobotBackwards = bool(direction)
 	

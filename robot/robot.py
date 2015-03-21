@@ -49,7 +49,8 @@ class MyRobot(wpilib.SampleRobot):
         self.sweeper_relay = wpilib.Relay(0)
 
         self.gyro = wpilib.Gyro(0)
-
+        self.accelerometer = wpilib.BuiltInAccelerometer()
+        
         self.tote_motor = wpilib.CANTalon(5)
         self.can_motor = wpilib.CANTalon(15)
 
@@ -66,9 +67,10 @@ class MyRobot(wpilib.SampleRobot):
                 
         self.backSensor = SharpIRGP2Y0A41SK0F(6)
         
-        self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
+        self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor, self.accelerometer)
 
         self.align = alignment.Alignment(self.sensor, self.tote_forklift, self.drive)
+        
         
         
         self.components = {
@@ -95,6 +97,7 @@ class MyRobot(wpilib.SampleRobot):
         self.ui_joystick_tote_up = Button(self.ui_joystick, 6)
         self.ui_joystick_can_up = Button(self.ui_joystick, 5)
         self.ui_joystick_can_down = Button(self.ui_joystick, 3)
+        self.autoPickup = Button(self.sensor,0)
         
         self.reverseDirection = Button(self.joystick1, 1)
         #self.alignTrigger = Button(self.joystick2, 1)
@@ -105,12 +108,13 @@ class MyRobot(wpilib.SampleRobot):
         self.oldCan=0
         self.reverseRobot = False
         self.oldReverseRobot = False
-        self.autoLift = False
+        self.autoLift = True
         
         self.sd.putNumber('liftTo', 0)
         self.sd.putNumber('binTo', 0)
         self.sd.putBoolean('autoLift', False)
         self.sd.putBoolean('reverseRobot',False)
+        self.sd.putBoolean('autoPickup', False)
         
         
         
@@ -246,8 +250,10 @@ class MyRobot(wpilib.SampleRobot):
             self.oldReverseRobot = self.reverseRobot
             
             # This needs to be implemented differently
-            #if self.sensor.is_against_tote():
-            #    self.align.align()
+            if self.autoPickup.get_switch() and self.autoLift:
+                self.autoLift = False
+                self.tote_forklift.raise_forklift()
+            self.autoLift = not self.sensor.is_against_tote()
             
             self.ui_joystick_buttons()
             

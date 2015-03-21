@@ -145,12 +145,20 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         
   
     
-    @timed_state(duration=2.5, next_state='drop')
+    @timed_state(duration=2.5, next_state='rotate')
     def drive_forward(self, initial_call):
         '''pushes 3rd tote into the auto zone'''
-        self.drive.move(self.final_fwd, -.02*self.drive.return_gyro_angle(), 0)
+        self.drive.move(self.final_fwd, 0, 0)
     
-        self.angRot = 90
+    
+    @timed_state(duration =1, next_state='drop')
+    def rotate(self):
+        if wpilib.SmartDashboard.getBoolean('autoPickup'):
+            self.angRot = 90
+        else:
+            self.angRot = -90
+    
+    
     @timed_state(duration=2, next_state = 'reverse')
     def drop(self, initial_call):
         '''lowers the totes onto a stack'''
