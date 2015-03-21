@@ -19,3 +19,14 @@ class Button:
                 self.latest = now
                 return True
         return False
+    
+    def get_switch(self):
+        '''Returns the value of the button. If the button is held down, then
+        True will only be returned once every 200ms'''
+        
+        now = self.timer.getMsClock()
+        if(self.joystick.is_against_tote()):
+            if (now-self.latest) > 40: 
+                self.latest = now
+                return True
+        return False
