@@ -137,9 +137,11 @@ class MyRobot(wpilib.SampleRobot):
             self.sensor.update()
             
             #self.calibrator.calibrate()
-            
-            self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
-            
+            try:
+                self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
+            except:
+                if not self.isFMSAttached():
+                    raise
             #
             # Can forklift controls
             #
@@ -147,9 +149,6 @@ class MyRobot(wpilib.SampleRobot):
             try:
                 if self.joystick1.getRawButton(5):
                     self.can_forklift.set_manual(1)
-                except:
-                    if not self.isFMSAttached():
-                        raise
                 elif self.joystick1.getRawButton(4):
                     self.can_forklift.set_manual(-1)
     
