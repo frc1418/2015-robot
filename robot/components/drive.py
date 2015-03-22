@@ -110,26 +110,28 @@ class Drive(object):
 		
 		return True
 	def get_dist_x(self):
-		self.xDistTimer.reset()
-		accel = self.acclerometer.getX()
-		tm = self.xDistTimer.get()
+		accel = self.accelerometer.getX()
+		tm = self.xTimer.get()
 		self.xVel += accel*tm
-		self.xDist += self.xVel*self.xAccelTimer + .5*accel*(tm**2)
+		self.xDist += self.xVel*tm + .5*accel*(tm**2)
 		return self.xDist
-	
+		
+		self.xTimer.reset()
 	def reset_x(self):
 		self.xDist = 0 
 
 	def get_dist_y(self):
-		self.yDistTimer.reset()
-		accel = self.acclerometer.gety()
-		tm = self.yDistTimer.get()
+		self.yTimer.reset()
+		accel = self.accelerometer.getY()
+		tm = self.yTimer.get()
 		self.yVel += accel*tm
-		self.yDist = self.yVel*self.yAccelTimer + .5*accel*(tm**2) 
+		self.yDist = self.yVel*tm + .5*accel*(tm**2) 
 		return self.yDist		
-	
+		
+		self.xTimer.reset()
 	def reset_y(self):
 		self.yDist = 0
+		
 	def set_direction(self, direction):
 		self.isTheRobotBackwards = bool(direction)
 	

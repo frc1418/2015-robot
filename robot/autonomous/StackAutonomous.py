@@ -57,12 +57,12 @@ class StackAutonomous(StatefulAutonomous):
             self.drive.reset_x()
             self.next_state('get_tote_3')
     
-    @timed_state(duration=1.3, next_state='get_state_4')
-    def get_tote_3(self, inital_call):
-        if inital_call:
+    @timed_state(duration=1.3, next_state='get_tote_4')
+    def get_tote_3(self, initial_call):
+        if initial_call:
             self.align.align()
             
-    @timed_state(duration = 2, next_state='get_tote3')
+    @timed_state(duration = 2, next_state='to_auto_zone')
     def get_tote_4(self, initial_call):
         if initial_call:
             self.align.align()
@@ -81,8 +81,8 @@ class StackAutonomous(StatefulAutonomous):
             self.next_state('drop')
     
     @timed_state(duration = 5)
-    def drop(self, inital_call):
-        if inital_call:
+    def drop(self, initial_call):
+        if initial_call:
             self.tote_forklift.set_pos_bottom()
         self.drive.move(.1, 0, 0) #based on driving experience the robot can't go over the scoring platform at this speed, so it should just drive up and stay against it
     
