@@ -144,72 +144,72 @@ class MyRobot(wpilib.SampleRobot):
             # Can forklift controls
             #
 
-
-            if self.joystick1.getRawButton(5):
-                self.can_forklift.set_manual(1)
-
-            elif self.joystick1.getRawButton(4):
-                self.can_forklift.set_manual(-1)
-
-            elif self.canUp.get():
-                self.can_forklift.raise_forklift()
-
-            elif self.canDown.get():
-                self.can_forklift.lower_forklift()
-
-            if self.canTop.get():
-                self.can_forklift.set_pos_top()
-            elif self.canBottom.get():
-                self.can_forklift.set_pos_bottom()
-
+            try:
+                if self.joystick1.getRawButton(5):
+                    self.can_forklift.set_manual(1)
+                except:
+                    if not self.isFMSAttached():
+                        raise
+                elif self.joystick1.getRawButton(4):
+                    self.can_forklift.set_manual(-1)
+    
+                elif self.canUp.get():
+                    self.can_forklift.raise_forklift()
+    
+                elif self.canDown.get():
+                    self.can_forklift.lower_forklift()
+    
+                if self.canTop.get():
+                    self.can_forklift.set_pos_top()
+                elif self.canBottom.get():
+                    self.can_forklift.set_pos_bottom()
+                    
+            except:
+                if not self.isFMSAttached():
+                    raise
+            
+            try:
+                if self.canTo != self.oldCan:
+                    if self.canTo == 0:
+                        self.can_forklift._set_position(0)
+                    elif self.canTo == 1:
+                        self.can_forklift._set_position(1)
+                    elif self.canTo == 2:
+                        self.can_forklift._set_position(2)
+                    elif self.canTo == 3:
+                        self.can_forklift._set_position(3)
+                    elif self.canTo == 4:
+                        self.can_forklift._set_position(4)  
+                    elif self.canTo == 2048:
+                        self.can_forklift.set_pos_top()
+                    elif self.canTo == 7000:
+                        self.can_forklift.set_pos_7000()
+                self.oldCan = self.canTo
+            except:
+                if not self.isFMSAttached():
+                    raise
             # #Tote forklift controls##
 
-
-            if self.joystick2.getRawButton(5):
-                self.tote_forklift.set_manual(1)
-
-            elif self.joystick2.getRawButton(4):
-                self.tote_forklift.set_manual(-1)
-
-            elif self.toteUp.get():
-                self.tote_forklift.raise_forklift()
-
-            elif self.toteDown.get():
-                self.tote_forklift.lower_forklift()
-
-            if self.toteTop.get():
-                self.tote_forklift.set_pos_top()
-            elif self.toteBottom.get():
-                self.tote_forklift.set_pos_bottom()
-
-
-            # INFRARED DRIVE#
-            if self.joystick2.getTrigger():
-                self.drive.isTheRobotBackwards = False
-                self.align.align()
-            elif self.autoLift:
-                if self.sensor.toteLimitL and self.sensor.toteLimitR:
+            try:
+                if self.joystick2.getRawButton(5):
+                    self.tote_forklift.set_manual(1)
+    
+                elif self.joystick2.getRawButton(4):
+                    self.tote_forklift.set_manual(-1)
+    
+                elif self.toteUp.get():
                     self.tote_forklift.raise_forklift()
-
-            if self.joystick2.getRawButton(11):
-                self.drive.reset_gyro_angle()
-                
-            if self.joystick2.getRawButton(8):
-                self.drive.wall_strafe(-.7)
-            elif self.joystick2.getRawButton(9):
-                self.drive.wall_strafe(.7)
-
-            # REVERSE DRIVE#
-            if self.reverseDirection.get():
-                self.drive.switch_direction()
-
-            if self.joystick1.getRawButton(10):
-                self.sweeper_relay.set(RelayValue.kForward)
-            elif self.joystick1.getRawButton(11):
-                self.sweeper_relay.set(RelayValue.kReverse)
-            else:
-                self.sweeper_relay.set(RelayValue.kOff)
-            
+    
+                elif self.toteDown.get():
+                    self.tote_forklift.lower_forklift()
+    
+                if self.toteTop.get():
+                    self.tote_forklift.set_pos_top()
+                elif self.toteBottom.get():
+                    self.tote_forklift.set_pos_bottom()
+            except:
+                if not self.isFMSAttached():
+                    raise
             if self.toteTo != self.oldTote:
                 if self.toteTo == 0:
                     self.tote_forklift._set_position(0)
@@ -224,42 +224,85 @@ class MyRobot(wpilib.SampleRobot):
                 elif self.toteTo == 2048:
                     self.tote_forklift.set_pos_top()
             self.oldTote = self.toteTo
+            # INFRARED DRIVE#
+            try:
+                if self.joystick2.getTrigger():
+                    self.drive.isTheRobotBackwards = False
+                    self.align.align()
+                elif self.autoLift:
+                    if self.sensor.toteLimitL and self.sensor.toteLimitR:
+                        self.tote_forklift.raise_forklift()
+            except:
+                if not self.isFMSAttached():
+                    raise            
             
-            if self.canTo != self.oldCan:
-                if self.canTo == 0:
-                    self.can_forklift._set_position(0)
-                elif self.canTo == 1:
-                    self.can_forklift._set_position(1)
-                elif self.canTo == 2:
-                    self.can_forklift._set_position(2)
-                elif self.canTo == 3:
-                    self.can_forklift._set_position(3)
-                elif self.canTo == 4:
-                    self.can_forklift._set_position(4)  
-                elif self.canTo == 2048:
-                    self.can_forklift.set_pos_top()
-                elif self.canTo == 7000:
-                    self.can_forklift.set_pos_7000()
-                    
-
-            self.oldCan = self.canTo
+            try:
+                if self.joystick2.getRawButton(11):
+                    self.drive.reset_gyro_angle()
+            except:
+                if not self.isFMSAttached():
+                    raise        
             
-            if self.reverseRobot != self.oldReverseRobot:
-                if self.reverseRobot == 0:
+            try:
+                if self.joystick2.getRawButton(8):
+                    self.drive.wall_strafe(-.7)
+                elif self.joystick2.getRawButton(9):
+                    self.drive.wall_strafe(.7)
+            except:
+                if not self.isFMSAttached():
+                    raise 
+            # REVERSE DRIVE#
+            try:
+                if self.reverseDirection.get():
                     self.drive.switch_direction()
-            self.oldReverseRobot = self.reverseRobot
+            except:
+                if not self.isFMSAttached():
+                    raise       
+            try:
+                if self.joystick1.getRawButton(10):
+                    self.sweeper_relay.set(RelayValue.kForward)
+                elif self.joystick1.getRawButton(11):
+                    self.sweeper_relay.set(RelayValue.kReverse)
+                else:
+                    self.sweeper_relay.set(RelayValue.kOff)
+            except:
+                if not self.isFMSAttached():
+                    raise    
             
-            # This needs to be implemented differently
-            if self.autoPickup.get_switch() and self.autoLift:
-                self.autoLift = False
-                self.tote_forklift.raise_forklift()
-            self.autoLift = not self.sensor.is_against_tote()
             
-            self.ui_joystick_buttons()
             
-            self.smartdashbord_update()
-            self.update()
+            try:
+                if self.reverseRobot != self.oldReverseRobot:
+                    if self.reverseRobot == 0:
+                        self.drive.switch_direction()
+                self.oldReverseRobot = self.reverseRobot
+            except:
+                if not self.isFMSAttached():
+                    raise
+            try:
+                if self.autoPickup.get_switch() and self.autoLift:
+                    self.autoLift = False
+                    self.tote_forklift.raise_forklift()
+                self.autoLift = not self.sensor.is_against_tote()
+            except:
+                if not self.isFMSAttached():
+                    raise
             
+            try:    
+                self.ui_joystick_buttons()
+            except:
+                if not self.isFMSAttached():
+                    raise
+            try:
+                self.smartdashbord_update()
+            except:
+                if not self.isFMSAttached():
+                    raise
+            try:
+                self.update()
+            except:
+                if not self.isFMSAttached():
+                    raise
             # Replaces wpilib.Timer.delay()
             delay.wait()
 
