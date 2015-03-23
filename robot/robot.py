@@ -3,7 +3,7 @@
 import wpilib
 RelayValue = wpilib.Relay.Value
 
-from components import drive, alignment
+from components import drive, alignment, AutoLift
 from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
@@ -49,7 +49,6 @@ class MyRobot(wpilib.SampleRobot):
         self.sweeper_relay = wpilib.Relay(0)
 
         self.gyro = wpilib.Gyro(0)
-        self.accelerometer = wpilib.BuiltInAccelerometer()
         
         self.tote_motor = wpilib.CANTalon(5)
         self.can_motor = wpilib.CANTalon(15)
@@ -67,16 +66,17 @@ class MyRobot(wpilib.SampleRobot):
                 
         self.backSensor = SharpIRGP2Y0A41SK0F(6)
         
-        self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor, self.accelerometer)
+        self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
 
         self.align = alignment.Alignment(self.sensor, self.tote_forklift, self.drive)
         
-        
+        self.autoLifter = AutoLift.Autolift(self.sensor, self.tote_forklift)
         
         self.components = {
             'tote_forklift': self.tote_forklift,
             'can_forklift': self.can_forklift,
             'drive': self.drive,
+            'autolift': self.autoLifter,
             'align': self.align,
             'sensors': self.sensor
         }
@@ -112,9 +112,9 @@ class MyRobot(wpilib.SampleRobot):
         
         self.sd.putNumber('liftTo', 0)
         self.sd.putNumber('binTo', 0)
-        self.sd.putBoolean('autoLift', False)
+        self.sd.putBoolean('autoLift', True)
         self.sd.putBoolean('reverseRobot',False)
-        self.sd.putBoolean('autoPickup', False)
+        self.sd.putBoolean('coop', False)
         
         
         
@@ -229,8 +229,8 @@ class MyRobot(wpilib.SampleRobot):
                     self.drive.isTheRobotBackwards = False
                     self.align.align()
                 elif self.autoLift:
-                    if self.sensor.toteLimitL and self.sensor.toteLimitR:
-                        self.tote_forklift.raise_forklift()
+                    if self.autoLift:
+                        self.autoLifter.autolift()
             except:
                 if not self.isFMSAttached():
                     raise            
@@ -278,14 +278,7 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
-            try:
-                if self.autoPickup.get_switch() and self.autoLift:
-                    self.autoLift = False
-                    self.tote_forklift.raise_forklift()
-                self.autoLift = not self.sensor.is_against_tote()
-            except:
-                if not self.isFMSAttached():
-                    raise
+            
             
             try:    
                 self.ui_joystick_buttons()
@@ -302,6 +295,8 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
+            
+            
             # Replaces wpilib.Timer.delay()
             delay.wait()
 

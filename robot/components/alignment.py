@@ -2,11 +2,10 @@
 import math
 
 from networktables import NetworkTable
-import logging
-logger = logging.getLogger("Aligning")
 
 from common.sensor import Sensor
 
+from components import AutoLift
 class Alignment:
     
     sensors = Sensor
@@ -20,7 +19,7 @@ class Alignment:
         self.sensors = sensors
         self.forkLift = forkLift
         self.drive = drive
-        
+        self.autolift = AutoLift
         sd = NetworkTable.getTable('SmartDashboard')
         
         self.rotate_constant = sd.getAutoUpdateValue('Align|Rotation Constant', 0.015)   
@@ -85,7 +84,8 @@ class Alignment:
         rightLimit = self.sensors.toteLimitR
         
         fwd_speed, rotation_speed = self.get_speed()
-        
+       
+        print(not leftLimit, not rightLimit) 
         # What we really want: if the distance sensor says we're really close,
         # then we need to strafe. Otherwise, go forward.
         
@@ -96,7 +96,7 @@ class Alignment:
             self.drive.move(fwd_speed, self.strafe_speed.value, rotation_speed)
         
         elif not leftLimit and not rightLimit:
-            self.forkLift.raise_forklift()
+            self.autolift.autolift()
             self.drive.move(-.1, 0, 0)
             self.aligned = True
         else:

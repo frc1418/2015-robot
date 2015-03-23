@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 import wpilib
-from wpilib.cantalon import CANTalon
-
+import distance
 class MyRobot(wpilib.SampleRobot):
     
     def robotInit(self):
@@ -17,7 +16,9 @@ class MyRobot(wpilib.SampleRobot):
         self.lr_motor = wpilib.CANTalon(2)
         self.rf_motor = wpilib.CANTalon(8)
         self.rr_motor = wpilib.CANTalon(4)
+        self.accelerometer = wpilib.BuiltInAccelerometer()
         
+        self.distance = distance.Distance(self.accelerometer)
         ##ROBOT DRIVE##
         self.robot_drive = wpilib.RobotDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
@@ -43,9 +44,11 @@ class MyRobot(wpilib.SampleRobot):
                 self.y = -0.5;
             
             self.rotation = (self.joystick2.getX() / 2)
-            
             self.robot_drive.mecanumDrive_Cartesian(self.x, self.y, self.rotation, 0)
+            self.logger.info(self.accelerometer.getX())
+            self.distance.get_dist_x()
             wpilib.Timer.delay(0.025)
+            
             
 if __name__ == '__main__':
     wpilib.run(MyRobot)
