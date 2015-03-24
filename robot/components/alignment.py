@@ -2,8 +2,6 @@
 import math
 
 from networktables import NetworkTable
-import logging
-logger = logging.getLogger("Aligning")
 
 from common.sensor import Sensor
 
@@ -11,7 +9,7 @@ class Alignment:
     
     sensors = Sensor
     
-    def __init__(self, sensors, forkLift, drive):
+    def __init__(self, sensors, forkLift, drive, autolift):
         '''
             :param sensors: Sensors object
             :type sensors: :class:`.Sensor`
@@ -20,7 +18,7 @@ class Alignment:
         self.sensors = sensors
         self.forkLift = forkLift
         self.drive = drive
-        
+        self.autolift = autolift
         sd = NetworkTable.getTable('SmartDashboard')
         
         self.rotate_constant = sd.getAutoUpdateValue('Align|Rotation Constant', 0.015)   
@@ -96,7 +94,7 @@ class Alignment:
             self.drive.move(fwd_speed, self.strafe_speed.value, rotation_speed)
         
         elif not leftLimit and not rightLimit:
-            self.forkLift.raise_forklift()
+            self.autolift.autolift()
             self.drive.move(-.1, 0, 0)
             self.aligned = True
         else:

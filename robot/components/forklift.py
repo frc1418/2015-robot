@@ -71,8 +71,7 @@ class Forklift (object):
         return (len(self.positions) - 1) + pos_idx
     
     def raise_forklift(self):
-        '''Raises the forklift by one position'''
-        
+        '''Raises the forklift by one position'''   
         target_index = self._detect_position_index(-170, -1)
         
         if target_index == -1:
@@ -216,7 +215,6 @@ class ToteForklift(Forklift):
             
     def set_pos_stack5(self):
         self._set_position(5)
-        
     set_pos_top = set_pos_stack5
      
     def set_pos_stack4(self):
