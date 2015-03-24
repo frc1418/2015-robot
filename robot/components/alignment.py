@@ -5,12 +5,11 @@ from networktables import NetworkTable
 
 from common.sensor import Sensor
 
-from components import AutoLift
 class Alignment:
     
     sensors = Sensor
     
-    def __init__(self, sensors, forkLift, drive):
+    def __init__(self, sensors, forkLift, drive, autolift):
         '''
             :param sensors: Sensors object
             :type sensors: :class:`.Sensor`
@@ -19,7 +18,7 @@ class Alignment:
         self.sensors = sensors
         self.forkLift = forkLift
         self.drive = drive
-        self.autolift = AutoLift
+        self.autolift = autolift
         sd = NetworkTable.getTable('SmartDashboard')
         
         self.rotate_constant = sd.getAutoUpdateValue('Align|Rotation Constant', 0.015)   
@@ -84,8 +83,7 @@ class Alignment:
         rightLimit = self.sensors.toteLimitR
         
         fwd_speed, rotation_speed = self.get_speed()
-       
-        print(not leftLimit, not rightLimit) 
+        
         # What we really want: if the distance sensor says we're really close,
         # then we need to strafe. Otherwise, go forward.
         
