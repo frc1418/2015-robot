@@ -9,7 +9,7 @@ import logging
 
 class ThreeToteStrafe(SensorStatefulAutonomous):
     MODE_NAME = 'Three Tote Hot'
-    DEFAULT = False  
+    DEFAULT = True  
     
     drive = Drive
     tote_forklift = ToteForklift
@@ -153,7 +153,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     
     @timed_state(duration =1, next_state='drop')
     def rotate(self):
-        if wpilib.SmartDashboard.getBoolean('autoPickup'):
+        if wpilib.SmartDashboard.getBoolean('coop'):
             self.angRot = 90
         else:
             self.angRot = -90
@@ -163,7 +163,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     def drop(self, initial_call):
         '''lowers the totes onto a stack'''
         if initial_call:
-            self.tote_forklift.set_pos_stack2()
+            self.tote_forklift.set_pos_stack2() ## this NEEDS to be a position not in the list. 
         
         #if self.tote_forklift.on_target():
         #    self.next_state('reverse')

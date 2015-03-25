@@ -111,7 +111,7 @@ class MyRobot(wpilib.SampleRobot):
         self.sd.putNumber('binTo', 0)
         self.sd.putBoolean('autoLift', True)
         self.sd.putBoolean('reverseRobot',False)
-        self.sd.putBoolean('coop', False)
+        self.sd.putBoolean('coop', True)
         self.autoLift = self.sd.getAutoUpdateValue('autoLift', True)
         
         
@@ -130,7 +130,11 @@ class MyRobot(wpilib.SampleRobot):
         delay = PreciseDelay(self.control_loop_wait_time)
 
         self.logger.info("Entering teleop mode")
-        
+        if self.sd.getBoolean('coop'):
+            angle = self.drive.return_gyro_angle()
+            self.align.align()
+            self.drive.angle_rotation(angle)
+            
         while self.isOperatorControl() and self.isEnabled():
             
             self.sensor.update()
