@@ -41,21 +41,13 @@ class StackAutonomous(StatefulAutonomous):
         if initial_call:
             self.align.align()
     
-    @timed_state(duration=3, next_state='strafe')
+    @timed_state(duration=1.2, next_state='strafe')
     def reverse(self):
-        if self.drive.get_dist_y() < 2.4:
-            self.drive.move(.5, 0,0)
-        else:
-            self.drive.reset_y()
-            self.next_state('strafe')
+            self.drive.move(.2, 0,0)
     
     @timed_state(duration = 2, next_state='get_tote_3')
     def strafe(self):
-        if self.drive.get_dist_x() < 5.05:
-            self.drive.move(0,-.7,0)
-        else:
-            self.drive.reset_x()
-            self.next_state('get_tote_3')
+            self.drive.move(0,-1,0)
     
     @timed_state(duration=1.3, next_state='get_tote_4')
     def get_tote_3(self, initial_call):
@@ -67,16 +59,13 @@ class StackAutonomous(StatefulAutonomous):
         if initial_call:
             self.align.align()
             
-    @timed_state(duration = 3, next_state='rotate')
+    @timed_state(duration = .5, next_state='rotate')
     def to_auto_zone(self):
-        if self.drive.get_dist_y() < 5.34:
-            self.drive.move(-.5, 0, 0)
-        else:
-            self.next_state('rotate')
+            self.drive.move(.7, 0, 0)
     
     @timed_state(duration = .5, next_state='drop')
     def rotate(self):
-        self.angRot = 90
+        self.angRot = -90
         if self.drive.return_gyro_angle() < -85:
             self.next_state('drop')
     
@@ -84,7 +73,7 @@ class StackAutonomous(StatefulAutonomous):
     def drop(self, initial_call):
         if initial_call:
             self.tote_forklift.set_pos_bottom()
-        self.drive.move(.1, 0, 0) #based on driving experience the robot can't go over the scoring platform at this speed, so it should just drive up and stay against it
+        self.drive.move(-.1, 0, 0) #based on driving experience the robot can't go over the scoring platform at this speed, so it should just drive up and stay against it
     
     
     
