@@ -3,7 +3,7 @@
 import wpilib
 RelayValue = wpilib.Relay.Value
 
-from components import drive, alignment, AutoLift
+from components import drive, alignment, autolift
 from components.forklift import ToteForklift, CanForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
@@ -63,7 +63,7 @@ class MyRobot(wpilib.SampleRobot):
         
         self.next_pos = 1
 
-        self.autoLifter = AutoLift.Autolift(self.sensor, self.tote_forklift) 
+        self.autoLifter = autolift.Autolift(self.sensor, self.tote_forklift) 
         
         self.backSensor = SharpIRGP2Y0A41SK0F(6)
         
