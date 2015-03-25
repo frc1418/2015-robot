@@ -8,7 +8,7 @@ import wpilib
 
 class StackAutonomous(StatefulAutonomous):
     MODE_NAME = 'Stack Auto'
-    DEFAULT = True
+    DEFAULT = False
     
     drive = Drive
     tote_forklift = ToteForklift
