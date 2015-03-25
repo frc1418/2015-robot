@@ -7,7 +7,7 @@ from components.forklift import ToteForklift
 
 import logging
 
-class ThreeToteStrafe(SensorStatefulAutonomous):
+class ThreeToteHot(SensorStatefulAutonomous):
     MODE_NAME = 'Three Tote Hot'
     DEFAULT = True  
     
