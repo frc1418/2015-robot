@@ -175,4 +175,3 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         if initial_call:
             wpilib.SmartDashboard.putBoolean('TeleInitGoto', True)
         self.drive.move(.2,0,0)
-        

@@ -63,7 +63,6 @@ class Drive(object):
 		self.y = y
 		self.rotation = max(min(1.0, rotation), -1) / 2.0
 		
-		
 
 	
 	def set_gyro_enabled(self, value):
