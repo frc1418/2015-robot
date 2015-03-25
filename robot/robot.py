@@ -111,7 +111,7 @@ class MyRobot(wpilib.SampleRobot):
         self.sd.putNumber('binTo', 0)
         self.sd.putBoolean('autoLift', True)
         self.sd.putBoolean('reverseRobot',False)
-        self.sd.putBoolean('coop', False)
+        self.sd.putBoolean('coop', True)
         self.autoLift = self.sd.getAutoUpdateValue('autoLift', True)
         
         
@@ -131,10 +131,10 @@ class MyRobot(wpilib.SampleRobot):
 
         self.logger.info("Entering teleop mode")
         
+            
         while self.isOperatorControl() and self.isEnabled():
             
             self.sensor.update()
-            
             #self.calibrator.calibrate()
             try:
                 self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
@@ -276,8 +276,19 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
+            if self.sd.getBoolean('coop'):
+                try:
+                    if abs(self.joystick1.getX())>.1 or abs(self.joystick1.getY())>.1 or abs(self.joystick2.getX())>.1:
+                        self.sd.putBoolean('coop', False) 
+               
             
-            
+                    if self.sd.getBoolean('coop'):
+                        self.drive.move(-.5)
+                except:
+                    self.sd.putBoolean('coop', False)
+                    if not self.isFMSAttached():
+                        raise
+                
             try:    
                 self.ui_joystick_buttons()
             except:
