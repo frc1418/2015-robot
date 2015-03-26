@@ -35,7 +35,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     # First tote operations
     #
     
-    @timed_state(duration=.5, first=True)
+    @timed_state(duration=.5, next_state='get_tote1', first=True)
     def calibrate(self, initial_call):
         
         if initial_call:
