@@ -201,12 +201,12 @@ class ToteForklift(Forklift):
         
         self.positions = [
             sd.getAutoUpdateValue('Tote Forklift|bottom', 400),
-            sd.getAutoUpdateValue('Tote Forklift|stack1', 4171),
-            sd.getAutoUpdateValue('Tote Forklift|stack2', 7638),
-            sd.getAutoUpdateValue('Tote Forklift|stack3', 9250),
-            sd.getAutoUpdateValue('Tote Forklift|stack4', 10200),
-            sd.getAutoUpdateValue('Tote Forklift|stack5', 10650),
-            sd.getAutoUpdateValue('Tote Forklift|stack6', 11600),
+            sd.getAutoUpdateValue('Tote Forklift|stack1', 3421),
+            sd.getAutoUpdateValue('Tote Forklift|stack2', 5988),
+            sd.getAutoUpdateValue('Tote Forklift|stack3', 8846),
+            sd.getAutoUpdateValue('Tote Forklift|stack4', 11355),
+            sd.getAutoUpdateValue('Tote Forklift|stack5', 11355),
+            sd.getAutoUpdateValue('Tote Forklift|stack6', 11355),
           ]
         
         self.wanted_pid = (
