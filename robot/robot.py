@@ -113,6 +113,7 @@ class MyRobot(wpilib.SampleRobot):
         self.sd.putBoolean('reverseRobot',False)
         self.sd.putBoolean('coop', True)
         self.autoLift = self.sd.getAutoUpdateValue('autoLift', True)
+        self.sd.getAutoUpdateValue('autoPickup', False)
         
         
         self.control_loop_wait_time = 0.025
@@ -276,16 +277,16 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
-            if self.sd.getBoolean('coop'):
+            if self.sd.getBoolean('autoPickup'):
                 try:
                     if abs(self.joystick1.getX())>.1 or abs(self.joystick1.getY())>.1 or abs(self.joystick2.getX())>.1:
-                        self.sd.putBoolean('coop', False) 
-               
-            
-                    if self.sd.getBoolean('coop'):
+                        self.sd.putBoolean('autoPickup', False)
+                         
+                    if self.sd.getBoolean('autoPickup'):
                         self.drive.move(-.5, 0, 0)
+                    self.sd.putBoolean('autoPickup',  not self.sensor.is_against_tote())
                 except:
-                    self.sd.putBoolean('coop', False)
+                    self.sd.putBoolean('autoPickup', False)
                     if not self.isFMSAttached():
                         raise
                 
