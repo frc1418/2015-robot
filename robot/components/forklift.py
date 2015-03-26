@@ -182,6 +182,7 @@ class Forklift (object):
         self.sd.putNumber('%s|Encoder' % name, self.motor.getEncPosition())
         self.sd.putBoolean('%s|Calibrated' % name, self.isCalibrated)
         self.sd.putBoolean('%s|Manual' % name, self.mode == ForkliftMode.MANUAL)
+        self.sd.putBoolean('%s|Limit' % name, self.get_limit_switch())
         if self.target_position is None:
             self.sd.putNumber('%s|Target Position' % name, -1)
         else:

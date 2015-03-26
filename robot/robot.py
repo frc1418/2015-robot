@@ -218,7 +218,7 @@ class MyRobot(wpilib.SampleRobot):
                 if self.joystick2.getTrigger():
                     self.drive.isTheRobotBackwards = False
                     self.align.align()
-                elif self.autoLift:
+                elif self.autoLift.value:
                     self.autoLifter.autolift()
             except:
                 if not self.isFMSAttached():
@@ -271,10 +271,10 @@ class MyRobot(wpilib.SampleRobot):
                     raise
             
             try:
-                if self.reverseRobot != self.oldReverseRobot:
-                    if self.reverseRobot == 0:
+                if self.reverseRobot.value != self.oldReverseRobot:
+                    if self.reverseRobot.value == 0:
                         self.drive.switch_direction()
-                self.oldReverseRobot = self.reverseRobot
+                self.oldReverseRobot = self.reverseRobot.value
             except:
                 if not self.isFMSAttached():
                     raise
