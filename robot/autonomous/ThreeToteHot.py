@@ -9,7 +9,7 @@ import logging
 
 class ThreeToteHot(SensorStatefulAutonomous):
     MODE_NAME = 'Three Tote Hot'
-    DEFAULT = True  
+    DEFAULT = False  
     
     drive = Drive
     tote_forklift = ToteForklift

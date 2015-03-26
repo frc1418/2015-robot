@@ -12,7 +12,7 @@ class ForkliftMode(enum.Enum):
 class Forklift (object):
     
     def __init__ (self, limit_port, init_down_speed):
-  
+        self.testFirst = True
         self.target_position = None
         self.target_index = None
         
@@ -201,7 +201,7 @@ class ToteForklift(Forklift):
         
         self.positions = [
             sd.getAutoUpdateValue('Tote Forklift|bottom', 400),
-            sd.getAutoUpdateValue('Tote Forklift|stack1', 4171),
+            sd.getAutoUpdateValue('Tote Forklift|stack1', 4300),
             sd.getAutoUpdateValue('Tote Forklift|stack2', 7638),
             sd.getAutoUpdateValue('Tote Forklift|stack3', 9250),
             sd.getAutoUpdateValue('Tote Forklift|stack4', 10200),

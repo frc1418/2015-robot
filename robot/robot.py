@@ -43,7 +43,7 @@ class MyRobot(wpilib.SampleRobot):
 
         # #INITIALIZE SENSORS#
         
-        self.sweeper_relay = wpilib.Relay(0)
+        
 
         self.gyro = wpilib.Gyro(0)
         
@@ -99,7 +99,7 @@ class MyRobot(wpilib.SampleRobot):
         self.toteTo = self.sd.getAutoUpdateValue('toteTo', -1)
         self.canTo = self.sd.getAutoUpdateValue('canTo', -1)
         self.reverseRobot = self.sd.getAutoUpdateValue('reverseRobot',False)
-        self.autoLift = self.sd.getAutoUpdateValue('autoLift', True)
+        self.autoLift = self.sd.getAutoUpdateValue('autoLift', False)
         
         # If set, this means we go forward and try to pickup the three totes
         # that we've deposited in autonomous mode
@@ -202,6 +202,8 @@ class MyRobot(wpilib.SampleRobot):
                     raise
             
             if self.toteTo.value >= 0:
+                #if self.toteTo.value < self.tote_forklift._detect_position_index(170, -1):
+                #    self.autoLift.value = False
                 toteTo = int(self.toteTo.value)
                 if toteTo == 2048:
                     self.tote_forklift.set_pos_top()
@@ -229,6 +231,14 @@ class MyRobot(wpilib.SampleRobot):
             #
             
             try:
+                if self.joystick2.getRawButton(10):
+                    self.pinServo.set(0)
+                if self.joystick2.getRawButton(11):
+                    self.pinServo.set(1)
+            except:
+                if not self.isFMSAttached():
+                    raise
+            try:
                 if self.joystick2.getRawButton(11):
                     self.drive.reset_gyro_angle()
             except:
@@ -247,17 +257,7 @@ class MyRobot(wpilib.SampleRobot):
             #
             # Sweeper
             #
-                  
-            try:
-                if self.joystick1.getRawButton(10):
-                    self.sweeper_relay.set(RelayValue.kForward)
-                elif self.joystick1.getRawButton(11):
-                    self.sweeper_relay.set(RelayValue.kReverse)
-                else:
-                    self.sweeper_relay.set(RelayValue.kOff)
-            except:
-                if not self.isFMSAttached():
-                    raise    
+                      
             
             #
             # Reverse drive

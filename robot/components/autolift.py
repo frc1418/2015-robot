@@ -39,7 +39,6 @@ class Autolift(object):
     def autolift(self):
         if self.allowLift and self.get_switch():
             self.allowLift = False
-            print("raising forklift")
             self.tote_forklift.raise_forklift()
         
     def doit(self):

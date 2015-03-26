@@ -9,17 +9,16 @@ import logging
 
 class ThreeToteStrafe(SensorStatefulAutonomous):
     MODE_NAME = 'Three Tote Strafe'
-    DEFAULT = False
+    DEFAULT = True
     
     drive = Drive
     tote_forklift = ToteForklift
     
     def initialize(self):
         self.logger = logging.getLogger('three-strafe')
-        self.register_sd_var('over', -.9)
-        self.register_sd_var('move_fwd', -.3)
-        self.register_sd_var('tote_adjust', .4)
-        self.register_sd_var('final_fwd', -.5)
+        self.register_sd_var('over', -1)
+        self.register_sd_var('move_fwd', -.4)
+        self.register_sd_var('final_fwd', -.6)
     
     def on_enable(self):
         super().on_enable()

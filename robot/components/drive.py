@@ -31,8 +31,8 @@ class Drive(object):
 		self.backInfrared = backInfrared
 		
 		sd = NetworkTable.getTable('SmartDashboard')
-		self.strafe_back_speed = sd.getAutoUpdateValue('strafe_back', .15)
-		self.strafe_fwd_speed = sd.getAutoUpdateValue('strafe_fwd', -.2)
+		self.strafe_back_speed = sd.getAutoUpdateValue('strafe_back', .5)
+		self.strafe_fwd_speed = sd.getAutoUpdateValue('strafe_fwd', -.35)
 		
 		
 	#

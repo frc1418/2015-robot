@@ -12,7 +12,7 @@ class WallStrafe(StatefulAutonomous):
     drive = Drive
 
     def initialize(self):
-        self.register_sd_var('over', -.5)
+        self.register_sd_var('over', -.9)
     
     def on_enable(self):
         super().on_enable()
