@@ -155,6 +155,7 @@ class ThreeToteHot(SensorStatefulAutonomous):
     def rotate(self):
         if wpilib.SmartDashboard.getBoolean('coop'):
             self.angRot = 90
+            wpilib.SmartDashboard.putBoolean('autoPickup', True)
         else:
             self.angRot = -90
     
