@@ -100,20 +100,16 @@ class MyRobot(wpilib.SampleRobot):
         self.reverseDirection = Button(self.joystick1, 1)
         #self.alignTrigger = Button(self.joystick2, 1)
         
-        self.toteTo=0
         self.oldTote=0
-        self.canTo=0
         self.oldCan=0
-        self.reverseRobot = False
         self.oldReverseRobot = False
         
-        self.sd.putNumber('liftTo', 0)
-        self.sd.putNumber('binTo', 0)
-        self.sd.putBoolean('autoLift', True)
-        self.sd.putBoolean('reverseRobot',False)
+        self.toteTo = self.sd.getAutoUpdateValue('liftTo', 0)
+        self.canTo = self.sd.getAutoUpdateValue('canTo', 0)
+        self.reverseRobot = self.sd.getAutoUpdateValue('reverseRobot',False)
         self.sd.putBoolean('coop', True)
         self.autoLift = self.sd.getAutoUpdateValue('autoLift', True)
-        self.sd.getAutoUpdateValue('autoPickup', False)
+        self.autoPickup = self.sd.getAutoUpdateValue('autoPickup', False)
         
         
         self.control_loop_wait_time = 0.025
@@ -168,18 +164,9 @@ class MyRobot(wpilib.SampleRobot):
                     raise
             
             try:
-                if self.canTo != self.oldCan:
-                    if self.canTo == 0:
-                        self.can_forklift._set_position(0)
-                    elif self.canTo == 1:
-                        self.can_forklift._set_position(1)
-                    elif self.canTo == 2:
-                        self.can_forklift._set_position(2)
-                    elif self.canTo == 3:
-                        self.can_forklift._set_position(3)
-                    elif self.canTo == 4:
-                        self.can_forklift._set_position(4)  
-                    elif self.canTo == 2048:
+                if self.canTo.value != self.oldCan:
+                    self.can_forklift._set_position(self.canTo.value)  
+                    if self.canTo == 2048:
                         self.can_forklift.set_pos_top()
                     elif self.canTo == 7000:
                         self.can_forklift.set_pos_7000()
@@ -209,18 +196,9 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
-            if self.toteTo != self.oldTote:
-                if self.toteTo == 0:
-                    self.tote_forklift._set_position(0)
-                elif self.toteTo == 1:
-                    self.tote_forklift._set_position(1)
-                elif self.toteTo == 2:
-                    self.tote_forklift._set_position(2)
-                elif self.toteTo == 3:
-                    self.tote_forklift._set_position(3)
-                elif self.toteTo == 4:
-                    self.tote_forklift._set_position(4)
-                elif self.toteTo == 2048:
+            if self.toteTo.value != self.oldTote:
+                self.tote_forklift._set_position(self.toteTo.value)
+                if self.toteTo == 2048:
                     self.tote_forklift.set_pos_top()
             self.oldTote = self.toteTo
             # INFRARED DRIVE#
@@ -277,16 +255,16 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
-            if self.sd.getBoolean('autoPickup'):
+            if self.autoPickup.value:
                 try:
                     if abs(self.joystick1.getX())>.1 or abs(self.joystick1.getY())>.1 or abs(self.joystick2.getX())>.1:
-                        self.sd.putBoolean('autoPickup', False)
+                        self.autoPickup.value = False
                          
-                    if self.sd.getBoolean('autoPickup'):
+                    if self.autoPickup:
                         self.drive.move(-.5, 0, 0)
-                    self.sd.putBoolean('autoPickup',  not self.sensor.is_against_tote())
+                    self.autoPickup.value = not self.sensor.is_against_tote()
                 except:
-                    self.sd.putBoolean('autoPickup', False)
+                    self.autoPickup.value
                     if not self.isFMSAttached():
                         raise
                 
@@ -319,10 +297,6 @@ class MyRobot(wpilib.SampleRobot):
         
         self.sd.putNumber('gyroAngle', self.gyro.getAngle())
   
-        self.toteTo = self.sd.getInt('liftTo',self.toteTo)
-        self.canTo = self.sd.getInt('binTo',self.canTo)
-        self.reverseRobot = self.sd.getBoolean('reverseRobot',self.reverseRobot)
-        self.initGoto5 = self.sd.putBoolean('TeleInitGoto', False)
         
     def ui_joystick_buttons(self):
         
