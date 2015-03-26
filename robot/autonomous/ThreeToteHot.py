@@ -15,12 +15,14 @@ class ThreeToteHot(SensorStatefulAutonomous):
     tote_forklift = ToteForklift
     
     def initialize(self):
-        self.logger = logging.getLogger('two-tote')
+        self.logger = logging.getLogger('three-hot')
+        self.register_sd_var('cooperate', True)
         self.register_sd_var('over', -.9)
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
         self.register_sd_var('final_fwd', -.5)
         self.angRot = 0
+        
     def on_enable(self):
         super().on_enable()
         self.drive.reset_gyro_angle()
@@ -48,7 +50,6 @@ class ThreeToteHot(SensorStatefulAutonomous):
     @timed_state(duration=1, next_state='back_to_wall1')
     def get_tote1(self, initial_call):
         '''This method will drive at .1 until the robot hits the tote'''
-        
         
         self.drive.move(self.move_fwd, 0, 0)
         
@@ -93,7 +94,6 @@ class ThreeToteHot(SensorStatefulAutonomous):
     @timed_state(duration=1, next_state='back_to_wall2')
     def get_tote2(self, initial_call):
         '''This method will drive at .1 until the robot hits the tote'''
-        
         
         self.drive.move(self.move_fwd, 0, 0)
         
@@ -145,17 +145,23 @@ class ThreeToteHot(SensorStatefulAutonomous):
         
   
     
-    @timed_state(duration=2.5, next_state='rotate')
+    @timed_state(duration=1.5, next_state='rotate')
     def drive_forward(self, initial_call):
         '''pushes 3rd tote into the auto zone'''
         self.drive.move(self.final_fwd, 0, 0)
+        
+        if self.sensors.is_against_tote():
+            self.tote_forklift.set_pos_stack3()
     
     
     @timed_state(duration =1, next_state='drop')
-    def rotate(self):
-        if wpilib.SmartDashboard.getBoolean('coop'):
+    def rotate(self, initial_call):
+        
+        if self.cooperate:
             self.angRot = 90
-            wpilib.SmartDashboard.putBoolean('autoPickup', True)
+            
+            if initial_call:
+                wpilib.SmartDashboard.putBoolean('autoPickup', True)
         else:
             self.angRot = -90
     
@@ -173,6 +179,4 @@ class ThreeToteHot(SensorStatefulAutonomous):
     @timed_state(duration = .5)
     def reverse(self, initial_call):
         '''backs up so we aren't touching'''
-        if initial_call:
-            wpilib.SmartDashboard.putBoolean('TeleInitGoto', True)
-        self.drive.move(.2,0,0)
+        self.drive.move(.15,0,0)

@@ -92,5 +92,5 @@ class PhysicsEngine:
             rf_motor = -hal_data['pwm'][2]['value']
             rr_motor = -hal_data['pwm'][3]['value']
             
-            vx, vy, vw = mecanum_drivetrain(lr_motor, rr_motor, lf_motor, rf_motor)
+            vx, vy, vw = mecanum_drivetrain(lr_motor, rr_motor, lf_motor, rf_motor, speed=3)
             self.controller.vector_drive(vx, vy, vw, tm_diff)

@@ -23,16 +23,13 @@ class MyRobot(wpilib.SampleRobot):
     def robotInit(self):
         self.sd = NetworkTable.getTable('SmartDashboard')
         
-       
-
         # #INITIALIZE JOYSTICKS##
         self.joystick1 = wpilib.Joystick(0)
         self.joystick2 = wpilib.Joystick(1)
         self.ui_joystick = wpilib.Joystick(2)
         
         self.pinServo = wpilib.Servo(6)
-
-        # hello
+        
         # #INITIALIZE MOTORS##
         self.lf_motor = wpilib.Talon(0)
         self.lr_motor = wpilib.Talon(1)
@@ -58,10 +55,7 @@ class MyRobot(wpilib.SampleRobot):
         self.tote_forklift = ToteForklift(self.tote_motor,self.sensor,2)
         self.can_forklift = CanForklift(self.can_motor,self.sensor,3)
         
-        
         self.calibrator = Calibrator(self.tote_forklift, self.sensor)
-        
-        self.next_pos = 1
 
         self.autoLifter = autolift.Autolift(self.sensor, self.tote_forklift) 
         
@@ -70,8 +64,6 @@ class MyRobot(wpilib.SampleRobot):
         self.drive = drive.Drive(self.robot_drive, self.gyro, self.backSensor)
 
         self.align = alignment.Alignment(self.sensor, self.tote_forklift, self.drive, self.autoLifter)
-        
-        
         
         self.components = {
             'tote_forklift': self.tote_forklift,
@@ -93,28 +85,35 @@ class MyRobot(wpilib.SampleRobot):
         self.toteDown = Button(self.joystick2, 2)
         self.toteTop = Button(self.joystick2, 6)
         self.toteBottom = Button(self.joystick2, 7)
+        
+        self.reverseDirection = Button(self.joystick1, 1)
+        
+        # Secondary driver's joystick
         self.ui_joystick_tote_down = Button(self.ui_joystick, 4)
         self.ui_joystick_tote_up = Button(self.ui_joystick, 6)
         self.ui_joystick_can_up = Button(self.ui_joystick, 5)
         self.ui_joystick_can_down = Button(self.ui_joystick, 3)
-        self.reverseDirection = Button(self.joystick1, 1)
-        #self.alignTrigger = Button(self.joystick2, 1)
         
-        self.oldTote=0
-        self.oldCan=0
         self.oldReverseRobot = False
         
-        self.toteTo = self.sd.getAutoUpdateValue('liftTo', 0)
-        self.canTo = self.sd.getAutoUpdateValue('canTo', 0)
+        self.toteTo = self.sd.getAutoUpdateValue('toteTo', -1)
+        self.canTo = self.sd.getAutoUpdateValue('canTo', -1)
         self.reverseRobot = self.sd.getAutoUpdateValue('reverseRobot',False)
-        self.sd.putBoolean('coop', True)
         self.autoLift = self.sd.getAutoUpdateValue('autoLift', True)
+        
+        # If set, this means we go forward and try to pickup the three totes
+        # that we've deposited in autonomous mode
         self.autoPickup = self.sd.getAutoUpdateValue('autoPickup', False)
+        self.autoPickupSpeed = self.sd.getAutoUpdateValue('autoPickupSpeed', -0.2)
         
         
         self.control_loop_wait_time = 0.025
         self.automodes = AutonomousModeSelector('autonomous', self.components)
+        
     def autonomous(self):
+        
+        self.sd.putBoolean('autoPickup', False)
+        
         self.automodes.run(self.control_loop_wait_time, self.update)
     
     
@@ -123,16 +122,16 @@ class MyRobot(wpilib.SampleRobot):
         self.can_forklift.set_manual(0)
         self.tote_forklift.set_manual(0)
         
-        
         delay = PreciseDelay(self.control_loop_wait_time)
 
         self.logger.info("Entering teleop mode")
-        
             
         while self.isOperatorControl() and self.isEnabled():
             
             self.sensor.update()
+            
             #self.calibrator.calibrate()
+            
             try:
                 self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
             except:
@@ -164,17 +163,22 @@ class MyRobot(wpilib.SampleRobot):
                     raise
             
             try:
-                if self.canTo.value != self.oldCan:
-                    self.can_forklift._set_position(self.canTo.value)  
-                    if self.canTo == 2048:
+                if self.canTo.value >= 0:
+                    canTo = int(self.canTo.value)
+                    if canTo == 2048:
                         self.can_forklift.set_pos_top()
-                    elif self.canTo == 7000:
+                    elif canTo == 7000:
                         self.can_forklift.set_pos_7000()
-                self.oldCan = self.canTo
+                    else:
+                        self.can_forklift._set_position(canTo)
+                    
+                    self.sd.putNumber('canTo', -1)
+                    
             except:
                 if not self.isFMSAttached():
                     raise
-            # #Tote forklift controls##
+                
+            ## Tote forklift controls##
 
             try:
                 if self.joystick2.getRawButton(5):
@@ -196,21 +200,33 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
-            if self.toteTo.value != self.oldTote:
-                self.tote_forklift._set_position(self.toteTo.value)
-                if self.toteTo == 2048:
+            
+            if self.toteTo.value >= 0:
+                toteTo = int(self.toteTo.value)
+                if toteTo == 2048:
                     self.tote_forklift.set_pos_top()
-            self.oldTote = self.toteTo
-            # INFRARED DRIVE#
+                else:
+                    self.tote_forklift._set_position(toteTo)
+                
+                self.sd.putDouble('toteTo', -1)
+            
+            #
+            # Driver-enabled automatic alignment code
+            #
+            
             try:
                 if self.joystick2.getTrigger():
                     self.drive.isTheRobotBackwards = False
                     self.align.align()
                 elif self.autoLift:
-                        self.autoLifter.autolift()
+                    self.autoLifter.autolift()
             except:
                 if not self.isFMSAttached():
                     raise            
+            
+            #
+            # Utilities
+            #
             
             try:
                 if self.joystick2.getRawButton(11):
@@ -226,14 +242,12 @@ class MyRobot(wpilib.SampleRobot):
                     self.drive.wall_strafe(.7)
             except:
                 if not self.isFMSAttached():
-                    raise 
-            # REVERSE DRIVE#
-            try:
-                if self.reverseDirection.get():
-                    self.drive.switch_direction()
-            except:
-                if not self.isFMSAttached():
-                    raise       
+                    raise
+            
+            #
+            # Sweeper
+            #
+                  
             try:
                 if self.joystick1.getRawButton(10):
                     self.sweeper_relay.set(RelayValue.kForward)
@@ -245,7 +259,16 @@ class MyRobot(wpilib.SampleRobot):
                 if not self.isFMSAttached():
                     raise    
             
+            #
+            # Reverse drive
+            #
             
+            try:
+                if self.reverseDirection.get():
+                    self.drive.switch_direction()
+            except:
+                if not self.isFMSAttached():
+                    raise
             
             try:
                 if self.reverseRobot != self.oldReverseRobot:
@@ -255,16 +278,28 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
+            
+            #
+            # At the end of autonomous mode, pick up the three bins in
+            # front of us if enabled
+            #
+            
             if self.autoPickup.value:
                 try:
+                    # End autopickup when the driver gives joystick input
                     if abs(self.joystick1.getX())>.1 or abs(self.joystick1.getY())>.1 or abs(self.joystick2.getX())>.1:
-                        self.autoPickup.value = False
-                         
-                    if self.autoPickup:
-                        self.drive.move(-.5, 0, 0)
-                    self.autoPickup.value = not self.sensor.is_against_tote()
+                        self.sd.putBoolean('autoPickup', False)
+                    else:
+                        if not self.sensor.is_against_tote():
+                            self.drive.move(self.autoPickupSpeed.value, 0, 0)
+                        else:
+                            # Move slow once we hit the totes
+                            self.drive.move(-0.1, 0, 0)
+                        
+                        self.autoLifter.autolift()
+                    
                 except:
-                    self.autoPickup.value
+                    self.sd.putBoolean('autoPickup', False)
                     if not self.isFMSAttached():
                         raise
                 
@@ -273,28 +308,29 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
+            
             try:
-                self.smartdashbord_update()
+                self.smartdashboard_update()
             except:
                 if not self.isFMSAttached():
                     raise
+            
             try:
                 self.update()
             except:
                 if not self.isFMSAttached():
                     raise
             
-            
             # Replaces wpilib.Timer.delay()
             delay.wait()
 
-    def smartdashbord_update(self):
+    def smartdashboard_update(self):
         
-        self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
         self.sensor.update_sd()
         self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
         
+        self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
         self.sd.putNumber('gyroAngle', self.gyro.getAngle())
   
         
@@ -321,7 +357,7 @@ class MyRobot(wpilib.SampleRobot):
         
         while not self.isEnabled():
             self.sensor.update()
-            self.smartdashbord_update()
+            self.smartdashboard_update()
             wpilib.Timer.delay(.01)
 
     def test(self):
@@ -329,6 +365,9 @@ class MyRobot(wpilib.SampleRobot):
         while self.isTest() and self.isEnabled():
             wpilib.LiveWindow.run()
             wpilib.Timer.delay(.01)
+            
+    def isFMSAttached(self):
+        return self.ds.isFMSAttached()
 
 if __name__ == '__main__':
 

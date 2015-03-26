@@ -156,6 +156,7 @@ class Forklift (object):
         
         if self.mode == ForkliftMode.MANUAL:
             self.motor.set(self.manual_value)
+            self.target_index = -1
         
         elif self.mode == ForkliftMode.AUTO:
             

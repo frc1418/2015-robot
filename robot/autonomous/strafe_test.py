@@ -7,8 +7,8 @@ from components.forklift import ToteForklift
 
 import logging
 
-class TwoToteStrafe(SensorStatefulAutonomous):
-    MODE_NAME = 'Test For Matt'
+class StrafeTest(SensorStatefulAutonomous):
+    MODE_NAME = 'Test: StrafeTest'
     DEFAULT = False 
     
     drive = Drive

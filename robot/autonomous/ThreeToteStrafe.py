@@ -15,7 +15,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     tote_forklift = ToteForklift
     
     def initialize(self):
-        self.logger = logging.getLogger('two-tote')
+        self.logger = logging.getLogger('three-strafe')
         self.register_sd_var('over', -.9)
         self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('tote_adjust', .4)
@@ -48,7 +48,6 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     @timed_state(duration=1, next_state='back_to_wall1')
     def get_tote1(self, initial_call):
         '''This method will drive at .1 until the robot hits the tote'''
-        
         
         self.drive.move(self.move_fwd, 0, 0)
         
@@ -93,7 +92,6 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     @timed_state(duration=1, next_state='back_to_wall2')
     def get_tote2(self, initial_call):
         '''This method will drive at .1 until the robot hits the tote'''
-        
         
         self.drive.move(self.move_fwd, 0, 0)
         
@@ -162,7 +160,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
             self.next_state('reverse')
     
     
-    @timed_state(duration = .5)
+    @timed_state(duration=.5)
     def reverse(self):
         '''backs up so we aren't touching'''
-        self.drive.move(.2,0,0)
+        self.drive.move(.2, 0, 0)

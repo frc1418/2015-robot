@@ -5,7 +5,7 @@ from robotpy_ext.autonomous import timed_state, StatefulAutonomous
 
 class WallStrafe(StatefulAutonomous):
 
-    MODE_NAME = 'Wall Strafe'
+    MODE_NAME = 'Test: Wall Strafe'
 
     DEFAULT = False 
     
