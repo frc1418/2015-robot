@@ -283,7 +283,7 @@ class MyRobot(wpilib.SampleRobot):
                
             
                     if self.sd.getBoolean('coop'):
-                        self.drive.move(-.5)
+                        self.drive.move(-.5, 0, 0)
                 except:
                     self.sd.putBoolean('coop', False)
                     if not self.isFMSAttached():
