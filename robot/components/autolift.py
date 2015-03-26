@@ -15,6 +15,9 @@ class Autolift(object):
         self.tote_forklift = forklift
         self.latest = None
         
+        self.last_allow = None
+        
+    
     def get_switch(self):
         '''Only return true if the switch has been pressed for more than 40ms'''
         
@@ -36,9 +39,19 @@ class Autolift(object):
     def autolift(self):
         if self.allowLift and self.get_switch():
             self.allowLift = False
+            print("raising forklift")
             self.tote_forklift.raise_forklift()
         
     def doit(self):
+        now = self.timer.getMsClock()
+
         if not self.allowLift:
-            self.allowLift = not self.sensors.is_against_tote()
-    
+            if self.last_allow is None:
+                self.last_allow = now
+                
+            if now - self.last_allow > 1000:
+                self.last_allow = None
+                self.allowLift = True
+                
+        else:
+            self.last_allow = None
