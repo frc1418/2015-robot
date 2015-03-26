@@ -13,23 +13,29 @@ class Autolift(object):
         
         self.sensors = sensor
         self.tote_forklift = forklift
-        self.latest = 0
+        self.latest = None
         
     def get_switch(self):
-        '''Returns the value of the button. If the button is held down, then
-        True will only be returned once every 200ms'''
+        '''Only return true if the switch has been pressed for more than 40ms'''
         
-        now = self.timer.getMsClock()
-        if(self.sensors.is_against_tote()):
-            if (now-self.latest) > 40: 
+        
+        if self.sensors.is_against_tote():
+            
+            now = self.timer.getMsClock()
+            
+            if self.latest is None:
                 self.latest = now
+            
+            if (now-self.latest) > 40:
                 return True
+        else:
+            self.latest = None
+            
         return False
     
     def autolift(self):
         if self.allowLift and self.get_switch():
             self.allowLift = False
-            print("Auto lifting!")
             self.tote_forklift.raise_forklift()
         
     def doit(self):
