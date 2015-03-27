@@ -14,12 +14,14 @@ class CanAutonomous(StatefulAutonomous):
     
     def initialize(self):
         pass
-        
-    @timed_state(duration=2, next_state='drive_forward', first=True)
+    @timed_state(duration = 1, next_state= 'can_lift', first=True)
+    def reverse(self):
+        self.drive.move(.4, 0, 0)
+    @timed_state(duration=2, next_state='drive_forward')
     def can_lift(self):
         self.can_forklift.set_pos_stack2()
     
-    @timed_state(duration=2)
+    @timed_state(duration=3)
     def drive_forward(self):
         self.drive.move(-.5, 0, 0)
         

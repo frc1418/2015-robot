@@ -17,7 +17,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     def initialize(self):
         self.logger = logging.getLogger('three-strafe')
         self.register_sd_var('over', -1)
-        self.register_sd_var('move_fwd', -.4)
+        self.register_sd_var('move_fwd', -.3)
         self.register_sd_var('final_fwd', -.5)
     
     def on_enable(self):
@@ -95,7 +95,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         self.drive.move(self.move_fwd, 0, 0)
         
         if self.sensors.is_against_tote():
-            self.tote_forklift.set_pos_stack2()
+            self.tote_forklift.set_pos_stack3()
             
             #self.logger.info("Against tote")
             #self.next_state('lift_tote1')
@@ -104,7 +104,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     def back_to_wall2(self, initial_call):
         
         if initial_call:
-            self.tote_forklift.set_pos_stack2()
+            self.tote_forklift.set_pos_stack3()
             self.pin_servo.set(1)
     
         y = self.drive.wall_goto()
@@ -118,7 +118,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         #    self.next_state('strafe_can1')
     
     
-    @timed_state(duration=1.8, next_state = 'go_until_tote3')
+    @timed_state(duration=2, next_state = 'go_until_tote3')
     def strafe_can2(self):
         '''strafes over for n seconds'''
         self.drive.wall_strafe(self.over)
@@ -143,10 +143,11 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         
   
     
-    @timed_state(duration=2.5, next_state='drop')
+    @timed_state(duration=2, next_state='drop')
     def drive_forward(self, initial_call):
         '''pushes 3rd tote into the auto zone'''
-        
+        if initial_call:
+            self.tote_forklift.set_pos_stack2()
         self.drive.move(self.final_fwd, 0, 0)
     
     
