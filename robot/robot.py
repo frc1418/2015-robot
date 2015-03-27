@@ -202,8 +202,6 @@ class MyRobot(wpilib.SampleRobot):
                     raise
             
             if self.toteTo.value >= 0:
-                #if self.toteTo.value < self.tote_forklift._detect_position_index(170, -1):
-                #    self.autoLift.value = False
                 toteTo = int(self.toteTo.value)
                 if toteTo == 2048:
                     self.tote_forklift.set_pos_top()
@@ -284,24 +282,24 @@ class MyRobot(wpilib.SampleRobot):
             # front of us if enabled
             #
             
-            if self.autoPickup.value:
-                try:
-                    # End autopickup when the driver gives joystick input
-                    if abs(self.joystick1.getX())>.1 or abs(self.joystick1.getY())>.1 or abs(self.joystick2.getX())>.1:
-                        self.sd.putBoolean('autoPickup', False)
-                    else:
-                        if not self.sensor.is_against_tote():
-                            self.drive.move(self.autoPickupSpeed.value, 0, 0)
-                        else:
-                            # Move slow once we hit the totes
-                            self.drive.move(-0.1, 0, 0)
-                        
-                        self.autoLifter.autolift()
-                    
-                except:
-                    self.sd.putBoolean('autoPickup', False)
-                    if not self.isFMSAttached():
-                        raise
+            #if self.autoPickup.value:
+            #    try:
+            #        # End autopickup when the driver gives joystick input
+            #        if abs(self.joystick1.getX())>.1 or abs(self.joystick1.getY())>.1 or abs(self.joystick2.getX())>.1:
+            #            self.sd.putBoolean('autoPickup', False)
+            #        else:
+            #            if not self.sensor.is_against_tote():
+            #                self.drive.move(self.autoPickupSpeed.value, 0, 0)
+            #            else:
+            #                # Move slow once we hit the totes
+            #                self.drive.move(-0.1, 0, 0)
+            #            
+            #            self.autoLifter.autolift()
+            #        
+            #    except:
+            #        self.sd.putBoolean('autoPickup', False)
+            #        if not self.isFMSAttached():
+            #            raise
                 
             try:    
                 self.ui_joystick_buttons()
