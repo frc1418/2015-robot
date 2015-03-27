@@ -8,31 +8,31 @@ import wpilib
 class Autolift(object):
     
     def __init__(self, sensor, forklift):
-        self.timer = wpilib.Timer()
+        
         self.allowLift = True
         
         self.sensors = sensor
         self.tote_forklift = forklift
-        self.latest = None
+        
+        self.switch_timer = wpilib.Timer()
+        self.allow_timer = wpilib.Timer()
         
         self.last_allow = None
-        
     
     def get_switch(self):
         '''Only return true if the switch has been pressed for more than 40ms'''
         
-        
         if self.sensors.is_against_tote():
             
-            now = self.timer.getMsClock()
+            if not self.switch_timer.running:
+                self.switch_timer.start()
             
-            if self.latest is None:
-                self.latest = now
-            
-            if (now-self.latest) > 40:
+            if self.switch_timer.hasPeriodPassed(0.04):
+                self.switch_timer.stop()
                 return True
         else:
-            self.latest = None
+            if self.switch_timer.running:
+                self.switch_timer.stop()
             
         return False
     
@@ -42,15 +42,13 @@ class Autolift(object):
             self.tote_forklift.raise_forklift()
         
     def doit(self):
-        now = self.timer.getMsClock()
 
         if not self.allowLift:
-            if self.last_allow is None:
-                self.last_allow = now
+            
+            if not self.allow_timer.running:
+                self.allow_timer.start()
                 
-            if now - self.last_allow > 1000:
-                self.last_allow = None
+            if self.allow_timer.hasPeriodPassed(1.5):
+                self.allow_timer.stop()
                 self.allowLift = True
-                
-        else:
-            self.last_allow = None
+
