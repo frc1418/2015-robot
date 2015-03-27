@@ -205,7 +205,7 @@ class ToteForklift(Forklift):
             sd.getAutoUpdateValue('Tote Forklift|stack2', 7638),
             sd.getAutoUpdateValue('Tote Forklift|stack3', 9250),
             sd.getAutoUpdateValue('Tote Forklift|stack4', 10200),
-            sd.getAutoUpdateValue('Tote Forklift|stack5', 10650),
+            sd.getAutoUpdateValue('Tote Forklift|stack5', 11600),
             sd.getAutoUpdateValue('Tote Forklift|stack6', 11600),
           ]
         

@@ -14,16 +14,14 @@ class CanAutonomous(StatefulAutonomous):
     
     def initialize(self):
         pass
-    @timed_state(duration = 1, next_state= 'can_lift', first=True)
-    def reverse(self):
-        self.drive.move(.4, 0, 0)
-    @timed_state(duration=2, next_state='drive_forward')
+    
+    @timed_state(duration=2, next_state='drive_forward', first=True)
     def can_lift(self):
         self.can_forklift.set_pos_stack2()
     
-    @timed_state(duration=3)
+    @timed_state(duration=3.5)
     def drive_forward(self):
-        self.drive.move(-.5, 0, 0)
+        self.drive.move(-.25, 0, 0)
         
     
 class ToteAutonomous(StatefulAutonomous):
@@ -36,14 +34,19 @@ class ToteAutonomous(StatefulAutonomous):
     def initialize(self):
         pass
         
-    @timed_state(duration=2, next_state='drive_forward', first=True)
+    @timed_state(duration=3, next_state='tote_lift2', first=True)
     def tote_lift(self):
-        self.drive.move(-.1, 0, 0)
+        self.drive.move(-.5, 0, 0)
+        self.tote_forklift.set_pos_stack1()
+        
+    @timed_state(duration=1)
+    def tote_lift2(self):
+        self.drive.move(-.5, 0, 0)
         self.tote_forklift.set_pos_stack2()
     
-    @timed_state(duration=2)
-    def drive_forward(self):
-        self.drive.move(-.5, 0, 0)
+    #@timed_state(duration=2)
+    #def drive_forward(self):
+    #    self.drive.move(-.5, 0, 0)
 
 class DualAutonomous(StatefulAutonomous):
     
