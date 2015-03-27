@@ -18,7 +18,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         self.logger = logging.getLogger('three-strafe')
         self.register_sd_var('over', -1)
         self.register_sd_var('move_fwd', -.4)
-        self.register_sd_var('final_fwd', -.6)
+        self.register_sd_var('final_fwd', -.5)
     
     def on_enable(self):
         super().on_enable()
