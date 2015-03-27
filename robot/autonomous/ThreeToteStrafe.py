@@ -105,6 +105,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
         
         if initial_call:
             self.tote_forklift.set_pos_stack2()
+            self.pin_servo.set(1)
     
         y = self.drive.wall_goto()
         if y <= 0.1:

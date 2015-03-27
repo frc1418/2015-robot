@@ -65,6 +65,7 @@ class MyRobot(wpilib.SampleRobot):
 
         self.align = alignment.Alignment(self.sensor, self.tote_forklift, self.drive, self.autoLifter)
         
+        # These must have a doit function
         self.components = {
             'tote_forklift': self.tote_forklift,
             'can_forklift': self.can_forklift,
@@ -73,9 +74,14 @@ class MyRobot(wpilib.SampleRobot):
             'align': self.align,
             'sensors': self.sensor
         }
-
         
-
+        # These do not, and get passed to autonomous mode
+        self.auton_components = {
+            'pin_servo': self.pinServo
+        }
+        
+        self.auton_components.update(self.components)
+        
         # #Defining Buttons##
         self.canUp = Button(self.joystick1,3)
         self.canDown = Button(self.joystick1,2)
@@ -108,7 +114,7 @@ class MyRobot(wpilib.SampleRobot):
         
         
         self.control_loop_wait_time = 0.025
-        self.automodes = AutonomousModeSelector('autonomous', self.components)
+        self.automodes = AutonomousModeSelector('autonomous', self.auton_components)
         
     def autonomous(self):
         
