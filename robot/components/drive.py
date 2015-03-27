@@ -31,8 +31,12 @@ class Drive(object):
 		self.backInfrared = backInfrared
 		
 		sd = NetworkTable.getTable('SmartDashboard')
-		self.strafe_back_speed = sd.getAutoUpdateValue('strafe_back', .5)
-		self.strafe_fwd_speed = sd.getAutoUpdateValue('strafe_fwd', -.35)
+		self.strafe_back_speed = sd.getAutoUpdateValue('strafe_back', .4)
+		self.strafe_fwd_speed = sd.getAutoUpdateValue('strafe_fwd', -.4)
+		
+		# Top range: 50 is slow
+		# Low range: 10 is too much acceleration
+		self.strafe_adj = sd.getAutoUpdateValue('strafe_adj', 20.0)
 		
 		
 	#
@@ -110,7 +114,7 @@ class Drive(object):
 	
 	def wall_goto(self):
 	
-		y = (self.backInfrared.getDistance() - 15.0)/50.0
+		y = (self.backInfrared.getDistance() - 15.0)/self.strafe_adj.value
 		y = max(min(self.strafe_back_speed.value, y), self.strafe_fwd_speed.value)
 		
 		self.y = y
