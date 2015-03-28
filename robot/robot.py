@@ -222,9 +222,9 @@ class MyRobot(wpilib.SampleRobot):
             
             try:
                 if self.joystick2.getTrigger():
-                    self.drive.isTheRobotBackwards = False
-                    self.align.align()
-                elif self.autoLift.value:
+                #    self.drive.isTheRobotBackwards = False
+                #    self.align.align()
+                #elif self.autoLift.value:
                     self.autoLifter.autolift()
             except:
                 if not self.isFMSAttached():
