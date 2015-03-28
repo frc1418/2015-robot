@@ -114,7 +114,7 @@ class Drive(object):
 	
 	def wall_goto(self):
 	
-		y = (self.backInfrared.getDistance() - 18.0)/self.strafe_adj.value
+		y = (self.backInfrared.getDistance() - 16.0)/self.strafe_adj.value
 		y = max(min(self.strafe_back_speed.value, y), self.strafe_fwd_speed.value)
 		
 		self.y = y
