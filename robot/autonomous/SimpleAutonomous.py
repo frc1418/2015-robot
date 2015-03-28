@@ -15,13 +15,25 @@ class CanAutonomous(StatefulAutonomous):
     def initialize(self):
         pass
     
-    @timed_state(duration=2, next_state='drive_forward', first=True)
+    @timed_state(duration=2, next_state='strafe', first=True)
     def can_lift(self):
         self.can_forklift.set_pos_stack2()
+        self.drive.angle_rotation(0)
     
-    @timed_state(duration=3.5)
+    @timed_state(duration=1, next_state='drive_forward')
+    def strafe(self):
+        self.drive.move(0, .5, 0)
+        self.drive.angle_rotation(0)
+    
+    @timed_state(duration=4,next_state='turn')
     def drive_forward(self):
         self.drive.move(-.25, 0, 0)
+        self.drive.angle_rotation(0)
+    
+    @timed_state(duration=4)
+    def turn(self):
+        #self.drive.move(-.1, 0, .3)
+        self.drive.angle_rotation(90)
         
     
 class ToteAutonomous(StatefulAutonomous):
@@ -62,10 +74,10 @@ class ToteAutonomous(StatefulAutonomous):
         self.drive.move(-.3, 0, 0)
         self.tote_forklift.set_pos_stack2()
     
-    @timed_state(duration=5)
+    @timed_state(duration=4.3)
     def backwards(self):
         '''Get into the autonomous zone'''
-        self.drive.move(.3, 0, 0)
+        self.drive.move(.25, 0, 0)
 
 class DualAutonomous(StatefulAutonomous):
     

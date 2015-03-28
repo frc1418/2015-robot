@@ -10,6 +10,6 @@ class DriveForward(StatefulAutonomous):
     def initialize(self):
         pass
 
-    @timed_state(duration=2, first=True)
+    @timed_state(duration=4.2, first=True)
     def drive_forward(self):
-        self.drive.move(-.5, 0, 0)
+        self.drive.move(.25, 0, 0)

@@ -100,7 +100,7 @@ class Drive(object):
 		
 		if angleOffset < -1 or angleOffset > 1:
 			self.rotation = angleOffset * self.angle_constant
-			self.rotation = max(min(0.5, self.rotation), -0.5)
+			self.rotation = max(min(0.3, self.rotation), -0.3)
 			
 			return False
 		
