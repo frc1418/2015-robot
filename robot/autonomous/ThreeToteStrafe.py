@@ -45,12 +45,12 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
             self.next_state('get_tote1')
     
     @timed_state(duration=1, next_state='back_to_wall1')
-    def get_tote1(self, initial_call):
+    def get_tote1(self, initial_call, state_tm):
         '''This method will drive at .1 until the robot hits the tote'''
         
         self.drive.move(self.move_fwd, 0, 0)
         
-        if self.sensors.is_against_tote():
+        if self.sensors.is_against_tote() or state_tm > 0.65:
             self.tote_forklift.set_pos_stack1()
             
             #self.logger.info("Against tote")
@@ -89,12 +89,12 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
             self.next_state('get_tote2')
             
     @timed_state(duration=1, next_state='back_to_wall2')
-    def get_tote2(self, initial_call):
+    def get_tote2(self, initial_call, state_tm):
         '''This method will drive at .1 until the robot hits the tote'''
         
         self.drive.move(self.move_fwd, 0, 0)
         
-        if self.sensors.is_against_tote():
+        if self.sensors.is_against_tote() or state_tm > 0.65:
             self.tote_forklift.set_pos_stack3()
             
             #self.logger.info("Against tote")
