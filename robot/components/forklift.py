@@ -12,7 +12,6 @@ class ForkliftMode(enum.Enum):
 class Forklift (object):
     
     def __init__ (self, limit_port, init_down_speed):
-        self.testFirst = True
         self.target_position = None
         self.target_index = None
         
