@@ -12,4 +12,5 @@ class DriveForward(StatefulAutonomous):
 
     @timed_state(duration=4.2, first=True)
     def drive_forward(self):
+        '''drives forward from alliance wall into auto zone'''
         self.drive.move(.25, 0, 0)

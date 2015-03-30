@@ -11,7 +11,7 @@ class Button:
         
     def get(self):
         '''Returns the value of the button. If the button is held down, then
-        True will only be returned once every 200ms'''
+        True will only be returned once every 600ms'''
         
         now = self.timer.getMsClock()
         if(self.joystick.getRawButton(self.buttonnum)):

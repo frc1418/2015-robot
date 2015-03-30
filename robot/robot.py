@@ -257,11 +257,7 @@ class MyRobot(wpilib.SampleRobot):
             except:
                 if not self.isFMSAttached():
                     raise
-            
-            #
-            # Sweeper
-            #
-                      
+                 
             
             #
             # Reverse drive

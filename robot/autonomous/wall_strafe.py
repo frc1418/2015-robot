@@ -20,6 +20,6 @@ class WallStrafe(StatefulAutonomous):
 
     @timed_state(duration=10.0, first=True)
     def do_the_drive(self):
-        
+        '''strafe against the wall for 10 seconds'''
         self.drive.wall_strafe(self.over)
         

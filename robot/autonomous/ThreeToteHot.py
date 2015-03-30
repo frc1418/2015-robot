@@ -8,6 +8,7 @@ from components.forklift import ToteForklift
 import logging
 
 class ThreeToteHot(SensorStatefulAutonomous):
+    '''Three tote strafe with rotation'''
     MODE_NAME = 'Three Tote Hot'
     DEFAULT = False  
     
@@ -156,7 +157,7 @@ class ThreeToteHot(SensorStatefulAutonomous):
     
     @timed_state(duration =1, next_state='drop')
     def rotate(self, initial_call):
-        
+        '''rotates to go for either the coopertition or put totes against wall during playoffs'''
         if self.cooperate:
             self.angRot = 90
             

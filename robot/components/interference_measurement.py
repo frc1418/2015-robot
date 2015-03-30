@@ -3,7 +3,7 @@ from common.sensor import Sensor
 from components.forklift import ToteForklift
 
 class Calibrator:
-    
+    '''Maps range where the tote forklift is interfering with IR sensors'''
     forklift = ToteForklift
     sensors = Sensor
     

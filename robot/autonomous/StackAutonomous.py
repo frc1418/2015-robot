@@ -7,8 +7,10 @@ from components.alignment import Alignment
 import wpilib
 
 class StackAutonomous(StatefulAutonomous):
+    '''Pickup 4 grey totes and put them on the scoring platform'''
     MODE_NAME = 'Stack Auto'
     DEFAULT = False
+    DISABLED = True #Let's not bother with this
     
     drive = Drive
     tote_forklift = ToteForklift

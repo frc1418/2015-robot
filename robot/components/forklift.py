@@ -102,22 +102,31 @@ class Forklift (object):
         self._set_position(index)
     
     def _set_position(self, index):
+        '''Sets position to index of positions list'''
         self.want_auto = True
         self.target_index = index
         self.target_position = self.positions[index].value
     
     def set_auto_position(self, target):
+        '''Goes to encoder position [target]
+            :param target: Encoder position
+            :type target: int [0..11600]
+        '''
         self.want_auto = True
         self.target_index = 0
         self.target_position = target 
         
     def on_target(self):
+        '''
+        :returns:  Is the encoder at the set target
+        :rtype: Bool
+        '''
         if abs(self.get_position()-self.target_position)<170:
             return True
         return False
     
     def _calibrate(self):
-        '''Moves the motor towards the limit switch if needed'''
+        '''Moves the motor towards the limit switch to reset the encoder to 0'''
         if not self.isCalibrated:
             if self.get_limit_switch():
                 self.motor.set(self.init_down_speed)
@@ -134,6 +143,7 @@ class Forklift (object):
         pass
     
     def doit(self):
+        '''Actually does stuff'''
         if self.want_manual:
             self.mode = ForkliftMode.MANUAL
         elif self.want_auto:
@@ -177,7 +187,7 @@ class Forklift (object):
         self.manual_value = 0
         
     def update_sd(self, name):
-        
+        '''Puts refreshed values to SmartDashboard'''
         self.sd.putNumber('%s|Encoder' % name, self.motor.getEncPosition())
         self.sd.putBoolean('%s|Calibrated' % name, self.isCalibrated)
         self.sd.putBoolean('%s|Manual' % name, self.mode == ForkliftMode.MANUAL)
@@ -237,6 +247,10 @@ class ToteForklift(Forklift):
         return self.limit.get()
     
     def get_position(self):
+        '''
+        :returns: Tote lift encoder position
+        :rtype: int
+        '''
         return self.sensor.tote_enc
 
 class CanForklift(Forklift):
@@ -313,8 +327,16 @@ class CanForklift(Forklift):
         self.set_auto_position(7000)
     
     def get_limit_switch(self):
+        '''
+        :returns: Is the lift against the limit switch
+        :rtype: bool
+        '''
         return not self.motor.isRevLimitSwitchClosed()
     
     def get_position(self):
+        '''
+        :returns: Tote lift encoder position
+        :rtype: int
+        '''
         return self.sensor.can_enc
     

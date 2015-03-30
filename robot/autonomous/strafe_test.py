@@ -8,6 +8,7 @@ from components.forklift import ToteForklift
 import logging
 
 class StrafeTest(SensorStatefulAutonomous):
+    '''tests strafing and tote sensors'''
     MODE_NAME = 'Test: StrafeTest'
     DEFAULT = False 
     

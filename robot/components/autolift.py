@@ -37,12 +37,13 @@ class Autolift(object):
         return False
     
     def autolift(self):
+        '''raises the forklift if the limit switches are pressed'''
         if self.allowLift and self.get_switch():
             self.allowLift = False
             self.tote_forklift.raise_forklift()
         
     def doit(self):
-
+        '''only allows the forklift to raise once every 1.5 seconds'''
         if not self.allowLift:
             
             if not self.allow_timer.running:
