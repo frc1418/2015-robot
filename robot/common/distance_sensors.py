@@ -34,9 +34,7 @@ class SharpIRGP2Y0A41SK0F:
         
         Short distance sensor: 4cm to 40cm
         
-        Output is in centimeters
-        
-        Distance can be calculated using 
+        Output is in centimeters=
     '''
     
     #short Distance

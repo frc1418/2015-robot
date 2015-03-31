@@ -37,7 +37,7 @@ class TwoToteStrafe(SensorStatefulAutonomous):
     
     @timed_state(duration=1, first=True)
     def calibrate(self, initial_call):
-        
+        '''calibrate the tote forklift'''
         if initial_call:
             self.tote_forklift.set_pos_bottom()
             
@@ -69,7 +69,7 @@ class TwoToteStrafe(SensorStatefulAutonomous):
     
     @timed_state(duration=4, next_state='strafe_can1')
     def wait_tote1(self):
-    
+        '''reverse to the wall'''
         self.drive.wall_goto()
         
         if self.tote_forklift.on_target():

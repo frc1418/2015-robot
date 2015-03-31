@@ -52,6 +52,7 @@ class Drive(object):
 			:param x: The speed that the robot should drive in the X direction. 1 is right [-1.0..1.0] 
 			:param y: The speed that the robot should drive in the Y direction. -1 is forward. [-1.0..1.0] 
 			:param rotation:  The rate of rotation for the robot that is completely independent of the translation. 1 is rotate to the right [-1.0..1.0]
+			:param squaredInputs: If True, the x and y values will be squared, allowing for more gradual speed. 
 		'''
 		if squaredInputs:
 			if x >= 0.0:
@@ -66,16 +67,21 @@ class Drive(object):
 		self.x = x
 		self.y = y
 		self.rotation = max(min(1.0, rotation), -1) / 2.0
-		
 
 	
 	def set_gyro_enabled(self, value):
+		'''Enables the gyro
+			:param value: Whether or not the gyro is enabled
+			:type value: Boolean
+		'''
 		self.gyro_enabled = value
 	
 	def return_gyro_angle(self):
+		''' Returns the gyro angle'''
 		return self.gyro.getAngle()
 	
 	def reset_gyro_angle(self):
+		'''Resets the gyro angle'''
 		self.gyro.reset()
 
 	
@@ -107,13 +113,15 @@ class Drive(object):
 		return True
 		
 	def set_direction(self, direction):
+		'''Used to reverse direction'''
 		self.isTheRobotBackwards = bool(direction)
 	
 	def switch_direction(self):
+		'''when called the robot will reverse front/back'''
 		self.isTheRobotBackwards = not self.isTheRobotBackwards
 	
 	def wall_goto(self):
-	
+		'''back up until we are 16 cm away from the wall. Fake PID will move us closer and further to the wall'''
 		y = (self.backInfrared.getDistance() - 16.0)/self.strafe_adj.value
 		y = max(min(self.strafe_back_speed.value, y), self.strafe_fwd_speed.value)
 		
@@ -121,7 +129,7 @@ class Drive(object):
 		return y
 	
 	def wall_strafe(self, speed):
-		
+		'''strafe against the wall'''
 		self.wall_goto()
 		
 		self.x = speed
@@ -133,7 +141,7 @@ class Drive(object):
 	#
 	
 	def doit(self):
-		''' actually does stuff'''
+		''' actually makes the robot drive'''
 		if(self.isTheRobotBackwards):
 			self.robotDrive.mecanumDrive_Cartesian(-self.x, -self.y, self.rotation , 0)
 		else:

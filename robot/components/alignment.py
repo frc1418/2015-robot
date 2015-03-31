@@ -38,7 +38,7 @@ class Alignment:
         
         
     def get_bin_angle(self):
-        
+        '''returns the angle of the bin in relationship to the front of the robot'''
         diff = self.sensors.leftDistance - self.sensors.rightDistance
         distance = min(self.sensors.leftDistance, self.sensors.rightDistance) + abs(diff/2.0)
         distance = abs(distance)
@@ -51,7 +51,7 @@ class Alignment:
         return distance, angle
         
     def get_speed(self):
-        # returns fwd speed, rotation speed
+        ''''returns fwd speed, rotation speed'''
         
         distance, angle = self.get_bin_angle()
         

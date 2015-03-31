@@ -76,6 +76,7 @@ class Sensor:
         
     
     def is_against_tote(self):
+        '''returns true if both limit switches are pressed'''
         if not self.toteLimitL and not self.toteLimitR:
             return True
         return False

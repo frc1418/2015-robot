@@ -36,7 +36,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     
     @timed_state(duration=.5, next_state='get_tote1', first=True)
     def calibrate(self, initial_call):
-        
+        '''calibrate tote forklift'''
         if initial_call:
             self.tote_forklift.set_pos_bottom()
             
@@ -47,7 +47,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     @timed_state(duration=1, next_state='back_to_wall1')
     def get_tote1(self, initial_call, state_tm):
         '''This method will drive at .1 until the robot hits the tote'''
-        
+        '''drive forward and pickup the first yellow tote'''
         self.drive.move(self.move_fwd, 0, 0)
         
         if self.sensors.is_against_tote() or state_tm > 0.65:
@@ -58,7 +58,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     
     @timed_state(duration=1.5, next_state='strafe_can1')
     def back_to_wall1(self, initial_call):
-        
+        '''reverse to the wall'''
         if initial_call:
             self.tote_forklift.set_pos_stack1()
     
@@ -102,7 +102,7 @@ class ThreeToteStrafe(SensorStatefulAutonomous):
     
     @timed_state(duration=1.5, next_state='strafe_can2')
     def back_to_wall2(self, initial_call):
-        
+        '''reverse to the wall'''
         if initial_call:
             self.tote_forklift.set_pos_stack3()
             self.pin_servo.set(1)
