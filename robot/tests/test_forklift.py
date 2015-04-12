@@ -21,10 +21,20 @@ def test_detect_position(hal_data):
     assert forklift._detect_position_index(170, 0) == None
     
     forklift.isCalibrated = True
+
+    keys = [
+        'Tote Forklift|bottom',
+        'Tote Forklift|stack1',
+        'Tote Forklift|stack2',
+        'Tote Forklift|stack3',
+        'Tote Forklift|stack4',
+        'Tote Forklift|stack5',
+        'Tote Forklift|stack6',
+    ]
     
     # set positions to known values
-    for i, pos in enumerate(forklift.positions):
-        pos.value = i*1000
+    for i, key in enumerate(keys):
+        wpilib.SmartDashboard.putNumber(key, i*1000)
     
     can['enc_position'] = 5
     sensors.update()
