@@ -1,23 +1,15 @@
 
-Team 1418 Robot Code
-========================================
-
-PLEASE NOTE! The contents of this distribution is distributed under two
-licenses! The robot portion of the code is distributed under the BSD license,
-found in LICENSE. 
-
-
-Introduction
-============
+FRC Team 1418 Robot Code
+========================
 
 This code is released from Team 1418's 2015 robot. Team 1418 had one of their
 best years yet in 2015. 
 
-They had a dominating performance at George Mason University at the Greater DC Regional,
+They had a great performance at George Mason University at the Greater DC Regional,
 finishing as the #2 seed, and led the #2 alliance to the semifinals with teams
 1885 and 686. They were awarded the Innovation in Control award for a variety
 of reasons, including their simple but effective sensor package, multiple
-autonomous modes and useful touchscreen driver station interface.  
+autonomous modes and useful touchscreen driver station interface.
 
 Highlights of the code
 ----------------------
@@ -29,9 +21,13 @@ Highlights of the code
 		* Three Tote Strafe - Picks up three totes and makes a Tote Stack worth 20 points
 		* Can Pickup - Picks up a single can and puts it in the auto zone
 		* Tote Pickup - Picks up a single tote and puts it in the auto zone
+		* Tote Pickup II - Pick up two totes from the landfill, and move back into the auto zone
 		* Drive Forward - Drives the robot into the auto zone
 	* Automatic support for tuning the autonomous mode parameters
 	  via the UI
+* Two forklifts, one for cans and one for totes
+	* Encoder-based PID control allows operator to pick up and deposit totes/cans quickly and accurately
+	* Fully controllable via NetworkTables
 * Mecanum drive
 
 The autonomous mode stuff will be rolled into pyfrc in the near future, so
