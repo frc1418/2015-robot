@@ -28,6 +28,7 @@ class Alignment:
         #self.threshold = sd.getAutoUpdateValue('Align|DistThreshold', 3)
         self.strafe_speed = sd.getAutoUpdateValue('Align|StrafeSpeed', .2)
         
+        self.binPos = sd.getAutoUpdateValue('binPosition', 0)
         
         # in centimeters
         self.sensor_spacing = 18
@@ -36,8 +37,11 @@ class Alignment:
         self.aligning = False
         self.aligned = False
         
+        self.can_aligning = True
+        self.can_aligned = False
         
-    def get_bin_angle(self):
+        
+    def get_tote_angle(self):
         '''returns the angle of the bin in relationship to the front of the robot'''
         diff = self.sensors.leftDistance - self.sensors.rightDistance
         distance = min(self.sensors.leftDistance, self.sensors.rightDistance) + abs(diff/2.0)
@@ -53,7 +57,7 @@ class Alignment:
     def get_speed(self):
         ''''returns fwd speed, rotation speed'''
         
-        distance, angle = self.get_bin_angle()
+        distance, angle = self.get_tote_angle()
         
         # bound it
         distance = min(max(distance, 0.0), 70)
@@ -100,11 +104,22 @@ class Alignment:
         else:
             self.drive.move(fwd_speed, 0, rotation_speed)
     
-    
-    
+    def can_align(self):
+        self.can_aligning = True
+        
+        if self.can_aligned:
+            self.drive.move(.5, 0, 0) # .5 because the part must go into the can fast enough to engage. Otherwise the can will just be pushed
+        if self.binPos.value in range(-.1, .1):
+            self.can_aligned = True
+        else:
+            self.drive.move(0, self.binPos.value/10, 0)
+            
     def doit(self):
         if not self.aligning:
             self.aligned = False
-        
         self.aligning = False
+        
+        if not self.can_aligning:
+            self.can_aligned = False
+        self.can_aligning = False
         
