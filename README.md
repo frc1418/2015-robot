@@ -1,15 +1,19 @@
+FRC1418 2015 Robot Code
+=======================
 
-FRC Team 1418 Robot Code
-========================
+* Code: **Robot** | [UI](https://github.com/frc1418/2015-ui) | [Image Processing](https://github.com/frc1418/2015-vision) | [Oculus Rift](https://github.com/frc1418/2015-oculus)
+* Factsheet: [Google Doc](https://docs.google.com/document/d/1irbUm-Qfxz_Ua2XiB5KzYWG2Ec5Xhr038NqL-k4FveA)
 
-This code is released from Team 1418's 2015 robot. Team 1418 had one of their
-best years yet in 2015. 
+Introduction
+------------
 
-They had a great performance at George Mason University at the Greater DC Regional,
-finishing as the #2 seed, and led the #2 alliance to the semifinals with teams
-1885 and 686. They were awarded the Innovation in Control award for a variety
-of reasons, including their simple but effective sensor package, multiple
-autonomous modes and useful touchscreen driver station interface.
+This code was used to control Team 1418's robot in 2015.
+
+They had a great performance at George Mason University at the Greater DC 
+Regional, finishing as the #2 seed, and led the #2 alliance to the semifinals
+with teams 1885 and 686. They were awarded the Innovation in Control award for
+a variety of reasons, including their simple but effective sensor package,
+multiple autonomous modes and useful touchscreen driver station interface.
 
 Highlights of the code
 ----------------------
@@ -30,10 +34,6 @@ Highlights of the code
 	* Fully controllable via NetworkTables
 * Mecanum drive
 
-The autonomous mode stuff will be rolled into pyfrc in the near future, so
-that it can be used by more teams. 
-
-
 Deploying onto the robot
 ------------------------
 
@@ -44,7 +44,7 @@ for more information.
 With the pyfrc library installed, you can deploy the code onto the robot
 by running robot.py with the following arguments:
 
-	$ python robot.py deploy
+	python3 robot.py deploy
 	
 This will run the unit tests and upload the code to the robot of your
 choice.
@@ -52,50 +52,41 @@ choice.
 Testing/Simulation
 ------------------
 
-The robot code has full integration with pyfrc. You can use the various
-simulation/testing options of the code by running robot.py directly. With
-pynetworktables installed, you can use netsim mode of pyfrc to test the
-robot code and the driver station UI together. 
+The robot code has full integration with pyfrc. Make sure you have pyfrc
+installed, and then you can use the various simulation/testing options
+of the code by running robot.py directly.
 
+    python3 robot.py sim
 
 Code Structure
 ==============
 
-.
-	You are here.
+	.
+		You are here.
 
-robot/
 	robot/
-		The robot code lives here
-		tests/
-			py.test-based unit tests that test the code and can be run via pyfrc
+		robot/
+			The robot code lives here
+			tests/
+				py.test-based unit tests that test the code and can be run via pyfrc
 
-	electrical_test/
-			Barebones code ran to make sure all of the electronics are working
-		tests/
-			Basic testing code to make sure we don't have syntax errors
-	Crio_tests/
-		Code for testing sensors on the Crio
-	practice_robot/
-		Barebones code for testing drive trains on the practice robot.
+		electrical_test/
+				Barebones code ran to make sure all of the electronics are working
+			tests/
+				Basic testing code to make sure we don't have syntax errors
+		CrioTests/
+			Code for testing sensors on the Crio
+		practice_robot/
+			Barebones code for testing drive trains on the practice robot.
 
+Authors
+=======
 
-
-2015 Team 1418 Programming Team
-===============================
-
-Mentors:
-
-	Dustin Spicuzza, lead software mentor
-	dustin@virtualroadside.com
-	
 Students:
 
-	Tim Winters, robot code
-	Matt Puentes, robot code
+* Tim Winters
+* Matt Puentes
+* Katherine Reinke
+* Rachel Baek
 
-	Leon Tan, Driver Station code
-	Tyler Gogol, Driver Station code
-	
-	Ben Rice, Image Processing programmer
-	Carter Fendly, Oculus Rift programmer / Image Processing programmer
+Dustin Spicuzza, mentor
