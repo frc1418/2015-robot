@@ -6,10 +6,9 @@ from components.forklift import ToteForklift
 
 def test_detect_position(hal_data):
     
-    tote_motor = wpilib.CANTalon(1)
-    can_motor = wpilib.CANTalon(2)
+    tote_motor = wpilib.CANTalon(1) 
     
-    sensors = Sensor(tote_motor, can_motor)
+    sensors = Sensor(tote_motor)
     
     forklift = ToteForklift(tote_motor, sensors, 5)
     forklift.set_manual(0)

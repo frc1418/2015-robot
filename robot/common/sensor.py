@@ -4,7 +4,7 @@ from networktables import NetworkTable
 
 class Sensor:
     
-    def __init__(self, tote_motor, can_motor):
+    def __init__(self, tote_motor):
         
         self.sd = NetworkTable.getTable('SmartDashboard')
         
@@ -20,7 +20,6 @@ class Sensor:
         self.rightSensor = CombinedSensor(self.longDistanceRSensor, 22, self.shortDistanceRSensor, 6)
         
         self.tote_motor = tote_motor
-        self.can_motor = can_motor
         
         self.in_range = False
         self.in_range_start = None
@@ -54,7 +53,6 @@ class Sensor:
         self.rightDistance = self.rightSensor.getDistance()
         
         self.tote_enc = self.tote_motor.getEncPosition()
-        self.can_enc = self.can_motor.getEncPosition()
         
         # Calculate if its in range
         in_range = (self.leftDistance < 30 and self.rightDistance < 30)

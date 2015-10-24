@@ -4,7 +4,7 @@ import wpilib
 RelayValue = wpilib.Relay.Value
 
 from components import drive, alignment, autolift
-from components.forklift import ToteForklift, CanForklift
+from components.forklift import ToteForklift
 from common.distance_sensors import SharpIR2Y0A02, SharpIRGP2Y0A41SK0F, CombinedSensor
 from common.button import Button
 from common.sensor import Sensor
@@ -48,12 +48,10 @@ class MyRobot(wpilib.SampleRobot):
         self.gyro = wpilib.Gyro(0)
         
         self.tote_motor = wpilib.CANTalon(5)
-        self.can_motor = wpilib.CANTalon(15)
 
-        self.sensor = Sensor(self.tote_motor, self.can_motor)
+        self.sensor = Sensor(self.tote_motor)
         
         self.tote_forklift = ToteForklift(self.tote_motor,self.sensor,2)
-        self.can_forklift = CanForklift(self.can_motor,self.sensor,3)
         
         self.calibrator = Calibrator(self.tote_forklift, self.sensor)
 
@@ -68,7 +66,6 @@ class MyRobot(wpilib.SampleRobot):
         # These must have a doit function
         self.components = {
             'tote_forklift': self.tote_forklift,
-            'can_forklift': self.can_forklift,
             'drive': self.drive,
             'autolift': self.autoLifter,
             'align': self.align,
@@ -83,10 +80,6 @@ class MyRobot(wpilib.SampleRobot):
         self.auton_components.update(self.components)
         
         # #Defining Buttons##
-        self.canUp = Button(self.joystick1,3)
-        self.canDown = Button(self.joystick1,2)
-        self.canTop = Button(self.joystick1,6)
-        self.canBottom = Button(self.joystick1, 7)
         self.toteUp = Button(self.joystick2, 3)
         self.toteDown = Button(self.joystick2, 2)
         self.toteTop = Button(self.joystick2, 6)
@@ -97,13 +90,10 @@ class MyRobot(wpilib.SampleRobot):
         # Secondary driver's joystick
         self.ui_joystick_tote_down = Button(self.ui_joystick, 4)
         self.ui_joystick_tote_up = Button(self.ui_joystick, 6)
-        self.ui_joystick_can_up = Button(self.ui_joystick, 5)
-        self.ui_joystick_can_down = Button(self.ui_joystick, 3)
         
         self.oldReverseRobot = False
         
         self.toteTo = self.sd.getAutoUpdateValue('toteTo', -1)
-        self.canTo = self.sd.getAutoUpdateValue('canTo', -1)
         self.reverseRobot = self.sd.getAutoUpdateValue('reverseRobot',False)
         self.autoLift = self.sd.getAutoUpdateValue('autoLift', False)
         
@@ -125,7 +115,6 @@ class MyRobot(wpilib.SampleRobot):
     
     def operatorControl(self):
         
-        self.can_forklift.set_manual(0)
         self.tote_forklift.set_manual(0)
         
         delay = PreciseDelay(self.control_loop_wait_time)
@@ -147,42 +136,7 @@ class MyRobot(wpilib.SampleRobot):
             # Can forklift controls
             #
 
-            try:
-                if self.joystick1.getRawButton(5):
-                    self.can_forklift.set_manual(1)
-                elif self.joystick1.getRawButton(4):
-                    self.can_forklift.set_manual(-1)
-    
-                elif self.canUp.get():
-                    self.can_forklift.raise_forklift()
-    
-                elif self.canDown.get():
-                    self.can_forklift.lower_forklift()
-    
-                if self.canTop.get():
-                    self.can_forklift.set_pos_top()
-                elif self.canBottom.get():
-                    self.can_forklift.set_pos_bottom()
-                    
-            except:
-                if not self.isFMSAttached():
-                    raise
-            
-            try:
-                if self.canTo.value >= 0:
-                    canTo = int(self.canTo.value)
-                    if canTo == 2048:
-                        self.can_forklift.set_pos_top()
-                    elif canTo == 7000:
-                        self.can_forklift.set_pos_7000()
-                    else:
-                        self.can_forklift._set_position(canTo)
-                    
-                    self.sd.putNumber('canTo', -1)
-                    
-            except:
-                if not self.isFMSAttached():
-                    raise
+        
                 
             ## Tote forklift controls##
 
@@ -234,14 +188,6 @@ class MyRobot(wpilib.SampleRobot):
             # Utilities
             #
             
-            try:
-                if self.joystick2.getRawButton(10):
-                    self.pinServo.set(0)
-                if self.joystick2.getRawButton(11):
-                    self.pinServo.set(1)
-            except:
-                if not self.isFMSAttached():
-                    raise
             try:
                 if self.joystick2.getRawButton(11):
                     self.drive.reset_gyro_angle()
@@ -327,7 +273,6 @@ class MyRobot(wpilib.SampleRobot):
     def smartdashboard_update(self):
         
         self.sensor.update_sd()
-        self.can_forklift.update_sd('Can Forklift')
         self.tote_forklift.update_sd('Tote Forklift')
         
         self.sd.putNumber('backSensorValue', self.backSensor.getDistance())
@@ -336,11 +281,7 @@ class MyRobot(wpilib.SampleRobot):
         
     def ui_joystick_buttons(self):
         
-        if self.ui_joystick_can_down.get():
-            self.can_forklift.set_pos_bottom()
-        elif self.ui_joystick_can_up.get():
-            self.can_forklift.set_pos_top()
-            
+        
         if self.ui_joystick_tote_down.get():
             self.tote_forklift.set_pos_bottom()
         elif self.ui_joystick_tote_up.get():
