@@ -125,6 +125,17 @@ class Forklift (object):
             return True
         return False
     
+    def overide_calibrate(self):
+        '''in case of calibration faliure, this can be called to ignore it.'''
+        self.motor.set(0)
+        self.motor.setSensorPosition(0)
+            
+        self.motor.changeControlMode(wpilib.CANTalon.ControlMode.Position)
+        self.isCalibrated = True
+                
+        self.on_calibrate()
+
+    
     def _calibrate(self):
         '''Moves the motor towards the limit switch to reset the encoder to 0'''
         if not self.isCalibrated:

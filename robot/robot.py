@@ -128,7 +128,7 @@ class MyRobot(wpilib.SampleRobot):
             #self.calibrator.calibrate()
             
             try:
-                self.drive.move(self.joystick1.getY(), self.joystick1.getX(), self.joystick2.getX(),True)
+                self.drive.move(self.joystick1.getY()*((1+self.joystick1.getZ())/2), self.joystick1.getX(), self.joystick2.getX(),True)
             except:
                 if not self.isFMSAttached():
                     raise
